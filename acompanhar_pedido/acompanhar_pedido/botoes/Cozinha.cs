@@ -137,7 +137,7 @@ namespace acompanhar_pedido.botoes
             string asc = "asc";
             try
             {
-                if(pnlAnt.Controls.Count != 0)
+                if(pnlAnt.Controls.Count != 1)
                 {
                     pnlAnt.Controls.Remove(pnlAnt.Controls[1]);
                     pnlAnt.Controls.Remove(pnlAnt.Controls[1]);

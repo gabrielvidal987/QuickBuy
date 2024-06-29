@@ -72,8 +72,11 @@ namespace acompanhar_pedido.botoes
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_produtos");
                     }
-                    File.Copy(foto_caminho, Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_produtos\{nome}.{exten}");
-                    foto_caminho = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()).Replace(@"\", @"\\") + $@"\\fotos_produtos\\{nome}.{exten}";
+                    if (foto_caminho != null )
+                    {
+                        File.Copy(foto_caminho, Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_produtos\{nome}.{exten}");
+                        foto_caminho = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()).Replace(@"\", @"\\") + $@"\\fotos_produtos\\{nome}.{exten}";
+                    }
                 }
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
                 MessageBox.Show(sql.InsertProduto(nome, valor, foto_caminho, nomeOriginal));
@@ -104,10 +107,25 @@ namespace acompanhar_pedido.botoes
                 pcholdNomeProd.Text = control.Controls[0].Text.ToString();
                 nomeOriginal = control.Controls[0].Text.ToString();
                 valorNumerico.Focus();
-                valorNumerico.Value = decimal.Parse(control.Controls[1].Text.Replace("R$", ""));
+                valorNumerico.Value = decimal.Parse(control.Controls[1].Text.Replace("R$", "").Replace('.',','));
                 fotoProd.BackgroundImage = control.Controls[2].BackgroundImage;
             }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+            catch (Exception er) 
+            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        private void RemProd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Control control = (Control)sender;
+                string nome_produto = control.Controls[0].Text.ToString();
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                sql.RemoveProd(nome_produto);
+                CriaBtns();
+
+            }
+            catch (Exception er)
+            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
         public void CriaBtns()
         {
@@ -122,7 +140,8 @@ namespace acompanhar_pedido.botoes
                     Label nomeProd = new Label();
                     Label valorProd = new Label();
                     PictureBox fotoProd = new PictureBox();
-                    btn.Size = new Size(153, 140);
+                    PictureBox remProd = new PictureBox();
+                    btn.Size = new Size(153, 220);
                     btn.BorderStyle = BorderStyle.Fixed3D;
                     btn.Padding = new Padding(8, 5, 0, 0);
                     btn.Margin = new Padding(5, 5, 5, 5);
@@ -154,10 +173,24 @@ namespace acompanhar_pedido.botoes
                     fotoProd.Enabled = false;
                     try { Image myimage = new Bitmap(item["caminho_foto"]); fotoProd.BackgroundImage = myimage; } catch { }
                     fotoProd.BackgroundImageLayout = ImageLayout.Stretch;
+                    remProd.BackColor = Color.FromArgb(255, 255, 255);
+                    remProd.Size = new Size(65, 65);
+                    remProd.SizeMode = PictureBoxSizeMode.StretchImage;
+                    remProd.Cursor = Cursors.Hand;
+                    remProd.Click += new EventHandler(RemProd_Click);
+                    Assembly assembly = Assembly.GetExecutingAssembly();
+                    using (Stream stream = assembly.GetManifestResourceStream("acompanhar_pedido.botoes.1282956_close_delete_deny_no_out_icon.png"))
+                    {
+                        if (stream != null)
+                        {
+                            remProd.Image = new Bitmap(stream);
+                        }
+                    }
                     pnlGeral.Controls.Add(btn);
                     btn.Controls.Add(nomeProd);
                     btn.Controls.Add(valorProd);
                     btn.Controls.Add(fotoProd);
+                    btn.Controls.Add(remProd);
                 }
             }
             catch (Exception er) { MessageBox.Show("Erro ao gerar icone dos produtos"); ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }

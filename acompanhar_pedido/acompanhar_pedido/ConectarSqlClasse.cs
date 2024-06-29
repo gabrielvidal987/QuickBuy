@@ -243,10 +243,12 @@ namespace acompanhar_pedido
                 try
                 {
                     cadPedido.ExecuteNonQuery();
+                    transaction.Commit();
                     resultado = "Pedido cadastrado com sucesso!";
                 }
                 catch (Exception er)
                 {
+                    transaction.Rollback();
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                     resultado = $"Erro ao cadastrar pedido";
                 }
@@ -563,7 +565,7 @@ namespace acompanhar_pedido
             }
             return filaCadPed;
         }
-    
+        //cria o usuario
         public void CriaUsuario(string nome, string caminho_foto)
         {
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -626,6 +628,28 @@ namespace acompanhar_pedido
             }
             return caminho;
         }
-
+        //remove um produto da lista de produtos
+        public void RemoveProd(string nome)
+        {
+            string resultado = "Não foi possivel deletar o produto";
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                MySqlCommand apagaProduto = new MySqlCommand($"DELETE FROM produtos WHERE usuario = '{VariaveisGlobais.Usuario}' and nome = '{nome}'", conexao, transaction);
+                try
+                {
+                    apagaProduto.ExecuteNonQuery();
+                    transaction.Commit();
+                    resultado = "Pedido removido com sucesso!";
+                }
+                catch (Exception er)
+                {
+                    transaction.Rollback();
+                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
+            }
+            MessageBox.Show(resultado);
+        }
     }
 }

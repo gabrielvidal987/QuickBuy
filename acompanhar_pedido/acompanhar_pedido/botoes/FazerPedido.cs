@@ -109,6 +109,7 @@ namespace acompanhar_pedido.teste
                         {
                             total--;
                             res["quantidade"] = total.ToString();
+                            res["total"] = Convert.ToString(double.Parse(res["valor"]) * int.Parse(res["quantidade"]));
                             CriarLabel();
                             ValorTotal();
                             break;
@@ -459,7 +460,6 @@ namespace acompanhar_pedido.teste
                 btnCad_Click(sender, e);
             }
         }
-
         private void btnHist_Click(object sender, EventArgs e)
         {
             try
