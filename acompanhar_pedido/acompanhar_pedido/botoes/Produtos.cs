@@ -122,7 +122,6 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 sql.RemoveProd(nome_produto);
                 CriaBtns();
-
             }
             catch (Exception er)
             { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
