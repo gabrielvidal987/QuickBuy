@@ -25,6 +25,7 @@ namespace acompanhar_pedido.botoes
         string fotopadrao = "";
         string foto_caminho;
         string exten = "png";
+        Bitmap apaga_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\delete.png");
         public Produtos()
         {
             InitializeComponent();
@@ -118,10 +119,16 @@ namespace acompanhar_pedido.botoes
             try
             {
                 Control control = (Control)sender;
-                string nome_produto = control.Controls[0].Text.ToString();
-                ConectarSqlClasse sql = new ConectarSqlClasse();
-                sql.RemoveProd(nome_produto);
-                CriaBtns();
+                for(int i = 0; i < pnlGeral.Controls.Count;i++)
+                {
+                    if (pnlGeral.Controls[i].Controls[3].Name == control.Name)
+                    {
+                        string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString();
+                        ConectarSqlClasse sql = new ConectarSqlClasse();
+                        sql.RemoveProd(nome_produto);
+                        CriaBtns();
+                    }
+                }
             }
             catch (Exception er)
             { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
@@ -133,6 +140,7 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 List<Dictionary<string, string>> listaProd = new List<Dictionary<string, string>>(sql.DadosProd());
                 pnlGeral.Controls.Clear();
+                int ind_btn = 0;
                 foreach (Dictionary<string, string> item in listaProd)
                 {
                     FlowLayoutPanel btn = new FlowLayoutPanel();
@@ -140,7 +148,7 @@ namespace acompanhar_pedido.botoes
                     Label valorProd = new Label();
                     PictureBox fotoProd = new PictureBox();
                     PictureBox remProd = new PictureBox();
-                    btn.Size = new Size(153, 220);
+                    btn.Size = new Size(153, 180);
                     btn.BorderStyle = BorderStyle.Fixed3D;
                     btn.Padding = new Padding(8, 5, 0, 0);
                     btn.Margin = new Padding(5, 5, 5, 5);
@@ -172,24 +180,20 @@ namespace acompanhar_pedido.botoes
                     fotoProd.Enabled = false;
                     try { Image myimage = new Bitmap(item["caminho_foto"]); fotoProd.BackgroundImage = myimage; } catch { }
                     fotoProd.BackgroundImageLayout = ImageLayout.Stretch;
-                    remProd.BackColor = Color.FromArgb(255, 255, 255);
-                    remProd.Size = new Size(65, 65);
+                    remProd.BackColor = Color.Transparent;
+                    remProd.Name = ind_btn.ToString();
+                    remProd.Size = new Size(20, 20);
                     remProd.SizeMode = PictureBoxSizeMode.StretchImage;
                     remProd.Cursor = Cursors.Hand;
                     remProd.Click += new EventHandler(RemProd_Click);
-                    Assembly assembly = Assembly.GetExecutingAssembly();
-                    using (Stream stream = assembly.GetManifestResourceStream("acompanhar_pedido.botoes.1282956_close_delete_deny_no_out_icon.png"))
-                    {
-                        if (stream != null)
-                        {
-                            remProd.Image = new Bitmap(stream);
-                        }
-                    }
-                    pnlGeral.Controls.Add(btn);
+                    remProd.Margin = new Padding(112, 23, 0, 0);
+                    remProd.Image = apaga_ico;
                     btn.Controls.Add(nomeProd);
                     btn.Controls.Add(valorProd);
                     btn.Controls.Add(fotoProd);
                     btn.Controls.Add(remProd);
+                    pnlGeral.Controls.Add(btn);
+                    ind_btn++;
                 }
             }
             catch (Exception er) { MessageBox.Show("Erro ao gerar icone dos produtos"); ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }

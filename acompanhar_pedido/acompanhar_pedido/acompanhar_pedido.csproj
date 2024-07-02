@@ -291,7 +291,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="1282956_close_delete_deny_no_out_icon.png" />
     <Content Include="iconeApp.ico" />
   </ItemGroup>
   <ItemGroup />
