@@ -641,6 +641,28 @@ namespace acompanhar_pedido
                 {
                     apagaProduto.ExecuteNonQuery();
                     transaction.Commit();
+                    resultado = "Produto removido com sucesso!";
+                }
+                catch (Exception er)
+                {
+                    transaction.Rollback();
+                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
+            }
+            MessageBox.Show(resultado);
+        }
+        public void RemovePedido(string numero_pedido)
+        {
+            string resultado = "Não foi possivel deletar o pedido";
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                MySqlCommand apagaProduto = new MySqlCommand($"DELETE FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' and numero_pedido = {numero_pedido}", conexao, transaction);
+                try
+                {
+                    apagaProduto.ExecuteNonQuery();
+                    transaction.Commit();
                     resultado = "Pedido removido com sucesso!";
                 }
                 catch (Exception er)

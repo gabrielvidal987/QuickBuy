@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace acompanhar_pedido.botoes
 {
     public partial class historico_pedidos : Form
     {
+        Bitmap apaga_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\delete.png");
         public historico_pedidos()
         {
             InitializeComponent();
@@ -26,6 +28,25 @@ namespace acompanhar_pedido.botoes
             pnlGeral.Location = new Point(Top = lbTitulo.Width);
             RecarregaFila();
         }
+        private void RemPedido_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Control control = (Control)sender;
+                for (int i = 0; i < pnlGeral.Controls.Count; i++)
+                {
+                    if (pnlGeral.Controls[i].Controls[3].Name == control.Name)
+                    {
+                        string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0];
+                        ConectarSqlClasse sql = new ConectarSqlClasse();
+                        sql.RemoveProd(nome_produto);
+                        RecarregaFila();
+                    }
+                }
+            }
+            catch (Exception er)
+            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
         public void RecarregaFila()
         {
             try
@@ -35,6 +56,7 @@ namespace acompanhar_pedido.botoes
                 List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed());
                 if (filaPedidos.Count > 0 )
                 {
+                    int ind_btn = 0;
                     foreach (Dictionary<string, string> i in filaPedidos)
                     {
                         int quantLetras = i["produtos_nome"].ToList().Count;
@@ -47,9 +69,10 @@ namespace acompanhar_pedido.botoes
                         Label obs = new Label();
                         Label hora = new Label();
                         Label valorTotal_formPagamento = new Label();
+                        PictureBox remProd = new PictureBox();
                         //cria o flowpanel com o cliente
                         pnl.Width = 240;
-                        pnl.Height = 200 + Convert.ToInt32(altura);
+                        pnl.Height = 250 + Convert.ToInt32(altura);
                         pnl.BackColor = Color.FromArgb(247, 247, 247);
                         pnl.Margin = new Padding(40, 10, 0, 10);
                         pnl.Padding = new Padding(5, 5, 5, 5);
@@ -100,6 +123,15 @@ namespace acompanhar_pedido.botoes
                         valorTotal_formPagamento.Width = 225;
                         valorTotal_formPagamento.Height = 40;
                         valorTotal_formPagamento.Font = new Font("Arial", 10);
+                        //cria botão de remover pedido
+                        remProd.BackColor = Color.Transparent;
+                        remProd.Name = ind_btn.ToString();
+                        remProd.Size = new Size(20, 20);
+                        remProd.SizeMode = PictureBoxSizeMode.StretchImage;
+                        remProd.Cursor = Cursors.Hand;
+                        remProd.Click += new EventHandler(RemPedido_Click);
+                        remProd.Margin = new Padding(112, 23, 0, 0);
+                        remProd.Image = apaga_ico;
                         //cria as labels no panel
                         pnl.Controls.Add(num_pedido_nome);
                         pnl.Controls.Add(endereco);
@@ -107,6 +139,7 @@ namespace acompanhar_pedido.botoes
                         pnl.Controls.Add(obs);
                         pnl.Controls.Add(hora);
                         pnl.Controls.Add(valorTotal_formPagamento);
+                        ind_btn++;
                     }
                 }
                 else { MessageBox.Show("Sem pedidos registrados ainda!!"); }
