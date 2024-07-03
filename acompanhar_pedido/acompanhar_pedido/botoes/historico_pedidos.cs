@@ -35,12 +35,13 @@ namespace acompanhar_pedido.botoes
                 Control control = (Control)sender;
                 for (int i = 0; i < pnlGeral.Controls.Count; i++)
                 {
-                    if (pnlGeral.Controls[i].Controls[3].Name == control.Name)
+                    if (pnlGeral.Controls[i].Controls[6].Name == control.Name)
                     {
-                        string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0];
+                        string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                         ConectarSqlClasse sql = new ConectarSqlClasse();
-                        sql.RemoveProd(nome_produto);
+                        sql.RemovePedido(nome_produto);
                         RecarregaFila();
+                        break;
                     }
                 }
             }
@@ -72,12 +73,11 @@ namespace acompanhar_pedido.botoes
                         PictureBox remProd = new PictureBox();
                         //cria o flowpanel com o cliente
                         pnl.Width = 240;
-                        pnl.Height = 250 + Convert.ToInt32(altura);
+                        pnl.Height = 210 + Convert.ToInt32(altura);
                         pnl.BackColor = Color.FromArgb(247, 247, 247);
                         pnl.Margin = new Padding(40, 10, 0, 10);
                         pnl.Padding = new Padding(5, 5, 5, 5);
                         pnl.BorderStyle = BorderStyle.FixedSingle;
-                        pnlGeral.Controls.Add(pnl);
                         //label numero de pedido
                         num_pedido_nome.AutoSize = false;
                         num_pedido_nome.Text = $"{i["numero_pedido"]} - {i["nome_cliente"]}";
@@ -130,7 +130,7 @@ namespace acompanhar_pedido.botoes
                         remProd.SizeMode = PictureBoxSizeMode.StretchImage;
                         remProd.Cursor = Cursors.Hand;
                         remProd.Click += new EventHandler(RemPedido_Click);
-                        remProd.Margin = new Padding(112, 23, 0, 0);
+                        remProd.Margin = new Padding(205, 5, 0, 0);
                         remProd.Image = apaga_ico;
                         //cria as labels no panel
                         pnl.Controls.Add(num_pedido_nome);
@@ -139,6 +139,8 @@ namespace acompanhar_pedido.botoes
                         pnl.Controls.Add(obs);
                         pnl.Controls.Add(hora);
                         pnl.Controls.Add(valorTotal_formPagamento);
+                        pnl.Controls.Add(remProd);
+                        pnlGeral.Controls.Add(pnl);
                         ind_btn++;
                     }
                 }
@@ -146,7 +148,6 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             RecarregaFila();
