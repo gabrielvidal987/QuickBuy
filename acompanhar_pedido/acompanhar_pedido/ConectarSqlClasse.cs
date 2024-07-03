@@ -238,7 +238,7 @@ namespace acompanhar_pedido
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 MySqlCommand cadPedido = new MySqlCommand($"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', '{data}', {valor},'{formaPag}',{valor},'{VariaveisGlobais.Usuario}')", conexao,transaction);
-                MySqlCommand numeroPedido = new MySqlCommand($"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}'", conexao,transaction);
+                MySqlCommand numeroPedido = new MySqlCommand($"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}'", conexao);
                 string a = "";
                 try
                 {
@@ -261,11 +261,9 @@ namespace acompanhar_pedido
                             a = reader["numero_pedido"].ToString();
                         }
                     }
-                    transaction.Commit();
                 }
                 catch (Exception er)
                 {
-                    transaction.Rollback();
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                 }
 
