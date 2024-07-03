@@ -338,7 +338,7 @@ namespace acompanhar_pedido.teste
                 {
                     int quantLetras = item["nome"].ToList().Count;
                     if (quantLetras < 15 ) { quantLetras = 15; }
-                    double altura = (quantLetras / 15) * 20;
+                    double altura = quantLetras / 15 * 20;
                     FlowLayoutPanel btn = new FlowLayoutPanel();
                     Label nomeProd = new Label();
                     Label valorProd = new Label();
