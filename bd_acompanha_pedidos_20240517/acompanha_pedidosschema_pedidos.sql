@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: acompanha_pedidosschema
 -- ------------------------------------------------------
--- Server version	8.0.37
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -34,7 +34,7 @@ CREATE TABLE `pedidos` (
   `valorLiq` double DEFAULT NULL,
   `usuario` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`numero_pedido`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,6 +43,7 @@ CREATE TABLE `pedidos` (
 
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
+INSERT INTO `pedidos` VALUES (3,'wefwefw','endereço não cadastrado','2X Pastel Pizza cm oregano,','sem observações','15:53',24,'dinheiro',24,'desbravadores'),(4,'wefwefw','endereço não cadastrado','2X Pastel Pizza cm oregano,','sem observações','15:53',24,'dinheiro',24,'desbravadores'),(5,'wefwefw','endereço não cadastrado','2X Pastel Pizza cm oregano,','sem observações','15:53',24,'dinheiro',24,'desbravadores'),(6,'wefwefw','endereço não cadastrado','2X Pastel Pizza cm oregano,','sem observações','15:53',24,'dinheiro',24,'desbravadores'),(7,'wefwefw','endereço não cadastrado','2X Pastel Pizza cm oregano,','sem observações','15:53',24,'dinheiro',24,'desbravadores'),(8,'wefwefw','endereço não cadastrado','2X Pastel Pizza cm oregano,','sem observações','15:53',24,'dinheiro',24,'desbravadores'),(9,'wefwefw','endereço não cadastrado','2X Pastel Pizza cm oregano,','sem observações','15:53',24,'dinheiro',24,'desbravadores'),(10,'wefwefw','endereço não cadastrado','2X Pastel Pizza cm oregano,','sem observações','15:53',24,'dinheiro',24,'desbravadores'),(11,'teste','endereço não cadastrado','1X Pastel Pizza cm oregano,','sem observações','15:55',12,'dinheiro',12,'desbravadores'),(12,'teste','endereço não cadastrado','1X Pastel Pizza cm oregano,','sem observações','15:56',12,'dinheiro',12,'desbravadores'),(17,'teste','endereço não cadastrado','1X Pastel Pizza cm oregano,','sem observações','14:59',12,'dinheiro',12,'desbravadores');
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-17  0:29:41
+-- Dump completed on 2024-07-08 15:58:45

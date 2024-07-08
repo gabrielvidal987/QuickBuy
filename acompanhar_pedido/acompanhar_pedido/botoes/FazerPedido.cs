@@ -338,12 +338,12 @@ namespace acompanhar_pedido.teste
                 {
                     int quantLetras = item["nome"].ToList().Count;
                     if (quantLetras < 15 ) { quantLetras = 15; }
-                    double altura = quantLetras / 15 * 20;
+                    double altura = quantLetras / 10 * 20;
                     FlowLayoutPanel btn = new FlowLayoutPanel();
                     Label nomeProd = new Label();
                     Label valorProd = new Label();
                     PictureBox fotoProd = new PictureBox();
-                    btn.Size = new Size(153, 125 + Convert.ToInt32(altura));
+                    btn.Size = new Size(210, 152 + Convert.ToInt32(altura));
                     btn.BorderStyle = BorderStyle.Fixed3D;
                     btn.Padding = new Padding(8, 5, 0, 0);
                     btn.Margin = new Padding(10, 10, 10, 10);
@@ -356,7 +356,7 @@ namespace acompanhar_pedido.teste
                     nomeProd.Font = new Font("Arial", 10);
                     nomeProd.ForeColor = Color.Black;
                     nomeProd.AutoSize = false;
-                    nomeProd.Size = new Size(129, Convert.ToInt32(altura));
+                    nomeProd.Size = new Size(186, Convert.ToInt32(altura));
                     nomeProd.BorderStyle = BorderStyle.FixedSingle;
                     nomeProd.TextAlign = ContentAlignment.MiddleCenter;
                     nomeProd.Text = item["nome"];
@@ -365,13 +365,13 @@ namespace acompanhar_pedido.teste
                     valorProd.Font = new Font("Arial", 10);
                     valorProd.ForeColor = Color.Black;
                     valorProd.AutoSize = false;
-                    valorProd.Size = new Size(129, 30);
+                    valorProd.Size = new Size(186, 30);
                     valorProd.BorderStyle = BorderStyle.FixedSingle;
                     valorProd.TextAlign = ContentAlignment.MiddleCenter;
                     valorProd.Text = $"R${item["valor"].Replace('.',',')}";
                     valorProd.Enabled = false;
                     fotoProd.BackColor = Color.FromArgb(255, 255, 255);
-                    fotoProd.Size = new Size(129, 78);
+                    fotoProd.Size = new Size(186, 105);
                     fotoProd.BorderStyle = BorderStyle.FixedSingle;
                     fotoProd.SizeMode = PictureBoxSizeMode.StretchImage;
                     fotoProd.Enabled = false;

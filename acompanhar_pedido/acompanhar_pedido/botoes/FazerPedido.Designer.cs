@@ -37,6 +37,7 @@
             this.pnlTotal = new System.Windows.Forms.Panel();
             this.boxPgto = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.pcholdObs = new acompanhar_pedido.PlaceHolderTextBox();
             this.resumo = new System.Windows.Forms.Label();
             this.btnCad = new System.Windows.Forms.Button();
             this.tbExtrato = new System.Windows.Forms.FlowLayoutPanel();
@@ -52,7 +53,6 @@
             this.btnHist = new System.Windows.Forms.Button();
             this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdCliente = new acompanhar_pedido.PlaceHolderTextBox();
-            this.pcholdObs = new acompanhar_pedido.PlaceHolderTextBox();
             this.pnlGeral.SuspendLayout();
             this.pnlTotal.SuspendLayout();
             this.pnlFimExtrato.SuspendLayout();
@@ -77,7 +77,7 @@
             this.pnlGeral.Location = new System.Drawing.Point(126, 151);
             this.pnlGeral.Name = "pnlGeral";
             this.pnlGeral.Padding = new System.Windows.Forms.Padding(30, 10, 10, 10);
-            this.pnlGeral.Size = new System.Drawing.Size(460, 507);
+            this.pnlGeral.Size = new System.Drawing.Size(537, 507);
             this.pnlGeral.TabIndex = 33;
             // 
             // flowLayoutPanel1
@@ -145,6 +145,18 @@
             this.label1.Size = new System.Drawing.Size(332, 15);
             this.label1.TabIndex = 28;
             this.label1.Text = "*para remover/subtrair um item basta clicar em seu nome no extrato*";
+            // 
+            // pcholdObs
+            // 
+            this.pcholdObs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pcholdObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
+            this.pcholdObs.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdObs.Location = new System.Drawing.Point(28, 354);
+            this.pcholdObs.Multiline = true;
+            this.pcholdObs.Name = "pcholdObs";
+            this.pcholdObs.PlaceHolderText = null;
+            this.pcholdObs.Size = new System.Drawing.Size(354, 56);
+            this.pcholdObs.TabIndex = 4;
             // 
             // resumo
             // 
@@ -329,18 +341,6 @@
             this.pcholdCliente.Size = new System.Drawing.Size(221, 23);
             this.pcholdCliente.TabIndex = 0;
             this.pcholdCliente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyDown);
-            // 
-            // pcholdObs
-            // 
-            this.pcholdObs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pcholdObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
-            this.pcholdObs.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdObs.Location = new System.Drawing.Point(28, 354);
-            this.pcholdObs.Multiline = true;
-            this.pcholdObs.Name = "pcholdObs";
-            this.pcholdObs.PlaceHolderText = null;
-            this.pcholdObs.Size = new System.Drawing.Size(354, 56);
-            this.pcholdObs.TabIndex = 4;
             // 
             // FazerPedido
             // 
