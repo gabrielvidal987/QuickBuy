@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FazerPedido));
             this.imprimir = new System.Windows.Forms.CheckBox();
             this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnReset = new System.Windows.Forms.Button();
             this.pnlTotal = new System.Windows.Forms.Panel();
             this.boxPgto = new System.Windows.Forms.ComboBox();
@@ -51,8 +50,9 @@
             this.impressora = new System.Drawing.Printing.PrintDocument();
             this.label5 = new System.Windows.Forms.Label();
             this.btnHist = new System.Windows.Forms.Button();
-            this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
+            this.pcholdEndereco = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdCliente = new acompanhar_pedido.PlaceHolderTextBox();
+            this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.pnlGeral.SuspendLayout();
             this.pnlTotal.SuspendLayout();
             this.pnlFimExtrato.SuspendLayout();
@@ -62,7 +62,7 @@
             // 
             this.imprimir.AutoSize = true;
             this.imprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.imprimir.Location = new System.Drawing.Point(240, 122);
+            this.imprimir.Location = new System.Drawing.Point(162, 117);
             this.imprimir.Name = "imprimir";
             this.imprimir.Size = new System.Drawing.Size(132, 24);
             this.imprimir.TabIndex = 2;
@@ -73,21 +73,12 @@
             // 
             this.pnlGeral.AutoScroll = true;
             this.pnlGeral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlGeral.Controls.Add(this.flowLayoutPanel1);
+            this.pnlGeral.Controls.Add(this.pcholdBuscaProd);
             this.pnlGeral.Location = new System.Drawing.Point(126, 151);
             this.pnlGeral.Name = "pnlGeral";
-            this.pnlGeral.Padding = new System.Windows.Forms.Padding(30, 10, 10, 10);
-            this.pnlGeral.Size = new System.Drawing.Size(537, 507);
+            this.pnlGeral.Padding = new System.Windows.Forms.Padding(20, 10, 10, 10);
+            this.pnlGeral.Size = new System.Drawing.Size(520, 507);
             this.pnlGeral.TabIndex = 33;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(40, 20);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(10);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(371, 224);
-            this.flowLayoutPanel1.TabIndex = 28;
             // 
             // btnReset
             // 
@@ -320,27 +311,42 @@
             this.btnHist.UseVisualStyleBackColor = false;
             this.btnHist.Click += new System.EventHandler(this.btnHist_Click);
             // 
-            // pcholdBuscaProd
+            // pcholdEndereco
             // 
-            this.pcholdBuscaProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.pcholdBuscaProd.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdBuscaProd.Location = new System.Drawing.Point(240, 82);
-            this.pcholdBuscaProd.Multiline = true;
-            this.pcholdBuscaProd.Name = "pcholdBuscaProd";
-            this.pcholdBuscaProd.PlaceHolderText = null;
-            this.pcholdBuscaProd.Size = new System.Drawing.Size(221, 27);
-            this.pcholdBuscaProd.TabIndex = 1;
+            this.pcholdEndereco.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.pcholdEndereco.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdEndereco.Location = new System.Drawing.Point(162, 84);
+            this.pcholdEndereco.Multiline = true;
+            this.pcholdEndereco.Name = "pcholdEndereco";
+            this.pcholdEndereco.PlaceHolderText = null;
+            this.pcholdEndereco.Size = new System.Drawing.Size(221, 27);
+            this.pcholdEndereco.TabIndex = 1;
             // 
             // pcholdCliente
             // 
             this.pcholdCliente.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
             this.pcholdCliente.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdCliente.Location = new System.Drawing.Point(240, 46);
+            this.pcholdCliente.Location = new System.Drawing.Point(162, 46);
+            this.pcholdCliente.Multiline = true;
             this.pcholdCliente.Name = "pcholdCliente";
             this.pcholdCliente.PlaceHolderText = null;
-            this.pcholdCliente.Size = new System.Drawing.Size(221, 23);
+            this.pcholdCliente.Size = new System.Drawing.Size(221, 27);
             this.pcholdCliente.TabIndex = 0;
             this.pcholdCliente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyDown);
+            // 
+            // pcholdBuscaProd
+            // 
+            this.pcholdBuscaProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
+            this.pcholdBuscaProd.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdBuscaProd.Location = new System.Drawing.Point(150, 13);
+            this.pcholdBuscaProd.Margin = new System.Windows.Forms.Padding(130, 3, 3, 3);
+            this.pcholdBuscaProd.Multiline = true;
+            this.pcholdBuscaProd.Name = "pcholdBuscaProd";
+            this.pcholdBuscaProd.PlaceHolderText = "Buscar produto...";
+            this.pcholdBuscaProd.Size = new System.Drawing.Size(221, 27);
+            this.pcholdBuscaProd.TabIndex = 35;
+            this.pcholdBuscaProd.Text = "Buscar produto...";
+            this.pcholdBuscaProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // FazerPedido
             // 
@@ -352,7 +358,7 @@
             this.Controls.Add(this.imprimir);
             this.Controls.Add(this.pnlGeral);
             this.Controls.Add(this.btnReset);
-            this.Controls.Add(this.pcholdBuscaProd);
+            this.Controls.Add(this.pcholdEndereco);
             this.Controls.Add(this.pcholdCliente);
             this.Controls.Add(this.pnlTotal);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -362,6 +368,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FazerPedido_Load_1);
             this.pnlGeral.ResumeLayout(false);
+            this.pnlGeral.PerformLayout();
             this.pnlTotal.ResumeLayout(false);
             this.pnlTotal.PerformLayout();
             this.pnlFimExtrato.ResumeLayout(false);
@@ -375,9 +382,8 @@
 
         private System.Windows.Forms.CheckBox imprimir;
         private System.Windows.Forms.FlowLayoutPanel pnlGeral;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button btnReset;
-        private PlaceHolderTextBox pcholdBuscaProd;
+        private PlaceHolderTextBox pcholdEndereco;
         private PlaceHolderTextBox pcholdCliente;
         private System.Windows.Forms.Panel pnlTotal;
         private System.Windows.Forms.Label label1;
@@ -396,5 +402,6 @@
         private System.Windows.Forms.ComboBox boxPgto;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnHist;
+        private PlaceHolderTextBox pcholdBuscaProd;
     }
 }

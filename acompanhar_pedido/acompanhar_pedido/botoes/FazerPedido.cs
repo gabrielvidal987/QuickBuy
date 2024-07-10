@@ -38,14 +38,14 @@ namespace acompanhar_pedido.teste
         {
             pcholdCliente.AutoSize = false;
             pcholdCliente.Size = new System.Drawing.Size(221, 27);
-            pcholdBuscaProd.AutoSize = false;
-            pcholdBuscaProd.Size = new System.Drawing.Size(221, 27);
+            pcholdEndereco.AutoSize = false;
+            pcholdEndereco.Size = new System.Drawing.Size(221, 27);
             pnlTotal.BackColor = Color.FromArgb(141, 172, 222);
             tbExtrato.BackColor = Color.FromArgb(198, 213, 239);
             pnlFimExtrato.BackColor = Color.FromArgb(198, 213, 239);
             boxPgto.BackColor = Color.FromArgb(198, 213, 239);
             pcholdCliente.PlaceHolderText = "Nome do cliente...";
-            pcholdBuscaProd.PlaceHolderText = "Endereço...";
+            pcholdEndereco.PlaceHolderText = "Endereço...";
             btnCad.BackColor = Color.FromArgb(132, 246, 58);
             btnHist.BackColor = Color.FromArgb(192, 213, 239);
             pcholdObs.PlaceHolderText = "Adicionar observação...";
@@ -246,7 +246,7 @@ namespace acompanhar_pedido.teste
                     pcholdCliente.Text = "";
                     pcholdObs.Text = "";
                     clienteExtrato.Text = "Cliente: ";
-                    pcholdBuscaProd.Text = "";
+                    pcholdEndereco.Text = "";
                     boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
                     pcholdObs.Focus();
                     pcholdCliente.Focus();
@@ -265,8 +265,8 @@ namespace acompanhar_pedido.teste
             string nome_produto = "sem produto";
             string produto_quantidade = "";
             string obs = pcholdObs.Text;
-            string endereco = pcholdBuscaProd.Text;
-            if (pcholdBuscaProd.Text == "") { endereco = "endereço não cadastrado"; }
+            string endereco = pcholdEndereco.Text;
+            if (pcholdEndereco.Text == "") { endereco = "endereço não cadastrado"; }
             nf = $"Cliente: {nome_cliente}";
             try 
             { 
@@ -310,7 +310,7 @@ namespace acompanhar_pedido.teste
                     totalValorExtrato.Text = "R$0,00";
                     clienteExtrato.Text = "Cliente: ";
                     pcholdCliente.Text = "";
-                    pcholdBuscaProd.Text = "";
+                    pcholdEndereco.Text = "";
                     pcholdCliente.Focus();
                 }
                 else
@@ -333,7 +333,8 @@ namespace acompanhar_pedido.teste
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 List<Dictionary<string, string>> listaProd = new List<Dictionary<string, string>>(sql.DadosProd());
-                pnlGeral.Controls.Clear();
+                while (pnlGeral.Controls.Count > 1) { pnlGeral.Controls.Remove(pnlGeral.Controls[1]); }
+                //pnlGeral.Controls.Clear();
                 foreach (Dictionary<string, string> item in listaProd)
                 {
                     int quantLetras = item["nome"].ToList().Count;
