@@ -1,4 +1,6 @@
-﻿namespace acompanhar_pedido.teste
+﻿using acompanhar_pedido.botoes;
+
+namespace acompanhar_pedido.teste
 {
     partial class FazerPedido
     {
@@ -31,12 +33,10 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FazerPedido));
             this.imprimir = new System.Windows.Forms.CheckBox();
-            this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
             this.btnReset = new System.Windows.Forms.Button();
             this.pnlTotal = new System.Windows.Forms.Panel();
             this.boxPgto = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.pcholdObs = new acompanhar_pedido.PlaceHolderTextBox();
             this.resumo = new System.Windows.Forms.Label();
             this.btnCad = new System.Windows.Forms.Button();
             this.tbExtrato = new System.Windows.Forms.FlowLayoutPanel();
@@ -50,12 +50,15 @@
             this.impressora = new System.Drawing.Printing.PrintDocument();
             this.label5 = new System.Windows.Forms.Label();
             this.btnHist = new System.Windows.Forms.Button();
+            this.filtraProd = new System.Windows.Forms.Timer(this.components);
+            this.pnlGeral = new acompanhar_pedido.botoes.DoubleBufferedFlowLayoutPanel();
+            this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdEndereco = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdCliente = new acompanhar_pedido.PlaceHolderTextBox();
-            this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
-            this.pnlGeral.SuspendLayout();
+            this.pcholdObs = new acompanhar_pedido.PlaceHolderTextBox();
             this.pnlTotal.SuspendLayout();
             this.pnlFimExtrato.SuspendLayout();
+            this.pnlGeral.SuspendLayout();
             this.SuspendLayout();
             // 
             // imprimir
@@ -68,17 +71,6 @@
             this.imprimir.TabIndex = 2;
             this.imprimir.Text = "Imprimir senha";
             this.imprimir.UseVisualStyleBackColor = true;
-            // 
-            // pnlGeral
-            // 
-            this.pnlGeral.AutoScroll = true;
-            this.pnlGeral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlGeral.Controls.Add(this.pcholdBuscaProd);
-            this.pnlGeral.Location = new System.Drawing.Point(126, 151);
-            this.pnlGeral.Name = "pnlGeral";
-            this.pnlGeral.Padding = new System.Windows.Forms.Padding(20, 10, 10, 10);
-            this.pnlGeral.Size = new System.Drawing.Size(520, 507);
-            this.pnlGeral.TabIndex = 33;
             // 
             // btnReset
             // 
@@ -107,7 +99,7 @@
             this.pnlTotal.Controls.Add(this.pnlFimExtrato);
             this.pnlTotal.Location = new System.Drawing.Point(785, 86);
             this.pnlTotal.Name = "pnlTotal";
-            this.pnlTotal.Size = new System.Drawing.Size(410, 593);
+            this.pnlTotal.Size = new System.Drawing.Size(436, 593);
             this.pnlTotal.TabIndex = 29;
             // 
             // boxPgto
@@ -124,7 +116,7 @@
             "CRÉDITO"});
             this.boxPgto.Location = new System.Drawing.Point(28, 418);
             this.boxPgto.Name = "boxPgto";
-            this.boxPgto.Size = new System.Drawing.Size(354, 24);
+            this.boxPgto.Size = new System.Drawing.Size(380, 24);
             this.boxPgto.TabIndex = 5;
             this.boxPgto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.boxPgto_KeyDown);
             // 
@@ -136,18 +128,6 @@
             this.label1.Size = new System.Drawing.Size(332, 15);
             this.label1.TabIndex = 28;
             this.label1.Text = "*para remover/subtrair um item basta clicar em seu nome no extrato*";
-            // 
-            // pcholdObs
-            // 
-            this.pcholdObs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pcholdObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
-            this.pcholdObs.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdObs.Location = new System.Drawing.Point(28, 354);
-            this.pcholdObs.Multiline = true;
-            this.pcholdObs.Name = "pcholdObs";
-            this.pcholdObs.PlaceHolderText = null;
-            this.pcholdObs.Size = new System.Drawing.Size(354, 56);
-            this.pcholdObs.TabIndex = 4;
             // 
             // resumo
             // 
@@ -172,7 +152,7 @@
             this.btnCad.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnCad.Location = new System.Drawing.Point(28, 512);
             this.btnCad.Name = "btnCad";
-            this.btnCad.Size = new System.Drawing.Size(351, 67);
+            this.btnCad.Size = new System.Drawing.Size(380, 67);
             this.btnCad.TabIndex = 6;
             this.btnCad.Text = "CADASTRAR PEDIDO";
             this.btnCad.UseVisualStyleBackColor = false;
@@ -185,7 +165,7 @@
             this.tbExtrato.Location = new System.Drawing.Point(28, 99);
             this.tbExtrato.Name = "tbExtrato";
             this.tbExtrato.Padding = new System.Windows.Forms.Padding(5, 8, 5, 8);
-            this.tbExtrato.Size = new System.Drawing.Size(354, 249);
+            this.tbExtrato.Size = new System.Drawing.Size(380, 249);
             this.tbExtrato.TabIndex = 16;
             // 
             // clienteExtrato
@@ -211,7 +191,7 @@
             this.nQuantProd.Cursor = System.Windows.Forms.Cursors.Default;
             this.nQuantProd.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold);
             this.nQuantProd.ForeColor = System.Drawing.Color.Black;
-            this.nQuantProd.Location = new System.Drawing.Point(340, 55);
+            this.nQuantProd.Location = new System.Drawing.Point(370, 54);
             this.nQuantProd.Margin = new System.Windows.Forms.Padding(3);
             this.nQuantProd.Name = "nQuantProd";
             this.nQuantProd.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
@@ -227,7 +207,7 @@
             this.itemsTexto.Cursor = System.Windows.Forms.Cursors.Default;
             this.itemsTexto.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold);
             this.itemsTexto.ForeColor = System.Drawing.Color.Black;
-            this.itemsTexto.Location = new System.Drawing.Point(265, 54);
+            this.itemsTexto.Location = new System.Drawing.Point(295, 53);
             this.itemsTexto.Margin = new System.Windows.Forms.Padding(3);
             this.itemsTexto.Name = "itemsTexto";
             this.itemsTexto.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
@@ -243,7 +223,7 @@
             this.pnlFimExtrato.Controls.Add(this.totalExtratoTexto);
             this.pnlFimExtrato.Location = new System.Drawing.Point(28, 453);
             this.pnlFimExtrato.Name = "pnlFimExtrato";
-            this.pnlFimExtrato.Size = new System.Drawing.Size(354, 53);
+            this.pnlFimExtrato.Size = new System.Drawing.Size(380, 53);
             this.pnlFimExtrato.TabIndex = 13;
             // 
             // totalValorExtrato
@@ -253,7 +233,7 @@
             this.totalValorExtrato.Cursor = System.Windows.Forms.Cursors.Default;
             this.totalValorExtrato.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold);
             this.totalValorExtrato.ForeColor = System.Drawing.Color.Black;
-            this.totalValorExtrato.Location = new System.Drawing.Point(237, 7);
+            this.totalValorExtrato.Location = new System.Drawing.Point(262, 7);
             this.totalValorExtrato.Margin = new System.Windows.Forms.Padding(3);
             this.totalValorExtrato.Name = "totalValorExtrato";
             this.totalValorExtrato.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
@@ -303,36 +283,29 @@
             this.btnHist.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.btnHist.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHist.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnHist.Location = new System.Drawing.Point(792, 16);
+            this.btnHist.Location = new System.Drawing.Point(816, 9);
             this.btnHist.Name = "btnHist";
-            this.btnHist.Size = new System.Drawing.Size(410, 51);
+            this.btnHist.Size = new System.Drawing.Size(380, 51);
             this.btnHist.TabIndex = 29;
             this.btnHist.Text = "HISTÓRICO DE PEDIDOS";
             this.btnHist.UseVisualStyleBackColor = false;
             this.btnHist.Click += new System.EventHandler(this.btnHist_Click);
             // 
-            // pcholdEndereco
+            // filtraProd
             // 
-            this.pcholdEndereco.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.pcholdEndereco.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdEndereco.Location = new System.Drawing.Point(162, 84);
-            this.pcholdEndereco.Multiline = true;
-            this.pcholdEndereco.Name = "pcholdEndereco";
-            this.pcholdEndereco.PlaceHolderText = null;
-            this.pcholdEndereco.Size = new System.Drawing.Size(221, 27);
-            this.pcholdEndereco.TabIndex = 1;
+            this.filtraProd.Enabled = true;
+            this.filtraProd.Tick += new System.EventHandler(this.filtraProd_Tick);
             // 
-            // pcholdCliente
+            // pnlGeral
             // 
-            this.pcholdCliente.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.pcholdCliente.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdCliente.Location = new System.Drawing.Point(162, 46);
-            this.pcholdCliente.Multiline = true;
-            this.pcholdCliente.Name = "pcholdCliente";
-            this.pcholdCliente.PlaceHolderText = null;
-            this.pcholdCliente.Size = new System.Drawing.Size(221, 27);
-            this.pcholdCliente.TabIndex = 0;
-            this.pcholdCliente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyDown);
+            this.pnlGeral.AutoScroll = true;
+            this.pnlGeral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlGeral.Controls.Add(this.pcholdBuscaProd);
+            this.pnlGeral.Location = new System.Drawing.Point(126, 151);
+            this.pnlGeral.Name = "pnlGeral";
+            this.pnlGeral.Padding = new System.Windows.Forms.Padding(20, 10, 10, 10);
+            this.pnlGeral.Size = new System.Drawing.Size(520, 507);
+            this.pnlGeral.TabIndex = 33;
             // 
             // pcholdBuscaProd
             // 
@@ -343,10 +316,45 @@
             this.pcholdBuscaProd.Multiline = true;
             this.pcholdBuscaProd.Name = "pcholdBuscaProd";
             this.pcholdBuscaProd.PlaceHolderText = "Buscar produto...";
-            this.pcholdBuscaProd.Size = new System.Drawing.Size(221, 27);
+            this.pcholdBuscaProd.Size = new System.Drawing.Size(221, 30);
             this.pcholdBuscaProd.TabIndex = 35;
             this.pcholdBuscaProd.Text = "Buscar produto...";
             this.pcholdBuscaProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // pcholdEndereco
+            // 
+            this.pcholdEndereco.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.pcholdEndereco.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdEndereco.Location = new System.Drawing.Point(162, 84);
+            this.pcholdEndereco.Multiline = true;
+            this.pcholdEndereco.Name = "pcholdEndereco";
+            this.pcholdEndereco.PlaceHolderText = null;
+            this.pcholdEndereco.Size = new System.Drawing.Size(221, 30);
+            this.pcholdEndereco.TabIndex = 1;
+            // 
+            // pcholdCliente
+            // 
+            this.pcholdCliente.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.pcholdCliente.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdCliente.Location = new System.Drawing.Point(162, 46);
+            this.pcholdCliente.Multiline = true;
+            this.pcholdCliente.Name = "pcholdCliente";
+            this.pcholdCliente.PlaceHolderText = null;
+            this.pcholdCliente.Size = new System.Drawing.Size(221, 30);
+            this.pcholdCliente.TabIndex = 0;
+            this.pcholdCliente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyDown);
+            // 
+            // pcholdObs
+            // 
+            this.pcholdObs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pcholdObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
+            this.pcholdObs.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdObs.Location = new System.Drawing.Point(28, 354);
+            this.pcholdObs.Multiline = true;
+            this.pcholdObs.Name = "pcholdObs";
+            this.pcholdObs.PlaceHolderText = null;
+            this.pcholdObs.Size = new System.Drawing.Size(380, 56);
+            this.pcholdObs.TabIndex = 4;
             // 
             // FazerPedido
             // 
@@ -367,12 +375,12 @@
             this.Text = "FazerPedido";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FazerPedido_Load_1);
-            this.pnlGeral.ResumeLayout(false);
-            this.pnlGeral.PerformLayout();
             this.pnlTotal.ResumeLayout(false);
             this.pnlTotal.PerformLayout();
             this.pnlFimExtrato.ResumeLayout(false);
             this.pnlFimExtrato.PerformLayout();
+            this.pnlGeral.ResumeLayout(false);
+            this.pnlGeral.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -381,7 +389,8 @@
         #endregion
 
         private System.Windows.Forms.CheckBox imprimir;
-        private System.Windows.Forms.FlowLayoutPanel pnlGeral;
+        //private System.Windows.Forms.FlowLayoutPanel pnlGeral;
+        private DoubleBufferedFlowLayoutPanel pnlGeral;
         private System.Windows.Forms.Button btnReset;
         private PlaceHolderTextBox pcholdEndereco;
         private PlaceHolderTextBox pcholdCliente;
@@ -403,5 +412,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnHist;
         private PlaceHolderTextBox pcholdBuscaProd;
+        private System.Windows.Forms.Timer filtraProd;
     }
 }

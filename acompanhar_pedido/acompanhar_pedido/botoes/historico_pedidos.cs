@@ -60,9 +60,8 @@ namespace acompanhar_pedido.botoes
                     int ind_btn = 0;
                     foreach (Dictionary<string, string> i in filaPedidos)
                     {
-                        int quantLetras = i["produtos_nome"].ToList().Count;
-                        if (quantLetras < 15) { quantLetras = 15; }
-                        double altura = (quantLetras / 15) * 25;
+                        int quantLetras = i["produtos_nome"].Split(',').ToList().Count;
+                        double altura = quantLetras * 30;
                         FlowLayoutPanel pnl = new FlowLayoutPanel();
                         Label num_pedido_nome = new Label();
                         Label endereco = new Label();
@@ -150,6 +149,10 @@ namespace acompanhar_pedido.botoes
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (pnlGeral.AutoScrollPosition.Y != 0)
+            {
+                return;
+            }
             RecarregaFila();
         }
     }

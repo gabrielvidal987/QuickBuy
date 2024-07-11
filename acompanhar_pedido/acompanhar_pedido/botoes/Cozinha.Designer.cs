@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cozinha));
-            this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
+            this.pnlGeral = new DoubleBufferedFlowLayoutPanel();
             this.pedidos = new System.Windows.Forms.Label();
             this.tPedPronto = new System.Windows.Forms.Timer(this.components);
-            this.pnlAnt = new System.Windows.Forms.FlowLayoutPanel();
+            this.pnlAnt = new DoubleBufferedFlowLayoutPanel();
             this.btnHistorico = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.setaEntrada = new System.Windows.Forms.PictureBox();
@@ -199,10 +199,10 @@
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel pnlGeral;
+        private DoubleBufferedFlowLayoutPanel pnlGeral;
         private System.Windows.Forms.Label pedidos;
         private System.Windows.Forms.Timer tPedPronto;
-        private System.Windows.Forms.FlowLayoutPanel pnlAnt;
+        private DoubleBufferedFlowLayoutPanel pnlAnt;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox setaEntrada;
         private System.Windows.Forms.PictureBox setaSaida;

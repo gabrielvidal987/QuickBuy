@@ -138,7 +138,8 @@ namespace acompanhar_pedido.botoes
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                List<Dictionary<string, string>> listaProd = new List<Dictionary<string, string>>(sql.DadosProd());
+                string filtro = "";
+                List<Dictionary<string, string>> listaProd = new List<Dictionary<string, string>>(sql.DadosProd(filtro));
                 pnlGeral.Controls.Clear();
                 int ind_btn = 0;
                 foreach (Dictionary<string, string> item in listaProd)

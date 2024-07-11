@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,6 +26,7 @@ namespace acompanhar_pedido.botoes
             pnlGeral.Width = this.Width - 60;
             pnlGeral.Height = this.Height - 150;
             pnlGeral.Location = new Point(Top = lbTitulo.Width);
+            pnlGeral.AutoScroll = true;
             RecarregaFila();
         }
         public void RecarregaFila()
@@ -37,9 +39,8 @@ namespace acompanhar_pedido.botoes
                 List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaAnt(desc));
                 foreach (Dictionary<string, string> i in filaPedidos)
                 {
-                    int quantLetras = i["produtos_nome"].ToList().Count;
-                    if (quantLetras < 15) { quantLetras = 15; }
-                    double altura = (quantLetras / 15) * 25;
+                    int quantLetras = i["produtos_nome"].Split(',').ToList().Count;
+                    double altura = quantLetras * 30;
                     FlowLayoutPanel pnl = new FlowLayoutPanel();
                     Label num_pedido_nome = new Label();
                     Label nome_produto = new Label();
@@ -68,7 +69,7 @@ namespace acompanhar_pedido.botoes
                     nome_produto.Padding = new Padding(5, 5, 5, 5);
                     nome_produto.Width = 225;
                     nome_produto.Height = Convert.ToInt32(altura);
-                    nome_produto.Text = i["produtos_nome"];
+                    nome_produto.Text = $"{i["produtos_nome"].Replace(",", "\n")}";
                     //label obs
                     obs.AutoSize = false;
                     obs.Text = i["observacoes"];
@@ -103,6 +104,10 @@ namespace acompanhar_pedido.botoes
         }
         private void reset_timer_Tick(object sender, EventArgs e)
         {
+            if (pnlGeral.AutoScrollPosition.Y != 0)
+            {
+                return;
+            }
             RecarregaFila();
         }
     }

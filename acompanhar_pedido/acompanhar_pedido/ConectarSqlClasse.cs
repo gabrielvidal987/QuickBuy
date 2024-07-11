@@ -474,13 +474,13 @@ namespace acompanhar_pedido
             return senha;
         }
         //traz uma lista de dicionarios com os dados dos produtos para a janela de fazer pedido
-        public List<Dictionary<string, string>> DadosProd()
+        public List<Dictionary<string, string>> DadosProd(string filtro)
         {
             List<Dictionary<string,string>> dadosProd = new List<Dictionary<string, string>>();
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                MySqlCommand pegaDados = new MySqlCommand($"SELECT * FROM produtos WHERE usuario = '{VariaveisGlobais.Usuario}';", conexao);
+                MySqlCommand pegaDados = new MySqlCommand($"SELECT * FROM produtos WHERE usuario = '{VariaveisGlobais.Usuario}' AND nome LIKE '%{filtro}%';", conexao);
                 using (var reader = pegaDados.ExecuteReader())
                 {
                     while (reader.Read())

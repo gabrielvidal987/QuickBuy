@@ -172,6 +172,9 @@
     <Compile Include="botoes\Cozinha.Designer.cs">
       <DependentUpon>Cozinha.cs</DependentUpon>
     </Compile>
+    <Compile Include="botoes\DoubleBufferedFlowLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="botoes\Fila.cs">
       <SubType>Form</SubType>
     </Compile>

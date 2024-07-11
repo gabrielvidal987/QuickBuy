@@ -26,7 +26,7 @@ namespace acompanhar_pedido.teste
         List<Dictionary<string, string>> extratoLista = new List<Dictionary<string, string>>();
         string nf;
         Thread t1;
-
+        string texto_filtra = "";
         public FazerPedido()
         {
             InitializeComponent();
@@ -248,6 +248,7 @@ namespace acompanhar_pedido.teste
                     clienteExtrato.Text = "Cliente: ";
                     pcholdEndereco.Text = "";
                     boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
+                    pcholdBuscaProd.Text = "";
                     pcholdObs.Focus();
                     pcholdCliente.Focus();
                     CarregaBotoes();
@@ -332,9 +333,11 @@ namespace acompanhar_pedido.teste
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                List<Dictionary<string, string>> listaProd = new List<Dictionary<string, string>>(sql.DadosProd());
+                pnlGeral.SuspendLayout();
                 while (pnlGeral.Controls.Count > 1) { pnlGeral.Controls.Remove(pnlGeral.Controls[1]); }
-                //pnlGeral.Controls.Clear();
+                string filtro = "";
+                if (pcholdBuscaProd.Text != "") { filtro = pcholdBuscaProd.Text; }
+                List<Dictionary<string, string>> listaProd = new List<Dictionary<string, string>>(sql.DadosProd(filtro));
                 foreach (Dictionary<string, string> item in listaProd)
                 {
                     int quantLetras = item["nome"].ToList().Count;
@@ -393,7 +396,10 @@ namespace acompanhar_pedido.teste
             {
                 MessageBox.Show("Erro ao carregar janela de pedidos. \n Erro: " + er);
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-
+            }
+            finally
+            {
+                pnlGeral.ResumeLayout();
             }
         }
         private void produtobtn_Click(object sender, EventArgs e)
@@ -474,6 +480,14 @@ namespace acompanhar_pedido.teste
         private void hist_pedidos(object obj)
         {
             try { Application.Run(new historico_pedidos()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+        }
+        private void filtraProd_Tick(object sender, EventArgs e)
+        {
+            if(pcholdBuscaProd.Text != texto_filtra)
+            {
+                texto_filtra = pcholdBuscaProd.Text;
+                CarregaBotoes();
+            }
         }
     }
 }

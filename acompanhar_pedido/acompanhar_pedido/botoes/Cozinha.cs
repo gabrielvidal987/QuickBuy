@@ -54,9 +54,8 @@ namespace acompanhar_pedido.botoes
                     {
                         continue;
                     }
-                    int quantLetras = i["produtos_nome"].ToList().Count;
-                    if (quantLetras < 15) { quantLetras = 15; }
-                    double altura = (quantLetras / 15) * 25;
+                    int quantLetras = i["produtos_nome"].Split(',').ToList().Count;
+                    double altura = quantLetras * 30;
                     FlowLayoutPanel pnl = new FlowLayoutPanel();
                     Label num_pedido_nome = new Label();
                     FlowLayoutPanel nome_produto = new FlowLayoutPanel();
