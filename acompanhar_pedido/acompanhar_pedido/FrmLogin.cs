@@ -113,18 +113,25 @@ namespace acompanhar_pedido
         }
         private void testConexaobtn_Click(object sender, EventArgs e)
         {
-            if (server.Text != "" && uid.Text != "" && password.Text != "" && database.Text != "")
+            //if (server.Text != "" && uid.Text != "" && password.Text != "" && database.Text != "")
+            //{
+            //    Dictionary<string, string> novoJson = new Dictionary<string, string>()
+            //    {
+            //        { "server", server.Text },
+            //        { "uid", uid.Text },
+            //        { "pwd", password.Text },
+            //        { "database", database.Text }
+            //    };
+            //    string jsonString = JsonConvert.SerializeObject(novoJson);
+            //    File.WriteAllText("BDfila.json", jsonString);
+            //}
+            Dictionary<string, string> novoJson = new Dictionary<string, string>()
             {
-                Dictionary<string, string> novoJson = new Dictionary<string, string>()
-                {
-                    { "server", server.Text },
-                    { "uid", uid.Text },
-                    { "pwd", password.Text },
-                    { "database", database.Text }
-                };
-                string jsonString = JsonConvert.SerializeObject(novoJson);
-                File.WriteAllText("BDfila.json", jsonString);
-            }
+                { "server", string.IsNullOrEmpty(server.Text) ? "localhost" : server.Text },
+                { "uid", string.IsNullOrEmpty(uid.Text) ? "root" : uid.Text },
+                { "pwd", string.IsNullOrEmpty(password.Text) ? "Vid@l9871" : password.Text },
+                { "database", string.IsNullOrEmpty(database.Text) ? "acompanha_pedidosschema" : database.Text }
+            };
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
@@ -133,6 +140,8 @@ namespace acompanhar_pedido
                 resultConexao.Text += $"{sql.ConectDataBase()}\n";
                 if (sql.ConectDataBase() == "Conexão com o banco de dados realizada com sucesso!!! \n")
                 {
+                    string jsonString = JsonConvert.SerializeObject(novoJson);
+                    File.WriteAllText("BDfila.json", jsonString);
                     txtEmail.Enabled = false;
                     txtSenha.Enabled = true;
                     button1.Enabled = true;
