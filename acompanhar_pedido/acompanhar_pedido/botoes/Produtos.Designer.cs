@@ -35,11 +35,11 @@
             this.lbCadProd = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.pcholdNomeProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.fotoProd = new System.Windows.Forms.PictureBox();
             this.btnAddpic = new System.Windows.Forms.OpenFileDialog();
             this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
+            this.pcholdNomeProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.pnlCadProd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.valorNumerico)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoProd)).BeginInit();
@@ -55,7 +55,7 @@
             this.pnlCadProd.Controls.Add(this.label1);
             this.pnlCadProd.Controls.Add(this.pcholdNomeProd);
             this.pnlCadProd.Controls.Add(this.fotoProd);
-            this.pnlCadProd.Location = new System.Drawing.Point(989, 42);
+            this.pnlCadProd.Location = new System.Drawing.Point(1036, 42);
             this.pnlCadProd.Name = "pnlCadProd";
             this.pnlCadProd.Size = new System.Drawing.Size(241, 467);
             this.pnlCadProd.TabIndex = 20;
@@ -63,15 +63,15 @@
             // valorNumerico
             // 
             this.valorNumerico.DecimalPlaces = 2;
-            this.valorNumerico.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.valorNumerico.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.valorNumerico.Increment = new decimal(new int[] {
             50,
             0,
             0,
             131072});
-            this.valorNumerico.Location = new System.Drawing.Point(76, 184);
+            this.valorNumerico.Location = new System.Drawing.Point(77, 186);
             this.valorNumerico.Name = "valorNumerico";
-            this.valorNumerico.Size = new System.Drawing.Size(85, 26);
+            this.valorNumerico.Size = new System.Drawing.Size(85, 30);
             this.valorNumerico.TabIndex = 2;
             this.valorNumerico.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -95,16 +95,16 @@
             // 
             this.lbCadProd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbCadProd.Font = new System.Drawing.Font("Arial", 15F);
-            this.lbCadProd.Location = new System.Drawing.Point(37, 25);
+            this.lbCadProd.Location = new System.Drawing.Point(12, 13);
             this.lbCadProd.Name = "lbCadProd";
-            this.lbCadProd.Size = new System.Drawing.Size(166, 58);
+            this.lbCadProd.Size = new System.Drawing.Size(214, 58);
             this.lbCadProd.TabIndex = 25;
             this.lbCadProd.Text = "CADASTRO DE PRODUTOS";
             this.lbCadProd.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.label2.Location = new System.Drawing.Point(88, 160);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 23);
@@ -113,23 +113,12 @@
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.label1.Location = new System.Drawing.Point(65, 104);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label1.Location = new System.Drawing.Point(57, 101);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 23);
+            this.label1.Size = new System.Drawing.Size(117, 23);
             this.label1.TabIndex = 23;
             this.label1.Text = "NOME/SABOR:";
-            // 
-            // pcholdNomeProd
-            // 
-            this.pcholdNomeProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic);
-            this.pcholdNomeProd.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdNomeProd.Location = new System.Drawing.Point(37, 130);
-            this.pcholdNomeProd.Name = "pcholdNomeProd";
-            this.pcholdNomeProd.PlaceHolderText = null;
-            this.pcholdNomeProd.Size = new System.Drawing.Size(166, 26);
-            this.pcholdNomeProd.TabIndex = 1;
-            this.pcholdNomeProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // fotoProd
             // 
@@ -158,7 +147,7 @@
             this.pnlGeral.Location = new System.Drawing.Point(26, 87);
             this.pnlGeral.Name = "pnlGeral";
             this.pnlGeral.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlGeral.Size = new System.Drawing.Size(951, 489);
+            this.pnlGeral.Size = new System.Drawing.Size(1004, 550);
             this.pnlGeral.TabIndex = 31;
             // 
             // label5
@@ -170,6 +159,17 @@
             this.label5.Size = new System.Drawing.Size(307, 13);
             this.label5.TabIndex = 36;
             this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
+            // 
+            // pcholdNomeProd
+            // 
+            this.pcholdNomeProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Italic);
+            this.pcholdNomeProd.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdNomeProd.Location = new System.Drawing.Point(24, 127);
+            this.pcholdNomeProd.Name = "pcholdNomeProd";
+            this.pcholdNomeProd.PlaceHolderText = null;
+            this.pcholdNomeProd.Size = new System.Drawing.Size(189, 30);
+            this.pcholdNomeProd.TabIndex = 1;
+            this.pcholdNomeProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Produtos
             // 

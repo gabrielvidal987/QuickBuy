@@ -70,21 +70,28 @@ namespace acompanhar_pedido
         public static void EnviaLog(string tipo, string origem, string erro)
         {
             string hora = DateTime.Now.ToString("yyyy/MM/dd-HH:mm:ss");
-            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            try
             {
-                conexao.Open();
-                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                MySqlCommand geraLog = new MySqlCommand($"INSERT INTO log_erro (usuario,hora,tipo,origem,erro) VALUES ('{VariaveisGlobais.Usuario}','{hora}','{tipo}','{origem}','{erro}');", conexao, transaction);
-                try
+                using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
                 {
-                    geraLog.ExecuteNonQuery();
-                    transaction.Commit();
+                    conexao.Open();
+                    MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                    MySqlCommand geraLog = new MySqlCommand($"INSERT INTO log_erro (usuario,hora,tipo,origem,erro) VALUES ('{VariaveisGlobais.Usuario}','{hora}','{tipo}','{origem}','{erro}');", conexao, transaction);
+                    try
+                    {
+                        geraLog.ExecuteNonQuery();
+                        transaction.Commit();
+                    }
+                    catch (Exception er)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Erro ao gerar log: \n {er}");
+                    }
                 }
-                catch (Exception er)
-                {
-                    transaction.Rollback();
-                    MessageBox.Show($"Erro ao gerar log: \n {er}");
-                }
+            }
+            catch
+            {
+                MessageBox.Show("Erro ao gerar log e enviar para BD. \n\nContactar Administrador e verificar conexão com internet e BD","ATENÇÃO!!!");
             }
         }
         //insere produto na tabela de produtos

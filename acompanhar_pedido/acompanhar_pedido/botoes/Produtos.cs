@@ -91,13 +91,19 @@ namespace acompanhar_pedido.botoes
         }
         public void EsteticaFundo()
         {
-            this.BackColor = Color.FromArgb(255, 216, 91);
-            pnlCadProd.BackColor = Color.FromArgb(255, 249, 228);
-            lbCadProd.BackColor = Color.FromArgb(255, 240, 191);
+            pnlCadProd.BackColor = Color.FromArgb(198, 213, 239);
+            lbCadProd.BackColor = Color.FromArgb(141, 172, 222);
             fotoProd.BackColor = Color.FromArgb(255, 255, 255);
             btnCadProd.BackColor = Color.FromArgb(0, 185, 34);
             pcholdNomeProd.PlaceHolderText = "ex: Açaí 400ml...";
-            pnlGeral.BackColor = Color.FromArgb(255, 226, 131);
+            pnlGeral.BackColor = Color.FromArgb(192, 213, 239);
+            pnlGeral.Location = new Point(30, 50);
+            pnlGeral.Size = new Size(this.Width - 350, this.Height - 150);
+            pnlCadProd.Location = new Point(pnlGeral.Width + 40, 80);
+            pnlCadProd.Size = new Size(240, this.Height - 210);
+            btnCadProd.Location = new Point(37, pnlCadProd.Height - 100);
+            fotoProd.Location = new Point(37, pnlCadProd.Height - 250);
+
         }
         private void produtobtn_Click(object sender, EventArgs e)
         {
@@ -144,42 +150,52 @@ namespace acompanhar_pedido.botoes
                 int ind_btn = 0;
                 foreach (Dictionary<string, string> item in listaProd)
                 {
+                    int quantLetras = item["nome"].ToList().Count;
+                    if (quantLetras < 15) { quantLetras = 15; }
+                    double altura = quantLetras / 10 * 20;
                     FlowLayoutPanel btn = new FlowLayoutPanel();
                     Label nomeProd = new Label();
                     Label valorProd = new Label();
                     PictureBox fotoProd = new PictureBox();
                     PictureBox remProd = new PictureBox();
-                    btn.Size = new Size(153, 180);
+                    btn.Size = new Size(210, 174 + Convert.ToInt32(altura));
                     btn.BorderStyle = BorderStyle.Fixed3D;
                     btn.Padding = new Padding(8, 5, 0, 0);
-                    btn.Margin = new Padding(5, 5, 5, 5);
-                    btn.BackColor = Color.FromArgb(255, 246, 215);
+                    btn.Margin = new Padding(10, 10, 10, 10);
+                    btn.BackColor = Color.FromArgb(240, 240, 240);
                     btn.Cursor = Cursors.Hand;
                     btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
                     btn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
                     btn.Click += new System.EventHandler(this.produtobtn_Click);
                     nomeProd.BackColor = Color.FromArgb(255, 255, 255);
-                    nomeProd.Font = new Font("Arial", 12);
+                    nomeProd.Font = new Font("Arial", 10);
+                    nomeProd.ForeColor = Color.Black;
                     nomeProd.AutoSize = false;
-                    nomeProd.Size = new Size(129, 23);
+                    nomeProd.Size = new Size(186, Convert.ToInt32(altura));
                     nomeProd.BorderStyle = BorderStyle.FixedSingle;
                     nomeProd.TextAlign = ContentAlignment.MiddleCenter;
                     nomeProd.Text = item["nome"];
                     nomeProd.Enabled = false;
                     valorProd.BackColor = Color.FromArgb(255, 255, 255);
-                    valorProd.Font = new Font("Arial", 12);
+                    valorProd.Font = new Font("Arial", 10);
+                    valorProd.ForeColor = Color.Black;
                     valorProd.AutoSize = false;
-                    valorProd.Size = new Size(129, 23);
+                    valorProd.Size = new Size(186, 30);
                     valorProd.BorderStyle = BorderStyle.FixedSingle;
                     valorProd.TextAlign = ContentAlignment.MiddleCenter;
-                    valorProd.Text = $"R${item["valor"]}";
+                    valorProd.Text = $"R${item["valor"].Replace('.', ',')}";
                     valorProd.Enabled = false;
                     fotoProd.BackColor = Color.FromArgb(255, 255, 255);
-                    fotoProd.Size = new Size(129, 70);
+                    fotoProd.Size = new Size(186, 105);
                     fotoProd.BorderStyle = BorderStyle.FixedSingle;
                     fotoProd.SizeMode = PictureBoxSizeMode.StretchImage;
                     fotoProd.Enabled = false;
-                    try { Image myimage = new Bitmap(item["caminho_foto"]); fotoProd.BackgroundImage = myimage; } catch { }
+                    try
+                    {
+                        Image myimage = new Bitmap(item["caminho_foto"]);
+                        fotoProd.BackgroundImage = myimage;
+                    }
+                    catch { }
                     fotoProd.BackgroundImageLayout = ImageLayout.Stretch;
                     remProd.BackColor = Color.Transparent;
                     remProd.Name = ind_btn.ToString();
@@ -187,7 +203,7 @@ namespace acompanhar_pedido.botoes
                     remProd.SizeMode = PictureBoxSizeMode.StretchImage;
                     remProd.Cursor = Cursors.Hand;
                     remProd.Click += new EventHandler(RemProd_Click);
-                    remProd.Margin = new Padding(112, 23, 0, 0);
+                    remProd.Margin = new Padding(170, 1, 0, 0);
                     remProd.Image = apaga_ico;
                     btn.Controls.Add(nomeProd);
                     btn.Controls.Add(valorProd);
