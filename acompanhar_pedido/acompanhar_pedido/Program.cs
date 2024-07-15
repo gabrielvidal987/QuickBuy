@@ -19,7 +19,7 @@ namespace acompanhar_pedido
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Produtos());
+            Application.Run(new FrmLogin());
         }
     }
 }

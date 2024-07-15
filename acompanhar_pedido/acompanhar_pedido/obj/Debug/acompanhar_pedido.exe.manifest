@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="acompanhar_pedido.exe" size="344464">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="acompanhar_pedido.exe" size="402320">
       <assemblyIdentity name="acompanhar_pedido" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>KYsnLs4NY773LNdjz+IYTOvRVS0MTXYIYtezO/sUOws=</dsig:DigestValue>
+        <dsig:DigestValue>3pDqvcN7pynoQNh0PE3eKA6pToDFb29vSux4bmILI9Y=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

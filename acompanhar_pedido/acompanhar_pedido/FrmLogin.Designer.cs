@@ -34,15 +34,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.password = new acompanhar_pedido.PlaceHolderTextBox();
+            this.uid = new acompanhar_pedido.PlaceHolderTextBox();
+            this.database = new acompanhar_pedido.PlaceHolderTextBox();
             this.testConexaobtn = new System.Windows.Forms.Button();
+            this.server = new acompanhar_pedido.PlaceHolderTextBox();
             this.resultConexao = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.btnLogin = new System.Windows.Forms.Button();
             this.txtSenha = new System.Windows.Forms.TextBox();
-            this.password = new acompanhar_pedido.PlaceHolderTextBox();
-            this.uid = new acompanhar_pedido.PlaceHolderTextBox();
-            this.database = new acompanhar_pedido.PlaceHolderTextBox();
-            this.server = new acompanhar_pedido.PlaceHolderTextBox();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,6 +112,52 @@
             this.label1.Text = "SERVER:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // password
+            // 
+            this.password.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.password.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.password.ForeColor = System.Drawing.Color.Gray;
+            this.password.Location = new System.Drawing.Point(5, 133);
+            this.password.Multiline = true;
+            this.password.Name = "password";
+            this.password.PasswordChar = '*';
+            this.password.PlaceHolderText = "*********";
+            this.password.Size = new System.Drawing.Size(215, 34);
+            this.password.TabIndex = 14;
+            this.password.Text = "*************";
+            this.password.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.password_KeyDown);
+            // 
+            // uid
+            // 
+            this.uid.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.uid.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.uid.ForeColor = System.Drawing.Color.Gray;
+            this.uid.Location = new System.Drawing.Point(5, 79);
+            this.uid.Multiline = true;
+            this.uid.Name = "uid";
+            this.uid.PlaceHolderText = "root";
+            this.uid.Size = new System.Drawing.Size(215, 34);
+            this.uid.TabIndex = 13;
+            this.uid.Text = "root";
+            this.uid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.uid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uid_KeyDown);
+            // 
+            // database
+            // 
+            this.database.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.database.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.database.ForeColor = System.Drawing.Color.Gray;
+            this.database.Location = new System.Drawing.Point(5, 185);
+            this.database.Multiline = true;
+            this.database.Name = "database";
+            this.database.PlaceHolderText = "acompanha_pedidosschema";
+            this.database.Size = new System.Drawing.Size(215, 34);
+            this.database.TabIndex = 15;
+            this.database.Text = "acompanha_pedidosschema";
+            this.database.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.database.KeyDown += new System.Windows.Forms.KeyEventHandler(this.database_KeyDown);
+            // 
             // testConexaobtn
             // 
             this.testConexaobtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -122,6 +168,21 @@
             this.testConexaobtn.Text = "testar conexão";
             this.testConexaobtn.UseVisualStyleBackColor = true;
             this.testConexaobtn.Click += new System.EventHandler(this.testConexaobtn_Click);
+            // 
+            // server
+            // 
+            this.server.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.server.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.server.ForeColor = System.Drawing.Color.Gray;
+            this.server.Location = new System.Drawing.Point(5, 24);
+            this.server.Multiline = true;
+            this.server.Name = "server";
+            this.server.PlaceHolderText = "localhost";
+            this.server.Size = new System.Drawing.Size(215, 34);
+            this.server.TabIndex = 12;
+            this.server.Text = "localhost";
+            this.server.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.server.KeyDown += new System.Windows.Forms.KeyEventHandler(this.server_KeyDown);
             // 
             // resultConexao
             // 
@@ -172,67 +233,6 @@
             this.txtSenha.TabIndex = 4;
             this.txtSenha.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSenha.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSenha_KeyDown);
-            // 
-            // password
-            // 
-            this.password.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.password.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.password.ForeColor = System.Drawing.Color.Gray;
-            this.password.Location = new System.Drawing.Point(5, 133);
-            this.password.Multiline = true;
-            this.password.Name = "password";
-            this.password.PasswordChar = '*';
-            this.password.PlaceHolderText = "*********";
-            this.password.Size = new System.Drawing.Size(215, 34);
-            this.password.TabIndex = 14;
-            this.password.Text = "*************";
-            this.password.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.password_KeyDown);
-            // 
-            // uid
-            // 
-            this.uid.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.uid.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.uid.ForeColor = System.Drawing.Color.Gray;
-            this.uid.Location = new System.Drawing.Point(5, 79);
-            this.uid.Multiline = true;
-            this.uid.Name = "uid";
-            this.uid.PlaceHolderText = "root";
-            this.uid.Size = new System.Drawing.Size(215, 34);
-            this.uid.TabIndex = 13;
-            this.uid.Text = "root";
-            this.uid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.uid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uid_KeyDown);
-            // 
-            // database
-            // 
-            this.database.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.database.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.database.ForeColor = System.Drawing.Color.Gray;
-            this.database.Location = new System.Drawing.Point(5, 185);
-            this.database.Multiline = true;
-            this.database.Name = "database";
-            this.database.PlaceHolderText = "acompanha_pedidosschema";
-            this.database.Size = new System.Drawing.Size(215, 34);
-            this.database.TabIndex = 15;
-            this.database.Text = "acompanha_pedidosschema";
-            this.database.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.database.KeyDown += new System.Windows.Forms.KeyEventHandler(this.database_KeyDown);
-            // 
-            // server
-            // 
-            this.server.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.server.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.server.ForeColor = System.Drawing.Color.Gray;
-            this.server.Location = new System.Drawing.Point(5, 24);
-            this.server.Multiline = true;
-            this.server.Name = "server";
-            this.server.PlaceHolderText = "localhost";
-            this.server.Size = new System.Drawing.Size(215, 34);
-            this.server.TabIndex = 12;
-            this.server.Text = "localhost";
-            this.server.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.server.KeyDown += new System.Windows.Forms.KeyEventHandler(this.server_KeyDown);
             // 
             // FrmLogin
             // 
