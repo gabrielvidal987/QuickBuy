@@ -29,75 +29,22 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLogin));
-            this.pnlLogin = new System.Windows.Forms.Panel();
-            this.txtEmail = new System.Windows.Forms.TextBox();
-            this.txtSenha = new acompanhar_pedido.PlaceHolderTextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.testConexaobtn = new System.Windows.Forms.Button();
+            this.resultConexao = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnLogin = new System.Windows.Forms.Button();
+            this.txtSenha = new System.Windows.Forms.TextBox();
             this.password = new acompanhar_pedido.PlaceHolderTextBox();
             this.uid = new acompanhar_pedido.PlaceHolderTextBox();
             this.database = new acompanhar_pedido.PlaceHolderTextBox();
-            this.testConexaobtn = new System.Windows.Forms.Button();
             this.server = new acompanhar_pedido.PlaceHolderTextBox();
-            this.resultConexao = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.pnlLogin.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pnlLogin
-            // 
-            this.pnlLogin.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlLogin.BackgroundImage")));
-            this.pnlLogin.Controls.Add(this.txtEmail);
-            this.pnlLogin.Controls.Add(this.txtSenha);
-            this.pnlLogin.Controls.Add(this.button1);
-            this.pnlLogin.Location = new System.Drawing.Point(496, 158);
-            this.pnlLogin.Name = "pnlLogin";
-            this.pnlLogin.Size = new System.Drawing.Size(360, 392);
-            this.pnlLogin.TabIndex = 0;
-            // 
-            // txtEmail
-            // 
-            this.txtEmail.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEmail.Location = new System.Drawing.Point(61, 261);
-            this.txtEmail.Multiline = true;
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(238, 16);
-            this.txtEmail.TabIndex = 5;
-            // 
-            // txtSenha
-            // 
-            this.txtSenha.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtSenha.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.txtSenha.ForeColor = System.Drawing.Color.Gray;
-            this.txtSenha.Location = new System.Drawing.Point(61, 310);
-            this.txtSenha.Name = "txtSenha";
-            this.txtSenha.PasswordChar = '*';
-            this.txtSenha.PlaceHolderText = "";
-            this.txtSenha.Size = new System.Drawing.Size(238, 16);
-            this.txtSenha.TabIndex = 4;
-            this.txtSenha.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSenha_KeyDown);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(128, 346);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(104, 34);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "ENTRAR";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // panel2
             // 
@@ -165,6 +112,67 @@
             this.label1.Text = "SERVER:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // testConexaobtn
+            // 
+            this.testConexaobtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.testConexaobtn.Location = new System.Drawing.Point(5, 223);
+            this.testConexaobtn.Name = "testConexaobtn";
+            this.testConexaobtn.Size = new System.Drawing.Size(215, 24);
+            this.testConexaobtn.TabIndex = 10;
+            this.testConexaobtn.Text = "testar conexão";
+            this.testConexaobtn.UseVisualStyleBackColor = true;
+            this.testConexaobtn.Click += new System.EventHandler(this.testConexaobtn_Click);
+            // 
+            // resultConexao
+            // 
+            this.resultConexao.BackColor = System.Drawing.SystemColors.MenuText;
+            this.resultConexao.ForeColor = System.Drawing.Color.Lime;
+            this.resultConexao.Location = new System.Drawing.Point(5, 253);
+            this.resultConexao.Multiline = true;
+            this.resultConexao.Name = "resultConexao";
+            this.resultConexao.ReadOnly = true;
+            this.resultConexao.Size = new System.Drawing.Size(215, 86);
+            this.resultConexao.TabIndex = 11;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Location = new System.Drawing.Point(12, 707);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(307, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
+            // 
+            // btnLogin
+            // 
+            this.btnLogin.BackColor = System.Drawing.SystemColors.Control;
+            this.btnLogin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogin.ForeColor = System.Drawing.Color.White;
+            this.btnLogin.Location = new System.Drawing.Point(1194, 263);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(104, 34);
+            this.btnLogin.TabIndex = 2;
+            this.btnLogin.Text = "ENTRAR";
+            this.btnLogin.UseVisualStyleBackColor = false;
+            this.btnLogin.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // txtSenha
+            // 
+            this.txtSenha.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSenha.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.txtSenha.Location = new System.Drawing.Point(1132, 207);
+            this.txtSenha.Multiline = true;
+            this.txtSenha.Name = "txtSenha";
+            this.txtSenha.PasswordChar = '*';
+            this.txtSenha.Size = new System.Drawing.Size(215, 34);
+            this.txtSenha.TabIndex = 4;
+            this.txtSenha.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtSenha.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSenha_KeyDown);
+            // 
             // password
             // 
             this.password.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -211,17 +219,6 @@
             this.database.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.database.KeyDown += new System.Windows.Forms.KeyEventHandler(this.database_KeyDown);
             // 
-            // testConexaobtn
-            // 
-            this.testConexaobtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.testConexaobtn.Location = new System.Drawing.Point(5, 223);
-            this.testConexaobtn.Name = "testConexaobtn";
-            this.testConexaobtn.Size = new System.Drawing.Size(215, 24);
-            this.testConexaobtn.TabIndex = 10;
-            this.testConexaobtn.Text = "testar conexão";
-            this.testConexaobtn.UseVisualStyleBackColor = true;
-            this.testConexaobtn.Click += new System.EventHandler(this.testConexaobtn_Click);
-            // 
             // server
             // 
             this.server.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -237,27 +234,6 @@
             this.server.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.server.KeyDown += new System.Windows.Forms.KeyEventHandler(this.server_KeyDown);
             // 
-            // resultConexao
-            // 
-            this.resultConexao.BackColor = System.Drawing.SystemColors.MenuText;
-            this.resultConexao.ForeColor = System.Drawing.Color.Lime;
-            this.resultConexao.Location = new System.Drawing.Point(5, 253);
-            this.resultConexao.Multiline = true;
-            this.resultConexao.Name = "resultConexao";
-            this.resultConexao.ReadOnly = true;
-            this.resultConexao.Size = new System.Drawing.Size(215, 86);
-            this.resultConexao.TabIndex = 11;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Location = new System.Drawing.Point(12, 707);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(307, 13);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
-            // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -265,9 +241,10 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1350, 729);
+            this.Controls.Add(this.txtSenha);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.pnlLogin);
+            this.Controls.Add(this.btnLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmLogin";
@@ -275,8 +252,6 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmLogin_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmLogin_KeyDown);
-            this.pnlLogin.ResumeLayout(false);
-            this.pnlLogin.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
@@ -285,11 +260,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel pnlLogin;
-        private System.Windows.Forms.Button button1;
-        private PlaceHolderTextBox txtSenha;
-        private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
@@ -302,6 +272,8 @@
         private PlaceHolderTextBox server;
         private System.Windows.Forms.TextBox resultConexao;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.TextBox txtSenha;
     }
 }
 

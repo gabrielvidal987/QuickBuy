@@ -30,16 +30,10 @@ namespace acompanhar_pedido
         public FrmLogin()
         {
             InitializeComponent();
-            pnlLogin.Visible = false;
+            
         }
         private void Login()
         {
-            if (txtEmail.Text != "desbravadores")
-            {
-                MessageBox.Show("Preencha o usuário");
-                txtEmail.Focus();
-                return;
-            }
             if (txtSenha.Text == "")
             {
                 MessageBox.Show("Preencha a senha");
@@ -76,15 +70,14 @@ namespace acompanhar_pedido
         }
         private void FrmLogin_Load(object sender, EventArgs e)
         {
-            txtEmail.Text = "desbravadores";
-            pnlLogin.Location = new Point(this.Size.Width / 2 - 180, this.Size.Height / 2 - 196);
-            pnlLogin.Visible = true;
-            button1.BackColor = Color.FromArgb(0,54,209);
-            button1.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 58, 225);
-            button1.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 47, 184);
-            txtEmail.Enabled = false;
+            btnLogin.BackColor = Color.FromArgb(0,54,209);
+            btnLogin.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 58, 225);
+            btnLogin.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 47, 184);
+            txtSenha.Location = new Point(panel2.Location.X + 3, panel2.Location.Y - 100);
+            btnLogin.Location = new Point(txtSenha.Location.X + 57, txtSenha.Location.Y + 50);
             txtSenha.Enabled = false;
-            button1.Enabled = false;
+            btnLogin.Enabled = false;
+            testConexaobtn_Click(sender, e);
         }
         private void FrmLogin_KeyDown(object sender, KeyEventArgs e)
         {
@@ -113,38 +106,30 @@ namespace acompanhar_pedido
         }
         private void testConexaobtn_Click(object sender, EventArgs e)
         {
-            //if (server.Text != "" && uid.Text != "" && password.Text != "" && database.Text != "")
-            //{
-            //    Dictionary<string, string> novoJson = new Dictionary<string, string>()
-            //    {
-            //        { "server", server.Text },
-            //        { "uid", uid.Text },
-            //        { "pwd", password.Text },
-            //        { "database", database.Text }
-            //    };
-            //    string jsonString = JsonConvert.SerializeObject(novoJson);
-            //    File.WriteAllText("BDfila.json", jsonString);
-            //}
-            Dictionary<string, string> novoJson = new Dictionary<string, string>()
-            {
-                { "server", string.IsNullOrEmpty(server.Text) ? "localhost" : server.Text },
-                { "uid", string.IsNullOrEmpty(uid.Text) ? "root" : uid.Text },
-                { "pwd", string.IsNullOrEmpty(password.Text) ? "Vid@l9871" : password.Text },
-                { "database", string.IsNullOrEmpty(database.Text) ? "acompanha_pedidosschema" : database.Text }
-            };
+            resultConexao.Text = "";
             try
             {
-                ConectarSqlClasse sql = new ConectarSqlClasse();
-                resultConexao.Text = "";
-                resultConexao.Text = "Realizando tentativa de conexão....\n";
-                resultConexao.Text += $"{sql.ConectDataBase()}\n";
-                if (sql.ConectDataBase() == "Conexão com o banco de dados realizada com sucesso!!! \n")
+                Dictionary<string, string> novoJson = new Dictionary<string, string>()
                 {
-                    string jsonString = JsonConvert.SerializeObject(novoJson);
-                    File.WriteAllText("BDfila.json", jsonString);
-                    txtEmail.Enabled = false;
+                    { "server", string.IsNullOrEmpty(server.Text) ? "localhost" : server.Text },
+                    { "uid", string.IsNullOrEmpty(uid.Text) ? "root" : uid.Text },
+                    { "pwd", string.IsNullOrEmpty(password.Text) ? "Vid@l9871" : password.Text },
+                    { "database", string.IsNullOrEmpty(database.Text) ? "acompanha_pedidosschema" : database.Text }
+                };
+                string jsonString = JsonConvert.SerializeObject(novoJson);
+                if (File.Exists("BDfila.json"))
+                {
+                    File.Delete("BDfila.json");
+                }
+                File.WriteAllText("BDfila.json", jsonString);
+                ConectarSqlClasse.AtualizarDicionario();
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                string res_conn = $"{sql.ConectDataBase()}";
+                if (res_conn == "Conexão com o banco de dados realizada com sucesso!!!")
+                {
+                    resultConexao.Text += res_conn;
                     txtSenha.Enabled = true;
-                    button1.Enabled = true;
+                    btnLogin.Enabled = true;
                     testConexaobtn.Enabled = false;
                     server.Enabled = false;
                     uid.Enabled = false;
@@ -152,10 +137,14 @@ namespace acompanhar_pedido
                     database.Enabled = false;
                     txtSenha.Focus();
                 }
+                else
+                {
+                    resultConexao.Text += res_conn;
+                }
             } 
             catch 
             {
-                resultConexao.Text += "Conexão sem sucesso....\n";
+                resultConexao.Text += "Conexão sem sucesso....";
             }
 
         }
