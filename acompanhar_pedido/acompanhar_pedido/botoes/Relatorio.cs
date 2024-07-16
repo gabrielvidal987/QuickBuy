@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -28,6 +29,13 @@ namespace acompanhar_pedido.botoes
         public void Estetica()
         {
             pcholdPesquisa.PlaceHolderText = "Digite o nome";
+            flowLayoutPanel2.Size = new Size(1140, 650);
+            flowLayoutPanel2.Location = new Point(200, 20);
+            button1.Width = flowLayoutPanel2.Width - 10;
+            tabelaVendasProd.Width = flowLayoutPanel2.Width - 10;
+            tabelaVendasProd.Height = flowLayoutPanel2.Height - 540;
+            tabelaVendas.Width = flowLayoutPanel2.Width - 10;
+            tabelaVendas.Height = flowLayoutPanel2.Height - 300;
         }
         private void apagaBD_Click(object sender, EventArgs e)
         {
@@ -66,13 +74,13 @@ namespace acompanhar_pedido.botoes
             entradaTotal = 0;
             entradas.Text = string.Empty;
             saidas.Text = string.Empty;
+            ConectarSqlClasse sql = new ConectarSqlClasse();
             try
             {
                 tabelaVendas.Columns.Clear();
                 bool filtro = false;
                 string ordem = "";
                 string nome = "";
-                ConectarSqlClasse sql = new ConectarSqlClasse();
                 if (btnNomeAZ.Checked)
                 {
                     filtro = true;
@@ -116,7 +124,17 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
 
-            
+            try
+            {
+                tabelaVendasProd.Columns.Clear();
+                DataTable datatable = new DataTable();
+                List<Dictionary<string,string>> listaBruta = new List<Dictionary<string,string>>(sql.ListaVendidos());
+                datatable.Columns.Add("produto");
+                datatable.Columns.Add("qtd");
+                foreach (var dict in  listaBruta) { datatable.Rows.Add(dict["produto"], dict["qtd"]); }
+                tabelaVendasProd.DataSource = datatable;
+            }
+            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
         public void AdicionaMedia()
         {
@@ -161,8 +179,11 @@ namespace acompanhar_pedido.botoes
             try
             {
                 button1.Width = flowLayoutPanel2.Width - 10;
+                tabelaVendasProd.Width = flowLayoutPanel2.Width - 10;
+                tabelaVendasProd.Height = flowLayoutPanel2.Height - 540;
                 tabelaVendas.Width = flowLayoutPanel2.Width - 10;
-                tabelaVendas.Height = flowLayoutPanel2.Height - 150;
+                tabelaVendas.Height = flowLayoutPanel2.Height - 300;
+
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 entradas.Text = entradaTotal.ToString("F");
                 if (saidas.Text != "")
