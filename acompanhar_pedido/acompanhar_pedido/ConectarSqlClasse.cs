@@ -32,21 +32,10 @@ namespace acompanhar_pedido
         //STATIC dictionary contendo as infos de acesso ao Banco de dados
         //private static Dictionary<string, string> res = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText("BDfila.json"));
         private static Dictionary<string, string> res = new Dictionary<string, string>();
-        public static void AtualizarDicionario()
+        public static void AtualizarDicionario(Dictionary<string,string> dadosConn)
         {
-            string jsonFilePath = "BDfila.json";
-            // Lê o arquivo JSON e atualiza o dicionário estático
-            if (File.Exists(jsonFilePath))
-            {
-                string jsonContents = File.ReadAllText(jsonFilePath);
-                res = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContents);
-            }
-            else
-            {
-                res.Clear();
-            }
+            res = dadosConn;
         }
-        
         //realiza um teste de conexão ao banco de dados com as config da tela de login, realiza o teste na tela de login
         public string ConectDataBase()
         {

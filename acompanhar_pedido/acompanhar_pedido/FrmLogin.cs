@@ -109,20 +109,14 @@ namespace acompanhar_pedido
             resultConexao.Text = "";
             try
             {
-                Dictionary<string, string> novoJson = new Dictionary<string, string>()
+                Dictionary<string, string> conn = new Dictionary<string, string>()
                 {
                     { "server", string.IsNullOrEmpty(server.Text) ? "localhost" : server.Text },
                     { "uid", string.IsNullOrEmpty(uid.Text) ? "root" : uid.Text },
                     { "pwd", string.IsNullOrEmpty(password.Text) ? "Vid@l9871" : password.Text },
                     { "database", string.IsNullOrEmpty(database.Text) ? "acompanha_pedidosschema" : database.Text }
                 };
-                string jsonString = JsonConvert.SerializeObject(novoJson);
-                if (File.Exists("BDfila.json"))
-                {
-                    File.Delete("BDfila.json");
-                }
-                File.WriteAllText("BDfila.json", jsonString);
-                ConectarSqlClasse.AtualizarDicionario();
+                ConectarSqlClasse.AtualizarDicionario(conn);
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 string res_conn = $"{sql.ConectDataBase()}";
                 if (res_conn == "Conexão com o banco de dados realizada com sucesso!!!")
