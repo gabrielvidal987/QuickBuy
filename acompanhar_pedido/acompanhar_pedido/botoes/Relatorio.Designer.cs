@@ -42,9 +42,9 @@
             this.btnValor = new System.Windows.Forms.RadioButton();
             this.btnUmNome = new System.Windows.Forms.RadioButton();
             this.exportExc = new System.Windows.Forms.Button();
-            this.exportTxt = new System.Windows.Forms.Button();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
+            this.tabelaVendas = new System.Windows.Forms.DataGridView();
             this.pnlES = new System.Windows.Forms.Panel();
             this.saidas = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -60,8 +60,6 @@
             this.btnAddpic = new System.Windows.Forms.OpenFileDialog();
             this.escolherLocal = new System.Windows.Forms.FolderBrowserDialog();
             this.label7 = new System.Windows.Forms.Label();
-            this.tabelaVendasProd = new System.Windows.Forms.DataGridView();
-            this.tabelaVendas = new System.Windows.Forms.DataGridView();
             this.resFinal = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdPesquisa = new acompanhar_pedido.PlaceHolderTextBox();
             this.txDeb = new acompanhar_pedido.PlaceHolderTextBox();
@@ -69,11 +67,10 @@
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tabelaVendas)).BeginInit();
             this.pnlES.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tabelaVendasProd)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tabelaVendas)).BeginInit();
             this.SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -130,10 +127,8 @@
             this.flowLayoutPanel2.Controls.Add(this.btnUmNome);
             this.flowLayoutPanel2.Controls.Add(this.pcholdPesquisa);
             this.flowLayoutPanel2.Controls.Add(this.exportExc);
-            this.flowLayoutPanel2.Controls.Add(this.exportTxt);
             this.flowLayoutPanel2.Controls.Add(this.flowLayoutPanel3);
             this.flowLayoutPanel2.Controls.Add(this.tabelaVendas);
-            this.flowLayoutPanel2.Controls.Add(this.tabelaVendasProd);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(224, 12);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(1114, 657);
@@ -239,26 +234,12 @@
             this.exportExc.UseVisualStyleBackColor = false;
             this.exportExc.Click += new System.EventHandler(this.exportExc_Click);
             // 
-            // exportTxt
-            // 
-            this.exportTxt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.exportTxt.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.exportTxt.Enabled = false;
-            this.exportTxt.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.exportTxt.Location = new System.Drawing.Point(3, 109);
-            this.exportTxt.Name = "exportTxt";
-            this.exportTxt.Size = new System.Drawing.Size(146, 31);
-            this.exportTxt.TabIndex = 13;
-            this.exportTxt.Text = "EXPORTAR PARA TXT";
-            this.exportTxt.UseVisualStyleBackColor = false;
-            this.exportTxt.Click += new System.EventHandler(this.exportTxt_Click);
-            // 
             // flowLayoutPanel3
             // 
             this.flowLayoutPanel3.Controls.Add(this.txDeb);
             this.flowLayoutPanel3.Controls.Add(this.txCred);
             this.flowLayoutPanel3.Controls.Add(this.label1);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(155, 109);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 109);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
             this.flowLayoutPanel3.Size = new System.Drawing.Size(948, 28);
             this.flowLayoutPanel3.TabIndex = 14;
@@ -273,6 +254,17 @@
             this.label1.Size = new System.Drawing.Size(363, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "*caso a taxa não seja especificada será utilizada uma taxa padrão de 1,5%*";
+            // 
+            // tabelaVendas
+            // 
+            this.tabelaVendas.AllowUserToAddRows = false;
+            this.tabelaVendas.AllowUserToDeleteRows = false;
+            this.tabelaVendas.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tabelaVendas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tabelaVendas.Location = new System.Drawing.Point(3, 143);
+            this.tabelaVendas.Name = "tabelaVendas";
+            this.tabelaVendas.Size = new System.Drawing.Size(1070, 213);
+            this.tabelaVendas.TabIndex = 15;
             // 
             // pnlES
             // 
@@ -424,28 +416,6 @@
             this.label7.TabIndex = 36;
             this.label7.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
             // 
-            // tabelaVendasProd
-            // 
-            this.tabelaVendasProd.AllowUserToAddRows = false;
-            this.tabelaVendasProd.AllowUserToDeleteRows = false;
-            this.tabelaVendasProd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabelaVendasProd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tabelaVendasProd.Location = new System.Drawing.Point(3, 365);
-            this.tabelaVendasProd.Name = "tabelaVendasProd";
-            this.tabelaVendasProd.Size = new System.Drawing.Size(1070, 200);
-            this.tabelaVendasProd.TabIndex = 16;
-            // 
-            // tabelaVendas
-            // 
-            this.tabelaVendas.AllowUserToAddRows = false;
-            this.tabelaVendas.AllowUserToDeleteRows = false;
-            this.tabelaVendas.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.tabelaVendas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tabelaVendas.Location = new System.Drawing.Point(3, 146);
-            this.tabelaVendas.Name = "tabelaVendas";
-            this.tabelaVendas.Size = new System.Drawing.Size(1070, 213);
-            this.tabelaVendas.TabIndex = 15;
-            // 
             // resFinal
             // 
             this.resFinal.Enabled = false;
@@ -524,13 +494,12 @@
             this.flowLayoutPanel2.PerformLayout();
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tabelaVendas)).EndInit();
             this.pnlES.ResumeLayout(false);
             this.pnlES.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tabelaVendasProd)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tabelaVendas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -563,7 +532,6 @@
         private System.Windows.Forms.OpenFileDialog btnAddpic;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button exportExc;
-        private System.Windows.Forms.Button exportTxt;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.FolderBrowserDialog escolherLocal;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
@@ -572,7 +540,6 @@
         private System.Windows.Forms.Label label7;
         private PlaceHolderTextBox txDeb;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.DataGridView tabelaVendasProd;
         private System.Windows.Forms.DataGridView tabelaVendas;
     }
 }

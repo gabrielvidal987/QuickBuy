@@ -20,6 +20,10 @@ namespace acompanhar_pedido.botoes
         string foto_caminho;
         string exten = "png";
         double entradaTotal = 0;
+        DataTable datatable = new DataTable();
+        List<Dictionary<string, string>> listaBruta = new List<Dictionary<string, string>>();
+
+
         public Relatorio()
         {
             InitializeComponent();
@@ -32,10 +36,8 @@ namespace acompanhar_pedido.botoes
             flowLayoutPanel2.Size = new Size(1140, 650);
             flowLayoutPanel2.Location = new Point(200, 20);
             button1.Width = flowLayoutPanel2.Width - 10;
-            tabelaVendasProd.Width = flowLayoutPanel2.Width - 10;
-            tabelaVendasProd.Height = flowLayoutPanel2.Height - 540;
             tabelaVendas.Width = flowLayoutPanel2.Width - 10;
-            tabelaVendas.Height = flowLayoutPanel2.Height - 300;
+            tabelaVendas.Height = flowLayoutPanel2.Height - 150;
         }
         private void apagaBD_Click(object sender, EventArgs e)
         {
@@ -118,21 +120,9 @@ namespace acompanhar_pedido.botoes
                     tabelaVendas.DataSource = sql.Relatorio(filtro, ordem, nome);
                 }
                 tabelaVendas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                listaBruta = sql.ListaVendidos();
                 AdicionaMedia();
                 exportExc.Enabled = true;
-                exportTxt.Enabled = true;
-            }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-
-            try
-            {
-                tabelaVendasProd.Columns.Clear();
-                DataTable datatable = new DataTable();
-                List<Dictionary<string,string>> listaBruta = new List<Dictionary<string,string>>(sql.ListaVendidos());
-                datatable.Columns.Add("produto");
-                datatable.Columns.Add("qtd");
-                foreach (var dict in  listaBruta) { datatable.Rows.Add(dict["produto"], dict["qtd"]); }
-                tabelaVendasProd.DataSource = datatable;
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
@@ -147,6 +137,8 @@ namespace acompanhar_pedido.botoes
                 if (txDeb.Text != "") { deb = double.Parse(txDeb.Text.Replace("%", "")) / 100; }
                 if (txCred.Text != "") { cred = double.Parse(txCred.Text.Replace("%", "")) / 100; }
                 tabelaVendas.Columns.Add("Tempo de espera", "Tempo de espera");
+                tabelaVendas.Columns.Add("Item", "ITEM");
+                tabelaVendas.Columns.Add("QTD vendida", "QTD vendida");
                 for (int c = 0; c < qtdLinha; c++)
                 {
                     tabelaVendas.Rows[c].Cells[11].Value = $"{int.Parse(tabelaVendas.Rows[c].Cells[6].Value.ToString().Split(':')[1]) - int.Parse(tabelaVendas.Rows[c].Cells[5].Value.ToString().Split(':')[1])} minuto(s)";
@@ -160,6 +152,7 @@ namespace acompanhar_pedido.botoes
                     }
                 }
                 for (int c = 0; c <qtdLinha; c++) { entradaTotal += Convert.ToDouble(tabelaVendas.Rows[c].Cells[9].Value); }
+                for (int c = 0; c < listaBruta.Count(); c++) { tabelaVendas.Rows[c].Cells[12].Value = listaBruta[c]["produto"]; tabelaVendas.Rows[c].Cells[13].Value = listaBruta[c]["qtd"]; }
                 tabelaVendas.Columns[0].HeaderText = "Senha";
                 tabelaVendas.Columns[1].HeaderText = "Nome";
                 tabelaVendas.Columns[2].HeaderText = "Endereço";
@@ -179,10 +172,8 @@ namespace acompanhar_pedido.botoes
             try
             {
                 button1.Width = flowLayoutPanel2.Width - 10;
-                tabelaVendasProd.Width = flowLayoutPanel2.Width - 10;
-                tabelaVendasProd.Height = flowLayoutPanel2.Height - 540;
                 tabelaVendas.Width = flowLayoutPanel2.Width - 10;
-                tabelaVendas.Height = flowLayoutPanel2.Height - 300;
+                tabelaVendas.Height = flowLayoutPanel2.Height - 150;
 
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 entradas.Text = entradaTotal.ToString("F");
@@ -256,14 +247,18 @@ namespace acompanhar_pedido.botoes
                         Worksheet ws = wb.Worksheets[0];
                         ws.Cells[0, 0].PutValue("Senha");
                         ws.Cells[0, 1].PutValue("Nome");
-                        ws.Cells[0, 2].PutValue("Itens");
-                        ws.Cells[0, 3].PutValue("observações");
-                        ws.Cells[0, 4].PutValue("Hora do pedido");
-                        ws.Cells[0, 5].PutValue("Hora de conclusão");
-                        ws.Cells[0, 6].PutValue("Valor Bruto");
-                        ws.Cells[0, 7].PutValue("Forma de pagamento");
-                        ws.Cells[0, 8].PutValue("Valor líquido");
-                        ws.Cells[0, 9].PutValue("Tempo de espera");
+                        ws.Cells[0, 2].PutValue("Endereço");
+                        ws.Cells[0, 3].PutValue("Itens");
+                        ws.Cells[0, 4].PutValue("observações");
+                        ws.Cells[0, 5].PutValue("Hora do pedido");
+                        ws.Cells[0, 6].PutValue("Hora de conclusão");
+                        ws.Cells[0, 7].PutValue("Valor Bruto");
+                        ws.Cells[0, 8].PutValue("Forma de pagamento");
+                        ws.Cells[0, 9].PutValue("Valor líquido");
+                        ws.Cells[0, 10].PutValue("Operador");
+                        ws.Cells[0, 11].PutValue("Tempo de espera");
+                        ws.Cells[0, 12].PutValue("ITEM");
+                        ws.Cells[0, 13].PutValue("Total Vendido");
                         string l = "A";
                         for (int c = 0; c < tabelaVendas.RowCount; c++)
                         {
@@ -313,6 +308,15 @@ namespace acompanhar_pedido.botoes
                                     case 13:
                                         l = "O";
                                         break;
+                                    case 14:
+                                        l = "P";
+                                        break;
+                                    case 15:
+                                        l = "Q";
+                                        break;
+                                    case 16:
+                                        l = "R";
+                                        break;
                                     default:
                                         return;
                                 }
@@ -344,41 +348,6 @@ namespace acompanhar_pedido.botoes
                     catch (Exception er)
                     {
                         MessageBox.Show("Erro ao criar a planilha com o relatório.");
-                        ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-                    }
-                }
-                catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-            }
-        }
-        private void exportTxt_Click(object sender, EventArgs e)
-        {
-            DialogResult result = escolherLocal.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                try
-                {
-                    List<string> list = new List<string>();
-                    string fl = escolherLocal.SelectedPath;
-                    try
-                    {
-                        File.AppendAllText(fl + @"\Relatório de vendas.txt", "Senha || Nome || Itens || observações || Hora do pedido || Hora de conclusão || Valor Bruto || Forma de pagamento || Valor líquido || Tempo de espera \n");
-                        for (int c = 0; c < tabelaVendas.RowCount; c++)
-                        {
-                            for (int i = 0; i < tabelaVendas.ColumnCount; i++)
-                            {
-                                if (i == tabelaVendas.ColumnCount - 1) { list.Add($"{tabelaVendas.Rows[c].Cells[i].Value}"); continue; }
-                                list.Add($"{tabelaVendas.Rows[c].Cells[i].Value} || ");
-                            }
-                            foreach (string s in list) { File.AppendAllText(fl + @"\Relatório de vendas.txt", s); }
-                            if (c == tabelaVendas.RowCount - 1) { break; }
-                            File.AppendAllText(fl + @"\Relatório de vendas.txt", "\n");
-                            list.Clear();
-                        }
-                        MessageBox.Show("Relatório salvo com sucesso em TXT no caminho: " + fl);
-                    }
-                    catch (Exception er)
-                    {
-                        MessageBox.Show("Erro ao exportar o relatório para TXT.");
                         ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                     }
                 }
