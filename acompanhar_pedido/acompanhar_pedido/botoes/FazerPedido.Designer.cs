@@ -37,6 +37,7 @@ namespace acompanhar_pedido.teste
             this.pnlTotal = new System.Windows.Forms.Panel();
             this.boxPgto = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.pcholdObs = new acompanhar_pedido.PlaceHolderTextBox();
             this.resumo = new System.Windows.Forms.Label();
             this.btnCad = new System.Windows.Forms.Button();
             this.tbExtrato = new System.Windows.Forms.FlowLayoutPanel();
@@ -46,7 +47,6 @@ namespace acompanhar_pedido.teste
             this.pnlFimExtrato = new System.Windows.Forms.Panel();
             this.totalValorExtrato = new System.Windows.Forms.Label();
             this.totalExtratoTexto = new System.Windows.Forms.Label();
-            this.tempo_nome_cliente = new System.Windows.Forms.Timer(this.components);
             this.impressora = new System.Drawing.Printing.PrintDocument();
             this.label5 = new System.Windows.Forms.Label();
             this.btnHist = new System.Windows.Forms.Button();
@@ -55,7 +55,6 @@ namespace acompanhar_pedido.teste
             this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdEndereco = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdCliente = new acompanhar_pedido.PlaceHolderTextBox();
-            this.pcholdObs = new acompanhar_pedido.PlaceHolderTextBox();
             this.pnlTotal.SuspendLayout();
             this.pnlFimExtrato.SuspendLayout();
             this.pnlGeral.SuspendLayout();
@@ -128,6 +127,18 @@ namespace acompanhar_pedido.teste
             this.label1.Size = new System.Drawing.Size(332, 15);
             this.label1.TabIndex = 28;
             this.label1.Text = "*para remover/subtrair um item basta clicar em seu nome no extrato*";
+            // 
+            // pcholdObs
+            // 
+            this.pcholdObs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pcholdObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
+            this.pcholdObs.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdObs.Location = new System.Drawing.Point(28, 354);
+            this.pcholdObs.Multiline = true;
+            this.pcholdObs.Name = "pcholdObs";
+            this.pcholdObs.PlaceHolderText = null;
+            this.pcholdObs.Size = new System.Drawing.Size(380, 56);
+            this.pcholdObs.TabIndex = 4;
             // 
             // resumo
             // 
@@ -258,11 +269,6 @@ namespace acompanhar_pedido.teste
             this.totalExtratoTexto.Text = "TOTAL";
             this.totalExtratoTexto.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // tempo_nome_cliente
-            // 
-            this.tempo_nome_cliente.Enabled = true;
-            this.tempo_nome_cliente.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // impressora
             // 
             this.impressora.DocumentName = "senha_pedido";
@@ -293,7 +299,6 @@ namespace acompanhar_pedido.teste
             // 
             // filtraProd
             // 
-            this.filtraProd.Enabled = true;
             this.filtraProd.Tick += new System.EventHandler(this.filtraProd_Tick);
             // 
             // pnlGeral
@@ -320,6 +325,7 @@ namespace acompanhar_pedido.teste
             this.pcholdBuscaProd.TabIndex = 35;
             this.pcholdBuscaProd.Text = "Buscar produto...";
             this.pcholdBuscaProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pcholdBuscaProd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pcholdBuscaProd_KeyPress);
             // 
             // pcholdEndereco
             // 
@@ -331,6 +337,7 @@ namespace acompanhar_pedido.teste
             this.pcholdEndereco.PlaceHolderText = null;
             this.pcholdEndereco.Size = new System.Drawing.Size(221, 30);
             this.pcholdEndereco.TabIndex = 1;
+            this.pcholdEndereco.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdEndereco_KeyDown);
             // 
             // pcholdCliente
             // 
@@ -343,18 +350,7 @@ namespace acompanhar_pedido.teste
             this.pcholdCliente.Size = new System.Drawing.Size(221, 30);
             this.pcholdCliente.TabIndex = 0;
             this.pcholdCliente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyDown);
-            // 
-            // pcholdObs
-            // 
-            this.pcholdObs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pcholdObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
-            this.pcholdObs.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdObs.Location = new System.Drawing.Point(28, 354);
-            this.pcholdObs.Multiline = true;
-            this.pcholdObs.Name = "pcholdObs";
-            this.pcholdObs.PlaceHolderText = null;
-            this.pcholdObs.Size = new System.Drawing.Size(380, 56);
-            this.pcholdObs.TabIndex = 4;
+            this.pcholdCliente.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyUp);
             // 
             // FazerPedido
             // 
@@ -406,7 +402,6 @@ namespace acompanhar_pedido.teste
         private System.Windows.Forms.Panel pnlFimExtrato;
         private System.Windows.Forms.Label totalValorExtrato;
         private System.Windows.Forms.Label totalExtratoTexto;
-        private System.Windows.Forms.Timer tempo_nome_cliente;
         private System.Drawing.Printing.PrintDocument impressora;
         private System.Windows.Forms.ComboBox boxPgto;
         private System.Windows.Forms.Label label5;

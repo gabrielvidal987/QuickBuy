@@ -20,7 +20,7 @@ namespace acompanhar_pedido.botoes
         string foto_caminho;
         string exten = "png";
         double entradaTotal = 0;
-        DataTable datatable = new DataTable();
+        DataTable dt = new DataTable();
         List<Dictionary<string, string>> listaBruta = new List<Dictionary<string, string>>();
 
 
@@ -46,11 +46,12 @@ namespace acompanhar_pedido.botoes
             {
                 try
                 {
-                    if (delProduto.Checked != false || delVendas.Checked != false)
+                    if (delProduto.Checked|| delVendas.Checked|| delPendentes.Checked)
                     {
                         ConectarSqlClasse sql = new ConectarSqlClasse();
                         string produto = "*";
                         string vendas = "*";
+                        string pendentes = "*";
                         if (delProduto.Checked)
                         {
                             produto = "produtos";
@@ -59,9 +60,14 @@ namespace acompanhar_pedido.botoes
                         {
                             vendas = "pedidos_prontos";
                         }
-                        MessageBox.Show(sql.LimparBD(produto, vendas));
+                        if (delPendentes.Checked)
+                        {
+                            pendentes = "pedidos";
+                        }
+                        MessageBox.Show(sql.LimparBD(produto, vendas,pendentes));
                         delProduto.Checked = false;
                         delVendas.Checked = false;
+                        delPendentes.Checked = false;
                     }
                     else
                     {
@@ -73,9 +79,11 @@ namespace acompanhar_pedido.botoes
         }
         private void GeraRelatorio_Click(object sender, EventArgs e)
         {
+            //ele cria tudo em um datatable chamado 'dt'. após alterar todo esse dt ele atribui os dados dele ao TabelaVendas
             entradaTotal = 0;
             entradas.Text = string.Empty;
             saidas.Text = string.Empty;
+            dt.Clear();
             ConectarSqlClasse sql = new ConectarSqlClasse();
             try
             {
@@ -87,13 +95,13 @@ namespace acompanhar_pedido.botoes
                 {
                     filtro = true;
                     ordem = "az";
-                    tabelaVendas.DataSource = sql.Relatorio(filtro, ordem, nome);
+                    dt = sql.Relatorio(filtro, ordem, nome);
                 }
                 else if (btnNomeZA.Checked)
                 {
                     filtro = true;
                     ordem = "za";
-                    tabelaVendas.DataSource = sql.Relatorio(filtro, ordem, nome);
+                    dt = sql.Relatorio(filtro, ordem, nome);
                 }
                 else if (btnUmNome.Checked)
                 {
@@ -102,7 +110,7 @@ namespace acompanhar_pedido.botoes
                         filtro = true;
                         ordem = "nome";
                         nome = pcholdPesquisa.Text;
-                        tabelaVendas.DataSource = sql.Relatorio(filtro, ordem, nome);
+                        dt = sql.Relatorio(filtro, ordem, nome);
                     }
                     else
                     {
@@ -113,13 +121,13 @@ namespace acompanhar_pedido.botoes
                 {
                     filtro = true;
                     ordem = "venda";
-                    tabelaVendas.DataSource = sql.Relatorio(filtro, ordem, nome);
+                    dt = sql.Relatorio(filtro, ordem, nome);
                 }
                 else
                 {
-                    tabelaVendas.DataSource = sql.Relatorio(filtro, ordem, nome);
+                    dt = sql.Relatorio(filtro, ordem, nome);
                 }
-                tabelaVendas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                //tabela que pega a lista dos produtos vendidos
                 listaBruta = sql.ListaVendidos();
                 AdicionaMedia();
                 exportExc.Enabled = true;
@@ -131,39 +139,54 @@ namespace acompanhar_pedido.botoes
             try
             {
                 //add media de tempo de espera e valor liquido
-                int qtdLinha = tabelaVendas.RowCount;
+                int qtdLinha = dt.Rows.Count;
                 double deb = 0.015; // 1,5 / 100 = 0.015
                 double cred = 0.015; // 1,5 / 100 = 0.015
                 if (txDeb.Text != "") { deb = double.Parse(txDeb.Text.Replace("%", "")) / 100; }
                 if (txCred.Text != "") { cred = double.Parse(txCred.Text.Replace("%", "")) / 100; }
-                tabelaVendas.Columns.Add("Tempo de espera", "Tempo de espera");
-                tabelaVendas.Columns.Add("Item", "ITEM");
-                tabelaVendas.Columns.Add("QTD vendida", "QTD vendida");
+                dt.Columns.Add("Tempo de espera");
+                dt.Columns.Add("Produto");
+                dt.Columns.Add("QTD vendida");
+                //calcula os valores liquidos com taxas de maquinas
                 for (int c = 0; c < qtdLinha; c++)
                 {
-                    tabelaVendas.Rows[c].Cells[11].Value = $"{int.Parse(tabelaVendas.Rows[c].Cells[6].Value.ToString().Split(':')[1]) - int.Parse(tabelaVendas.Rows[c].Cells[5].Value.ToString().Split(':')[1])} minuto(s)";
-                    if (tabelaVendas.Rows[c].Cells[8].Value.ToString() == "debito")
+                    dt.Rows[c][11] = $"{int.Parse(dt.Rows[c][6].ToString().Split(':')[1]) - int.Parse(dt.Rows[c][5].ToString().Split(':')[1])} minuto(s)";
+                    if (dt.Rows[c][8].ToString() == "debito")
                     {
-                        tabelaVendas.Rows[c].Cells[9].Value = (double.Parse(tabelaVendas.Rows[c].Cells[7].Value.ToString()) - (double.Parse(tabelaVendas.Rows[c].Cells[7].Value.ToString()) * deb)).ToString("F");
+                        dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * deb)).ToString("F");
                     }
-                    if (tabelaVendas.Rows[c].Cells[8].Value.ToString() == "credito")
+                    if (dt.Rows[c][8].ToString() == "credito")
                     {
-                        tabelaVendas.Rows[c].Cells[9].Value = (double.Parse(tabelaVendas.Rows[c].Cells[7].Value.ToString()) - (double.Parse(tabelaVendas.Rows[c].Cells[7].Value.ToString()) * cred)).ToString("F");
+                        dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * cred)).ToString("F");
                     }
                 }
-                for (int c = 0; c <qtdLinha; c++) { entradaTotal += Convert.ToDouble(tabelaVendas.Rows[c].Cells[9].Value); }
-                for (int c = 0; c < listaBruta.Count(); c++) { tabelaVendas.Rows[c].Cells[12].Value = listaBruta[c]["produto"]; tabelaVendas.Rows[c].Cells[13].Value = listaBruta[c]["qtd"]; }
-                tabelaVendas.Columns[0].HeaderText = "Senha";
-                tabelaVendas.Columns[1].HeaderText = "Nome";
-                tabelaVendas.Columns[2].HeaderText = "Endereço";
-                tabelaVendas.Columns[3].HeaderText = "Itens";
-                tabelaVendas.Columns[4].HeaderText = "Observações";
-                tabelaVendas.Columns[5].HeaderText = "hora do pedido";
-                tabelaVendas.Columns[6].HeaderText = "hora de conclusão";
-                tabelaVendas.Columns[7].HeaderText = "Valor Bruto";
-                tabelaVendas.Columns[8].HeaderText = "Forma de pagamento";
-                tabelaVendas.Columns[9].HeaderText = "Valor líquido";
-                tabelaVendas.Columns[10].HeaderText = "Operador";
+                //calcula a entrada total baseada na tabela/relatorio gerado
+                for (int c = 0; c <qtdLinha; c++) { entradaTotal += Convert.ToDouble(dt.Rows[c][9]); }
+                //coloca no relatório a qtd de cada produto vendido
+                for (int c = 0; c < listaBruta.Count(); c++) 
+                {
+                    if (c > dt.Rows.Count - 1)
+                    {
+                        dt.Rows.Add();
+                        dt.Rows[c][12] = listaBruta[c]["produto"]; dt.Rows[c][13] = listaBruta[c]["qtd"];
+                    }
+                    dt.Rows[c][12] = listaBruta[c]["produto"]; dt.Rows[c][13] = listaBruta[c]["qtd"]; 
+                }
+                //altera o nome das colunas
+                dt.Columns[0].ColumnName = "Senha";
+                dt.Columns[1].ColumnName = "Nome";
+                dt.Columns[2].ColumnName = "Endereço";
+                dt.Columns[3].ColumnName = "Itens";
+                dt.Columns[4].ColumnName = "Observações";
+                dt.Columns[5].ColumnName = "hora do pedido";
+                dt.Columns[6].ColumnName = "hora de conclusão";
+                dt.Columns[7].ColumnName = "Valor Bruto";
+                dt.Columns[8].ColumnName = "Forma de pagamento";
+                dt.Columns[9].ColumnName = "Valor líquido";
+                dt.Columns[10].ColumnName = "Operador";
+                //atribui os dados do dt ao tabelaVendas
+                tabelaVendas.DataSource = dt;
+                tabelaVendas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }

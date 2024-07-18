@@ -225,13 +225,6 @@ namespace acompanhar_pedido.teste
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (pcholdCliente.Text != "")
-            {
-                clienteExtrato.Text = $"Cliente: {pcholdCliente.Text}";
-            }
-        }
         private void btnReset_Click(object sender, EventArgs e)
         {
             try
@@ -267,8 +260,8 @@ namespace acompanhar_pedido.teste
             string produto_quantidade = "";
             string obs = pcholdObs.Text;
             string endereco = pcholdEndereco.Text;
-            if (pcholdEndereco.Text == "") { endereco = "endereço não cadastrado"; }
-            nf = $"Cliente: {nome_cliente}";
+            if (pcholdEndereco.Text.Length < 5) { endereco = "endereço não cadastrado"; }
+            nf = $"Cliente: {nome_cliente}\n";
             try 
             { 
                 if (obs == "")
@@ -282,13 +275,13 @@ namespace acompanhar_pedido.teste
                     nome_produto = item["nome"];
                     string quantidade = $"{item["quantidade"]}X";
                     produto_quantidade += $"{quantidade} {nome_produto},";
-                    nf += $"\nItem: {item["nome"]} qtd: {item["quantidade"]}";
+                    nf += $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
                 }
                 if (nome_cliente != "" && nome_produto != "sem produto")
                 {
                     string hora_pedido = horario.ToString("HH:mm");
                     string formaPag = boxPgto.Text.ToLower().Replace('é', 'e');
-                    nf += $"\n\nobs: {obs} \n\nHorario do pedido: {hora_pedido}\n\nForma de pagamento: {formaPag}\n\nVALOR TOTAL: R${totalValorExtrato.Text.Replace("R$", "")}\n\n ENDEREÇO: \n {endereco}\n\n";
+                    nf += $"\n\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {formaPag}\n---------------------------------\nVALOR TOTAL: R${totalValorExtrato.Text.Replace("R$", "")}\n---------------------------------";
                     ConectarSqlClasse sql = new ConectarSqlClasse();
                     nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, hora_pedido, valorTotal, formaPag);
                     if (imprimir.Checked == true)
@@ -302,7 +295,7 @@ namespace acompanhar_pedido.teste
                             MessageBox.Show("Erro ao imprimir senha");
                         }
                     }
-                    MessageBox.Show(nf);
+                    MessageBox.Show($"{nf} \n\nHorario do pedido: {hora_pedido}","PEDIDO CADASTRADO COM SUCESSO!!");
                     boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
                     tbExtrato.Controls.Clear();
                     extratoLista.Clear();
@@ -313,13 +306,13 @@ namespace acompanhar_pedido.teste
                     pcholdCliente.Text = "";
                     pcholdEndereco.Text = "";
                     pcholdCliente.Focus();
-                }
-                else
-                {
-                    MessageBox.Show("Preencha o nome do cliente e adicione os produtos");
-                    pcholdCliente.Focus();
-                }
-                CarregaBotoes();
+            }
+            else
+            {
+                MessageBox.Show("Preencha o nome do cliente e adicione os produtos");
+                pcholdCliente.Focus();
+            }
+            CarregaBotoes();
             }
             catch (Exception er) 
             {
@@ -488,6 +481,25 @@ namespace acompanhar_pedido.teste
                 texto_filtra = pcholdBuscaProd.Text;
                 CarregaBotoes();
             }
+        }
+        private void pcholdEndereco_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnCad_Click(sender, e);
+            }
+        }
+        private void pcholdBuscaProd_KeyPress(object sender, KeyEventArgs e)
+        {
+            if (pcholdBuscaProd.Text != texto_filtra)
+            {
+                texto_filtra = pcholdBuscaProd.Text;
+                CarregaBotoes();
+            }
+        }
+        private void pcholdCliente_KeyUp(object sender, KeyEventArgs e)
+        {
+            clienteExtrato.Text = $"Cliente: {pcholdCliente.Text}";
         }
     }
 }

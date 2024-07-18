@@ -279,31 +279,32 @@ namespace acompanhar_pedido
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                 }
 
-                if (resultado == "Pedido cadastrado com sucesso!") { resultado += $"\n*********************************\nNumero do pedido/Senha: {a}\n*********************************"; }
+                if (resultado == "Pedido cadastrado com sucesso!") { resultado = $"*********************************\nNumero do pedido/Senha: {a}\n*********************************"; }
             }
             return resultado;
         }
         //limpa o banco de dados com as especificações da tela de relatórios
-        public string LimparBD(string tabelaProdutos, string tabelaVendas)
+        public string LimparBD(string tabelaProdutos, string tabelaVendas,string tabelaPedidos)
         {
-            string resultado = "Nada foi realizado!";
+            string resultado = "";
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 MySqlCommand limpaProdutos = new MySqlCommand($"Delete FROM {tabelaProdutos} WHERE usuario = '{VariaveisGlobais.Usuario}'", conexao,transaction);
                 MySqlCommand limpaVendas = new MySqlCommand($"Delete FROM {tabelaVendas} WHERE usuario = '{VariaveisGlobais.Usuario}'", conexao,transaction);
+                MySqlCommand limpaPedidos = new MySqlCommand($"Delete FROM {tabelaPedidos} WHERE usuario = '{VariaveisGlobais.Usuario}'", conexao,transaction);
                 if (tabelaProdutos != "*")
                 {
                     try
                     {
                         limpaProdutos.ExecuteNonQuery();
-                        resultado = "Apagada tabela de produtos";
+                        resultado += "Sucesso ao apagar tabela de produtos";
                     }
                     catch (Exception er)
                     {
                         EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-                        resultado = $"erro ao apagar tabela de produtos";
+                        resultado += $"erro ao apagar tabela de produtos";
                     }
                 }
                 if (tabelaVendas != "*")
@@ -311,16 +312,30 @@ namespace acompanhar_pedido
                     try
                     {
                         limpaVendas.ExecuteNonQuery();
-                        resultado = "Apagada tabela de vendas";
+                        resultado += "\n\nSucesso ao apagar tabela de vendas";
                     }
                     catch (Exception er)
                     {
                         EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-                        resultado = $"erro ao apagar tabela de vendas";
+                        resultado += $"\n\nerro ao apagar tabela de vendas";
+                    }
+                }
+                if (tabelaPedidos != "*")
+                {
+                    try
+                    {
+                        limpaPedidos.ExecuteNonQuery();
+                        resultado += "\n\nSucesso ao apagar tabela de pedido";
+                    }
+                    catch (Exception er)
+                    {
+                        EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                        resultado += $"\n\nerro ao apagar tabela de vendas";
                     }
                 }
                 try { transaction.Commit(); } catch { transaction.Rollback(); }
             }
+            if (resultado == "") { resultado = "Nada foi realizado!"; }
             return resultado;
         }
         //tira um relatório baseado nas configs da tela janela de relatório
@@ -369,13 +384,16 @@ namespace acompanhar_pedido
         public List<Dictionary<string,string>> ListaVendidos()
         {
             List<string> listaBruta = new List<string>();
+            List<string> listaProdutos = new List<string>();
             List<Dictionary<string, string>> listaDicVendidos = new List<Dictionary<string, string>>();
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
                 MySqlCommand comando = new MySqlCommand($"SELECT produtos_nome FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' ;", conexao);
+                MySqlCommand lista_produtos = new MySqlCommand($"SELECT nome from produtos where usuario = '{VariaveisGlobais.Usuario}';", conexao);
                 try
                 {
+                    //traz a lista bruta dos produtos vendidos de "pedidos_prontos"
                     using (var reader = comando.ExecuteReader())
                     {
                         while (reader.Read())
@@ -394,17 +412,34 @@ namespace acompanhar_pedido
                             }
                         }
                     }
+                    //traz uma lista dos produtos que existem naquele usuário
+                    using (var reader = lista_produtos.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            try
+                            {
+                                listaProdutos.Add(reader["nome"].ToString());
+                            }
+                            catch (Exception er)
+                            {
+                                EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                                break;
+                            }
+                        }
+                    }
                 }
                 catch (Exception er)
                 {
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                 }
             }
+            //cria um dicionario para cada produto contendo nome e qtd vendida e no fim add esse dicionario em uma lista
             for (int i = 0; i < listaBruta.Count; i++)
             {
                 string itemAtualListaBruta = listaBruta[i];
                 bool criar = true;
-                foreach(var dic in listaDicVendidos)
+                foreach (var dic in listaDicVendidos)
                 {
                     string[] partes = itemAtualListaBruta.Split(new[] { ' ' }, 2);
                     if (dic["produto"].Contains(partes[1]))
@@ -425,6 +460,24 @@ namespace acompanhar_pedido
                     {
                         { "produto",partes[1] },
                         { "qtd", partes[0].Replace("X","") }
+                    };
+                    listaDicVendidos.Add(dict);
+                }
+            }
+            //cria o dicionario dos produtos que não venderam nenhuma unidade e add na fila do listaDicVendidos
+            foreach (string prod in listaProdutos)
+            {
+                bool produto_vendido = false;
+                foreach(Dictionary<string,string> dict in listaDicVendidos)
+                {
+                    if (dict["produto"] == prod) { produto_vendido = true; }
+                }
+                if (!produto_vendido)
+                {
+                    Dictionary<string, string> dict = new Dictionary<string, string>()
+                    {
+                        { "produto",prod },
+                        { "qtd", "0" }
                     };
                     listaDicVendidos.Add(dict);
                 }
