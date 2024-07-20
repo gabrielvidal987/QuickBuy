@@ -1,0 +1,12 @@
+Para inicializar o app é necessario conectar os demais computadores ao banco de dados do host e o host também precisa compartilhar a pasta aonde o programa fica instalado e a pasta aonde o programa roda
+para iniciar também precisa ligar o sql server no host
+usuario 2> user2 ; senha> Vid****9871
+
+Aplicativo destinado para registro, acompanhamento e realização de pedidos. também conta com relatórios e exportações deste relatórios
+ao entrar no app, será solicitada uma conta. a conta padrão é login: desbravadores senha: desbravadores
+no menu inicial é possivel verificar o total de valor que ja entrou com os pedidos que ficaram prontos, e a quantidade de produtos que estão em preparo e a quantidade de prontos
+no primeiro botão é possivel realizar a abertura de pedidos com nome do cliente, produto e observações.
+no segundo botão é possivel realizar o cadastro ou alteração dos produtos
+no terceiro botão fica a tela da cozinha com os pedidos em aberto e os recém entregues
+no quarto botão é o painel de senha por ordem de liberação dos pedidos
+no quinto botão são os relatórios, nele é possivel verificar as vendas realizadas com alguns filtros e exportar para txt ou excel.xlsx e também limpar o relatório ou criar outro usuário.

@@ -259,7 +259,8 @@ namespace acompanhar_pedido.teste
             string nome_cliente = clienteExtrato.Text.Replace("Cliente: ", "");
             string nome_produto = "sem produto";
             string produto_quantidade = "";
-            string obs = pcholdObs.Text;
+            string obs_bruto = pcholdObs.Text;
+            string obs = AddLineBreaksEveryNChars(obs_bruto, 30);
             string endereco_bruto = pcholdEndereco.Text;
             string endereco = AddLineBreaksEveryNChars(endereco_bruto, 30);
             if (pcholdEndereco.Text.Length < 5) { endereco = "endereço não cadastrado"; }
@@ -288,6 +289,8 @@ namespace acompanhar_pedido.teste
                     nf += $"\n\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {formaPag}\n---------------------------------\nVALOR TOTAL: R${totalValorExtrato.Text.Replace("R$", "")}\n---------------------------------";
                     ConectarSqlClasse sql = new ConectarSqlClasse();
                     nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, hora_pedido, valorTotal, formaPag);
+                    nf += $"\n\nHorario do pedido: {hora_pedido}";
+
                     if (imprimir.Checked == true)
                     {
                         try
@@ -299,7 +302,7 @@ namespace acompanhar_pedido.teste
                             MessageBox.Show("Erro ao imprimir senha");
                         }
                     }
-                    MessageBox.Show($"{nf} \n\nHorario do pedido: {hora_pedido}","PEDIDO CADASTRADO COM SUCESSO!!");
+                    MessageBox.Show($"{nf}","PEDIDO CADASTRADO COM SUCESSO!!");
                     boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
                     tbExtrato.Controls.Clear();
                     extratoLista.Clear();
