@@ -18,6 +18,7 @@ using System.Drawing.Printing;
 using acompanhar_pedido.botoes;
 using System.Linq.Expressions;
 using System.Threading;
+using MySqlX.XDevAPI.Common;
 
 namespace acompanhar_pedido.teste
 {
@@ -259,7 +260,8 @@ namespace acompanhar_pedido.teste
             string nome_produto = "sem produto";
             string produto_quantidade = "";
             string obs = pcholdObs.Text;
-            string endereco = pcholdEndereco.Text;
+            string endereco_bruto = pcholdEndereco.Text;
+            string endereco = AddLineBreaksEveryNChars(endereco_bruto, 30);
             if (pcholdEndereco.Text.Length < 5) { endereco = "endereço não cadastrado"; }
             nf = $"Cliente: {nome_cliente}\n";
             try 
@@ -275,7 +277,9 @@ namespace acompanhar_pedido.teste
                     nome_produto = item["nome"];
                     string quantidade = $"{item["quantidade"]}X";
                     produto_quantidade += $"{quantidade} {nome_produto},";
-                    nf += $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
+                    string texto_item = $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
+                    string texto_item_formatado = AddLineBreaksEveryNChars(texto_item, 30);
+                    nf += texto_item_formatado;
                 }
                 if (nome_cliente != "" && nome_produto != "sem produto")
                 {
@@ -433,14 +437,34 @@ namespace acompanhar_pedido.teste
                 btnCad_Click(sender, e);
             }
         }
+        static string AddLineBreaksEveryNChars(string input, int interval)
+        {
+            if (string.IsNullOrEmpty(input) || interval <= 0)
+            {
+                return input;
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                sb.Append(input[i]);
+                if ((i + 1) % interval == 0)
+                {
+                    sb.Append("\n");
+                }
+            }
+
+            return sb.ToString();
+        }
         private void impressora_PrintPage(object sender, PrintPageEventArgs e)
         {
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                Font font = new Font("Arial", 16, FontStyle.Regular, GraphicsUnit.Pixel);
+                Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
                 SolidBrush cor = new SolidBrush(Color.Black);
-                Point local = new Point(200, 200);
+                Point local = new Point(5, 10);
                 e.Graphics.DrawString(nf, font, cor, local);
             }
             catch (Exception er)
