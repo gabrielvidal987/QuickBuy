@@ -47,7 +47,7 @@ namespace acompanhar_pedido.botoes
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaProdutos());
+                List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaPedidos());
                 foreach (Dictionary<string, string> i in filaPedidos)
                 {
                     if (pedidoJaNaLista.Contains(i["numero_pedido"]))
@@ -136,11 +136,8 @@ namespace acompanhar_pedido.botoes
             string asc = "asc";
             try
             {
-                if(pnlAnt.Controls.Count != 1)
+                while(pnlAnt.Controls.Count != 1)
                 {
-                    pnlAnt.Controls.Remove(pnlAnt.Controls[1]);
-                    pnlAnt.Controls.Remove(pnlAnt.Controls[1]);
-                    pnlAnt.Controls.Remove(pnlAnt.Controls[1]);
                     pnlAnt.Controls.Remove(pnlAnt.Controls[1]);
                 }
             }

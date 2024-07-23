@@ -284,7 +284,7 @@ namespace acompanhar_pedido.teste
                 }
                 if (nome_cliente != "" && nome_produto != "sem produto")
                 {
-                    string hora_pedido = horario.ToString("HH:mm");
+                    string hora_pedido = horario.ToString("HH:mm:ss");
                     string formaPag = boxPgto.Text.ToLower().Replace('é', 'e');
                     nf += $"\n\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {formaPag}\n---------------------------------\nVALOR TOTAL: R${totalValorExtrato.Text.Replace("R$", "")}\n---------------------------------";
                     ConectarSqlClasse sql = new ConectarSqlClasse();
@@ -296,6 +296,7 @@ namespace acompanhar_pedido.teste
                         try
                         {
                             impressora.Print();
+                            pcholdCliente.Focus();
                         }
                         catch
                         {

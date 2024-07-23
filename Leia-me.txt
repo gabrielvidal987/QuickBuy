@@ -1,6 +1,6 @@
 Para inicializar o app é necessario conectar os demais computadores ao banco de dados do host e o host também precisa compartilhar a pasta aonde o programa fica instalado e a pasta aonde o programa roda
 para iniciar também precisa ligar o sql server no host
-usuario 2> user2 ; senha> Vid****9871
+usuario 2> user2 ; senha> ********
 
 Aplicativo destinado para registro, acompanhamento e realização de pedidos. também conta com relatórios e exportações deste relatórios
 ao entrar no app, será solicitada uma conta. a conta padrão é login: desbravadores senha: desbravadores

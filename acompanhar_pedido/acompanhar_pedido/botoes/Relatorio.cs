@@ -150,7 +150,7 @@ namespace acompanhar_pedido.botoes
                 //calcula os valores liquidos com taxas de maquinas
                 for (int c = 0; c < qtdLinha; c++)
                 {
-                    dt.Rows[c][11] = $"{int.Parse(dt.Rows[c][6].ToString().Split(':')[1]) - int.Parse(dt.Rows[c][5].ToString().Split(':')[1])} minuto(s)";
+                    dt.Rows[c][11] = $"{TimeSpan.Parse(dt.Rows[c][6].ToString())  - TimeSpan.Parse(dt.Rows[c][5].ToString())}";
                     if (dt.Rows[c][8].ToString() == "debito")
                     {
                         dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * deb)).ToString("F");

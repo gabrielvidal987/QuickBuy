@@ -47,12 +47,10 @@ namespace acompanhar_pedido.botoes
             senhasAnteriores.BackColor = Color.FromArgb(240, 240, 240);
             tMedEspera.BackColor = Color.FromArgb(240, 240, 240);
         }
-
         private void Fila_Load(object sender, EventArgs e)
         {
             Estética();
         }
-
         public void TocaSom()
         {
             if (File.Exists(curDir))
@@ -77,7 +75,6 @@ namespace acompanhar_pedido.botoes
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
             }
         }
-
         public void TrocaSenha()
         {
             ConectarSqlClasse sql = new ConectarSqlClasse();

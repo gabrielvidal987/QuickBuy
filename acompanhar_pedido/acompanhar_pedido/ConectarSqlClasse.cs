@@ -149,8 +149,8 @@ namespace acompanhar_pedido
 
 
         }
-        //gera uma lista com a fila dos pedidos
-        public List<Dictionary<string, string>> FilaProdutos()
+        //gera uma lista com a fila dos pedidos ja feitos para aparecerem na cozinha
+        public List<Dictionary<string, string>> FilaPedidos()
         {
             List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>();
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
