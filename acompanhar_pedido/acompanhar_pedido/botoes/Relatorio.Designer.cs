@@ -33,6 +33,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.delProduto = new System.Windows.Forms.CheckBox();
             this.delVendas = new System.Windows.Forms.CheckBox();
+            this.delPendentes = new System.Windows.Forms.CheckBox();
             this.apagaBD = new System.Windows.Forms.Button();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
@@ -64,7 +65,6 @@
             this.btnAddpic = new System.Windows.Forms.OpenFileDialog();
             this.escolherLocal = new System.Windows.Forms.FolderBrowserDialog();
             this.label7 = new System.Windows.Forms.Label();
-            this.delPendentes = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
@@ -105,6 +105,16 @@
             this.delVendas.Text = "APAGAR TABELA DE VENDAS";
             this.delVendas.UseVisualStyleBackColor = true;
             // 
+            // delPendentes
+            // 
+            this.delPendentes.AutoSize = true;
+            this.delPendentes.Location = new System.Drawing.Point(3, 49);
+            this.delPendentes.Name = "delPendentes";
+            this.delPendentes.Size = new System.Drawing.Size(190, 17);
+            this.delPendentes.TabIndex = 7;
+            this.delPendentes.Text = "APAGAR PEDIDOS PENDENTES";
+            this.delPendentes.UseVisualStyleBackColor = true;
+            // 
             // apagaBD
             // 
             this.apagaBD.Location = new System.Drawing.Point(12, 97);
@@ -140,13 +150,14 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.button1.Location = new System.Drawing.Point(3, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(1100, 63);
             this.button1.TabIndex = 5;
             this.button1.Text = "GERAR RELATÓRIO";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.GeraRelatorio_Click);
             // 
             // btnOrdemVenda
@@ -239,7 +250,7 @@
             // 
             // exportExc
             // 
-            this.exportExc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.exportExc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.exportExc.Cursor = System.Windows.Forms.Cursors.Hand;
             this.exportExc.Enabled = false;
             this.exportExc.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -472,16 +483,6 @@
             this.label7.Size = new System.Drawing.Size(307, 13);
             this.label7.TabIndex = 36;
             this.label7.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
-            // 
-            // delPendentes
-            // 
-            this.delPendentes.AutoSize = true;
-            this.delPendentes.Location = new System.Drawing.Point(3, 49);
-            this.delPendentes.Name = "delPendentes";
-            this.delPendentes.Size = new System.Drawing.Size(190, 17);
-            this.delPendentes.TabIndex = 7;
-            this.delPendentes.Text = "APAGAR PEDIDOS PENDENTES";
-            this.delPendentes.UseVisualStyleBackColor = true;
             // 
             // Relatorio
             // 

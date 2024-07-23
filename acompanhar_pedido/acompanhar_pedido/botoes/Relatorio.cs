@@ -131,6 +131,7 @@ namespace acompanhar_pedido.botoes
                 listaBruta = sql.ListaVendidos();
                 AdicionaMedia();
                 exportExc.Enabled = true;
+                exportExc.BackColor = Color.FromArgb(192, 255, 192);
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
