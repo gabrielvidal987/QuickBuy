@@ -147,7 +147,7 @@ namespace acompanhar_pedido.botoes
                 dt.Columns.Add("Tempo de espera");
                 dt.Columns.Add("Produto");
                 dt.Columns.Add("QTD vendida");
-                for (int cont = 0; cont < qtdLinha; cont++) { for (int i = 0; i < 10; i++) { if (dt.Rows[cont][i] == "") { dt.Rows.Remove(dt.Rows[cont]);continue; } } }
+                for (int cont = 0; cont < qtdLinha; cont++) { for (int i = 0; i < 10; i++) { if (dt.Rows[cont][i].ToString() == "") { dt.Rows.Remove(dt.Rows[cont]);continue; } } }
                 //calcula os valores liquidos com taxas de maquinas
                 for (int c = 0; c < qtdLinha; c++)
                 {

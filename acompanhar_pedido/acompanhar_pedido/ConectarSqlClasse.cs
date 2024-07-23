@@ -222,9 +222,10 @@ namespace acompanhar_pedido
                                     };
                                 filaPedidos.Add(pedido);
                             }
-                            catch (Exception erro)
+                            catch (Exception er)
                             {
-                                MessageBox.Show("valor não encontrado, erro:" + erro);
+                                MessageBox.Show("valor não encontrado");
+                                EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                                 break;
                             }
                         }
@@ -365,6 +366,50 @@ namespace acompanhar_pedido
                             break;
                     }
                 }
+                //etapa de verificação, caso tenha um registro sem produto ele será apagado
+                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                MySqlCommand pesquisa_verifica_campo_nulo = new MySqlCommand(pesquisa, conexao);
+                List<string> lista_para_apagar = new List<string>();
+                using (var reader = pesquisa_verifica_campo_nulo.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        try
+                        {
+                            string numero_pedido = Convert.ToString(reader["numero_pedido"]);
+                            string nome_cliente = Convert.ToString(reader["nome_cliente"]);
+                            string produtos_nome = Convert.ToString(reader["produtos_nome"]);
+                            if (produtos_nome == string.Empty) 
+                            {
+                                lista_para_apagar.Add(numero_pedido);
+                            }
+                        }
+                        catch (Exception er)
+                        {
+                            MessageBox.Show("valor não encontrado");
+                            EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                            break;
+                        }
+                    }
+                }
+                if (lista_para_apagar.Count > 0)
+                {
+                    foreach(string numero_apagar in lista_para_apagar)
+                    {
+                        try
+                        {
+                            MySqlCommand apaga_valor_nulo = new MySqlCommand($"DELETE FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' AND numero_pedido = {numero_apagar}", conexao, transaction);
+                            apaga_valor_nulo.ExecuteNonQuery();
+                            transaction.Commit();
+                        }
+                        catch (Exception er)
+                        {
+                            transaction.Rollback();
+                            EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                        }
+                    }
+                }
+                //etapa de criação do datatable com os dados do select de relatório
                 using (MySqlDataAdapter da = new MySqlDataAdapter(pesquisa, conexao))
                 {
                     using (DataTable dt = new DataTable())
