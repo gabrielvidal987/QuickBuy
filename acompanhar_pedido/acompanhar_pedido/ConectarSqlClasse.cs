@@ -860,10 +860,42 @@ namespace acompanhar_pedido
                         while (reader.Read())
                         {
                             //Cliente: nome \n\n ITEM: xxx QTD: x \n\n OBS: xxxxx \n ENDEREÇO:\nxxxxxxxx\n\nPAGAMENTO: debito\n---------------------------------\nVALOR TOTAL: R$0,00\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {a}\n*********************************\n\nHorario do pedido: HH:MM:SS
-                            nf += $"CLIENTE: {reader["hora_pedido"]}\n\n";
+                            nf += $"CLIENTE: {reader["nome_cliente"]}\n\n";
                             string[] produtos_comprados = reader["produtos_nome"].ToString().Split(',');
                             foreach(string prod in produtos_comprados) { nf += $"{prod}\n"; }
                             nf += $"\nOBS: {reader["observacoes"]}\nENDEREÇO:\n{reader["endereco"]}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}";
+                        }
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception er)
+                {
+                    transaction.Rollback();
+                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
+                return nf;
+            }
+        }
+        //imprime o pedido pronto do historico de pedidos prontos
+        public string imprimePedidoPronto(string numero_pedido)
+        {
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                MySqlCommand pega_dados_prod = new MySqlCommand($"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' and numero_pedido = {numero_pedido}", conexao, transaction);
+                string nf = "";
+                try
+                {
+                    using (var reader = pega_dados_prod.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            //Cliente: nome \n\n ITEM: xxx QTD: x \n\n OBS: xxxxx \n ENDEREÇO:\nxxxxxxxx\n\nPAGAMENTO: debito\n---------------------------------\nVALOR TOTAL: R$0,00\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {a}\n*********************************\n\nHorario do pedido: HH:MM:SS
+                            nf += $"CLIENTE: {reader["nome_cliente"]}\n\n";
+                            string[] produtos_comprados = reader["produtos_nome"].ToString().Split(',');
+                            foreach (string prod in produtos_comprados) { nf += $"{prod}\n"; }
+                            nf += $"\nOBS: {reader["observacoes"]}\nENDEREÇO:\n{reader["endereco"]}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\nHorario de entrega: {reader["hora_ficou_pronto"]}";
                         }
                     }
                     transaction.Commit();

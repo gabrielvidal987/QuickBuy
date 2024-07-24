@@ -70,7 +70,7 @@ namespace acompanhar_pedido.botoes
                         }
                         catch
                         {
-                            MessageBox.Show("Erro ao imprimir senha");
+                            MessageBox.Show("Erro ao imprimir pedido");
                         }
                         break;
                     }
@@ -176,7 +176,7 @@ namespace acompanhar_pedido.botoes
                         btnPrint.SizeMode = PictureBoxSizeMode.StretchImage;
                         btnPrint.Cursor = Cursors.Hand;
                         btnPrint.Click += new EventHandler(btnPrint_Click);
-                        btnPrint.Margin = new Padding(160, 5, 0, 0);
+                        btnPrint.Margin = new Padding(175, 5, 0, 0);
                         btnPrint.Image = print_ico;
                         //cria botão de remover pedido
                         remProd.BackColor = Color.Transparent;

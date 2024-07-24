@@ -13,12 +13,17 @@ using System.Windows;
 using System.Security;
 using System.Threading;
 using System.Transactions;
+using System.IO;
 
 namespace acompanhar_pedido.botoes
 {
     public partial class Cozinha : Form
     {
         Thread t1;
+        Bitmap print_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\print_ico.png");
+        string dados_nf;
+        int ind_btn = 0;
+
         List<string> pedidoJaNaLista = new List<string>();
         public Cozinha()
         {
@@ -61,9 +66,10 @@ namespace acompanhar_pedido.botoes
                     FlowLayoutPanel nome_produto = new FlowLayoutPanel();
                     Label obs = new Label();
                     Label hora = new Label();
+                    PictureBox btnPrint = new PictureBox();
                     //cria o flowpanel com o cliente
                     pnl.Width = 240;
-                    pnl.Height = 130;
+                    pnl.Height = 150;
                     pnl.BackColor = Color.FromArgb(247, 247, 247);
                     pnl.Margin = new Padding(40, 10, 0, 10);
                     pnl.Padding = new Padding(5, 5, 5, 5);
@@ -116,12 +122,23 @@ namespace acompanhar_pedido.botoes
                     hora.Width = 225;
                     hora.Height = 20;
                     hora.Font = new Font("Arial", 10);
+                    //cria botão de imprimir o pedido
+                    btnPrint.BackColor = Color.Transparent;
+                    btnPrint.Name = ind_btn.ToString();
+                    btnPrint.Size = new Size(20, 20);
+                    btnPrint.SizeMode = PictureBoxSizeMode.StretchImage;
+                    btnPrint.Cursor = Cursors.Hand;
+                    btnPrint.Click += new EventHandler(btnPrint_Click);
+                    btnPrint.Margin = new Padding(205, 5, 0, 0);
+                    btnPrint.Image = print_ico;
                     //cria as labels no panel
                     pnl.Controls.Add(num_pedido_nome);
                     pnl.Controls.Add(nome_produto);
                     pnl.Controls.Add(obs);
                     pnl.Controls.Add(hora);
+                    pnl.Controls.Add(btnPrint);
                     pedidoJaNaLista.Add(i["numero_pedido"]);
+                    ind_btn++;
                 }
                 CarregaAnt();
 
@@ -159,9 +176,10 @@ namespace acompanhar_pedido.botoes
                         Label obs = new Label();
                         Label hora = new Label();
                         Label hora_pronta = new Label();
+                        PictureBox btnPrint = new PictureBox();
                         //cria o flowpanel com o cliente
                         pnl.Width = 210;
-                        pnl.Height = 180;
+                        pnl.Height = 200;
                         pnl.BackColor = Color.FromArgb(247, 247, 247);
                         pnl.Margin = new Padding(40, 10, 0, 10);
                         pnl.Padding = new Padding(5, 5, 5, 5);
@@ -198,18 +216,28 @@ namespace acompanhar_pedido.botoes
                         hora.Font = new Font("Arial", 10);
                         //label hora que ficou pronta
                         hora_pronta.AutoSize = false;
-                        hora_pronta.Text = $"Hora que ficou pronto: {i["hora_ficou_pronto"]}";
+                        hora_pronta.Text = $"Hora de entrega: {i["hora_ficou_pronto"]}";
                         hora_pronta.BorderStyle = BorderStyle.FixedSingle;
                         hora_pronta.TextAlign = ContentAlignment.MiddleCenter;
                         hora_pronta.Width = 195;
                         hora_pronta.Height = 40;
                         hora_pronta.Font = new Font("Arial", 10);
+                        //cria botão de imprimir o pedido
+                        btnPrint.BackColor = Color.Transparent;
+                        btnPrint.Name = ind_btn.ToString();
+                        btnPrint.Size = new Size(20, 20);
+                        btnPrint.SizeMode = PictureBoxSizeMode.StretchImage;
+                        btnPrint.Cursor = Cursors.Hand;
+                        btnPrint.Click += new EventHandler(btnPrintAnt_Click);
+                        btnPrint.Margin = new Padding(185, 5, 0, 0);
+                        btnPrint.Image = print_ico;
                         //cria as labels no panel
                         pnl.Controls.Add(num_pedido_nome);
                         pnl.Controls.Add(nome_produto);
                         pnl.Controls.Add(obs);
                         pnl.Controls.Add(hora);
                         pnl.Controls.Add(hora_pronta);
+                        pnl.Controls.Add(btnPrint);
                     } 
                 }
                 catch (Exception er)
@@ -287,6 +315,77 @@ namespace acompanhar_pedido.botoes
                 }
                 reloadBar.Value = 0;
                 RecarregaFila();
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
+        }
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Control control = (Control)sender;
+                for (int i = 0; i < pnlGeral.Controls.Count; i++)
+                {
+                    if (pnlGeral.Controls[i].Controls[4].Name == control.Name)
+                    {
+                        string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                        ConectarSqlClasse sql = new ConectarSqlClasse();
+                        dados_nf = sql.ImprimePedidoHistorico(numero_pedido);
+                        try
+                        {
+                            impressora.Print();
+                            pnlGeral.Focus();
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Erro ao imprimir pedido");
+                        }
+                        break;
+                    }
+                }
+            }
+            catch (Exception er)
+            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        private void btnPrintAnt_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Control control = (Control)sender;
+                for (int i = 0; i < pnlAnt.Controls.Count; i++)
+                {
+                    if (pnlGeral.Controls[i].Controls[5].Name == control.Name)
+                    {
+                        string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                        ConectarSqlClasse sql = new ConectarSqlClasse();
+                        dados_nf = sql.imprimePedidoPronto(numero_pedido);
+                        try
+                        {
+                            impressora.Print();
+                            pnlGeral.Focus();
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Erro ao imprimir pedido");
+                        }
+                        break;
+                    }
+                }
+            }
+            catch (Exception er)
+            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        private void impressora_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            try
+            {
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
+                SolidBrush cor = new SolidBrush(Color.Black);
+                Point local = new Point(5, 10);
+                e.Graphics.DrawString(dados_nf, font, cor, local);
             }
             catch (Exception er)
             {

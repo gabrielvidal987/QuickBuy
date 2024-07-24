@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(historico_pedidos));
             this.label5 = new System.Windows.Forms.Label();
             this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
             this.lbTitulo = new System.Windows.Forms.Label();
@@ -76,6 +77,7 @@
             // impressora
             // 
             this.impressora.DocumentName = "senha_pedido";
+            this.impressora.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.impressora_PrintPage);
             // 
             // historico_pedidos
             // 
@@ -85,6 +87,7 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.pnlGeral);
             this.Controls.Add(this.lbTitulo);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "historico_pedidos";
             this.Text = "historico_pedidos";
             this.ResumeLayout(false);
