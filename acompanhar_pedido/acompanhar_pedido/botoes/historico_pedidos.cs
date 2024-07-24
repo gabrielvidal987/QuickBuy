@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace acompanhar_pedido.botoes
     public partial class historico_pedidos : Form
     {
         Bitmap apaga_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\delete.png");
+        Bitmap print_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\print_ico.png");
+        string dados_nf;
         public historico_pedidos()
         {
             InitializeComponent();
@@ -37,9 +40,9 @@ namespace acompanhar_pedido.botoes
                 {
                     if (pnlGeral.Controls[i].Controls[6].Name == control.Name)
                     {
-                        string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                        string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                         ConectarSqlClasse sql = new ConectarSqlClasse();
-                        sql.RemovePedido(nome_produto);
+                        sql.RemovePedido(numero_pedido);
                         RecarregaFila();
                         break;
                     }
@@ -47,6 +50,49 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er)
             { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Control control = (Control)sender;
+                for (int i = 0; i < pnlGeral.Controls.Count; i++)
+                {
+                    if (pnlGeral.Controls[i].Controls[6].Name == control.Name)
+                    {
+                        string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                        ConectarSqlClasse sql = new ConectarSqlClasse();
+                        dados_nf = sql.ImprimePedidoHistorico(numero_pedido);
+                        try
+                        {
+                            impressora.Print();
+                            pnlGeral.Focus();
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Erro ao imprimir senha");
+                        }
+                        break;
+                    }
+                }
+            }
+            catch (Exception er)
+            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        private void impressora_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            try
+            {
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
+                SolidBrush cor = new SolidBrush(Color.Black);
+                Point local = new Point(5, 10);
+                e.Graphics.DrawString(dados_nf, font, cor, local);
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
         }
         public void RecarregaFila()
         {
@@ -69,6 +115,7 @@ namespace acompanhar_pedido.botoes
                         Label obs = new Label();
                         Label hora = new Label();
                         Label valorTotal_formPagamento = new Label();
+                        PictureBox btnPrint = new PictureBox();
                         PictureBox remProd = new PictureBox();
                         //cria o flowpanel com o cliente
                         pnl.Width = 240;
@@ -122,6 +169,15 @@ namespace acompanhar_pedido.botoes
                         valorTotal_formPagamento.Width = 225;
                         valorTotal_formPagamento.Height = 40;
                         valorTotal_formPagamento.Font = new Font("Arial", 10);
+                        //cria botão de imprimir o pedido
+                        btnPrint.BackColor = Color.Transparent;
+                        btnPrint.Name = ind_btn.ToString();
+                        btnPrint.Size = new Size(20, 20);
+                        btnPrint.SizeMode = PictureBoxSizeMode.StretchImage;
+                        btnPrint.Cursor = Cursors.Hand;
+                        btnPrint.Click += new EventHandler(btnPrint_Click);
+                        btnPrint.Margin = new Padding(160, 5, 0, 0);
+                        btnPrint.Image = print_ico;
                         //cria botão de remover pedido
                         remProd.BackColor = Color.Transparent;
                         remProd.Name = ind_btn.ToString();
@@ -129,7 +185,7 @@ namespace acompanhar_pedido.botoes
                         remProd.SizeMode = PictureBoxSizeMode.StretchImage;
                         remProd.Cursor = Cursors.Hand;
                         remProd.Click += new EventHandler(RemPedido_Click);
-                        remProd.Margin = new Padding(205, 5, 0, 0);
+                        remProd.Margin = new Padding(10, 5, 0, 0);
                         remProd.Image = apaga_ico;
                         //cria as labels no panel
                         pnl.Controls.Add(num_pedido_nome);
@@ -138,6 +194,7 @@ namespace acompanhar_pedido.botoes
                         pnl.Controls.Add(obs);
                         pnl.Controls.Add(hora);
                         pnl.Controls.Add(valorTotal_formPagamento);
+                        pnl.Controls.Add(btnPrint);
                         pnl.Controls.Add(remProd);
                         pnlGeral.Controls.Add(pnl);
                         ind_btn++;

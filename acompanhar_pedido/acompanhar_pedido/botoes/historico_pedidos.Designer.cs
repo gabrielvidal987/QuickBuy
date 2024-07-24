@@ -33,6 +33,7 @@
             this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
             this.lbTitulo = new System.Windows.Forms.Label();
             this.reset_tela = new System.Windows.Forms.Timer(this.components);
+            this.impressora = new System.Drawing.Printing.PrintDocument();
             this.SuspendLayout();
             // 
             // label5
@@ -72,6 +73,10 @@
             this.reset_tela.Interval = 5000;
             this.reset_tela.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // impressora
+            // 
+            this.impressora.DocumentName = "senha_pedido";
+            // 
             // historico_pedidos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -93,5 +98,6 @@
         private System.Windows.Forms.FlowLayoutPanel pnlGeral;
         private System.Windows.Forms.Label lbTitulo;
         private System.Windows.Forms.Timer reset_tela;
+        private System.Drawing.Printing.PrintDocument impressora;
     }
 }
