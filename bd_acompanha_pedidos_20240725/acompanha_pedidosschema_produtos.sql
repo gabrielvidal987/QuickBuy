@@ -29,7 +29,7 @@ CREATE TABLE `produtos` (
   `caminho_foto` varchar(2000) DEFAULT NULL,
   `usuario` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id_produto`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `produtos` (
 
 LOCK TABLES `produtos` WRITE;
 /*!40000 ALTER TABLE `produtos` DISABLE KEYS */;
-INSERT INTO `produtos` VALUES (1,'Pastel Pizza cm oregano docin','12.00','','desbravadores'),(3,'nome extremamente grande para ser usado de teste','1.00','','desbravadores');
+INSERT INTO `produtos` VALUES (15,'açai','1.00','','desbravadores'),(16,'pizza','1.50','','desbravadores'),(17,'suco','0.50','','desbravadores'),(18,'bolo','2.50','','desbravadores'),(19,'testeeee','0.50','','desbravadores'),(20,'saaabe','0.50','','desbravadores'),(21,'sabendo','0.50','','desbravadores'),(22,'sucoooo','1.00','','desbravadores'),(23,'testandooo','1.00','','desbravadores'),(24,'sabe se vai?','1.00','','desbravadores'),(25,'num sei','1.00','','desbravadores');
 /*!40000 ALTER TABLE `produtos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-08 15:58:45
+-- Dump completed on 2024-07-25 14:51:44
