@@ -38,6 +38,8 @@ namespace acompanhar_pedido.botoes
                 pnlAnt.BackColor = Color.FromArgb(141, 172, 222);
                 pnlGeral.Width = this.Width - 150;
                 pnlAnt.Width = this.Width - 150;
+                //lbprontos.Location = new Point(pnlGeral.Location.X + (pnlGeral.Width / 2) - 83, pnlGeral.Location.Y + pnlGeral.Height);
+                lbprontos.Location = new Point(this.Width / 2 - 83, pnlGeral.Location.Y + pnlGeral.Height);
                 setaSaida.Location = new Point(Left = this.Width - 110, Top = this.Height - 270);
                 RecarregaFila();
                 reload.Start();
@@ -66,10 +68,11 @@ namespace acompanhar_pedido.botoes
                     FlowLayoutPanel nome_produto = new FlowLayoutPanel();
                     Label obs = new Label();
                     Label hora = new Label();
+                    Label formRetirada = new Label();
                     PictureBox btnPrint = new PictureBox();
                     //cria o flowpanel com o cliente
                     pnl.Width = 240;
-                    pnl.Height = 150;
+                    pnl.Height = 190;
                     pnl.BackColor = Color.FromArgb(247, 247, 247);
                     pnl.Margin = new Padding(40, 10, 0, 10);
                     pnl.Padding = new Padding(5, 5, 5, 5);
@@ -122,6 +125,16 @@ namespace acompanhar_pedido.botoes
                     hora.Width = 225;
                     hora.Height = 20;
                     hora.Font = new Font("Arial", 10);
+                    //label com a retirada
+                    string retirada = "BALCÃO";
+                    if (bool.Parse(i["delivery"]) == true) { retirada = "ENTREGA"; }
+                    formRetirada.AutoSize = false;
+                    formRetirada.Text = retirada;
+                    formRetirada.BorderStyle = BorderStyle.FixedSingle;
+                    formRetirada.TextAlign = ContentAlignment.MiddleCenter;
+                    formRetirada.Width = 225;
+                    formRetirada.Height = 40;
+                    formRetirada.Font = new Font("Arial", 10);
                     //cria botão de imprimir o pedido
                     btnPrint.BackColor = Color.Transparent;
                     btnPrint.Name = ind_btn.ToString();
@@ -136,6 +149,7 @@ namespace acompanhar_pedido.botoes
                     pnl.Controls.Add(nome_produto);
                     pnl.Controls.Add(obs);
                     pnl.Controls.Add(hora);
+                    pnl.Controls.Add(formRetirada);
                     pnl.Controls.Add(btnPrint);
                     pedidoJaNaLista.Add(i["numero_pedido"]);
                     ind_btn++;
@@ -175,14 +189,14 @@ namespace acompanhar_pedido.botoes
                         Label num_pedido_nome = new Label();
                         Label nome_produto = new Label();
                         Label obs = new Label();
-                        Label hora = new Label();
                         Label hora_pronta = new Label();
+                        Label formRetirada = new Label();
                         PictureBox btnPrint = new PictureBox();
                         //cria o flowpanel com o cliente
                         pnl.Width = 210;
-                        pnl.Height = 200;
+                        pnl.Height = 220;
                         pnl.BackColor = Color.FromArgb(247, 247, 247);
-                        pnl.Margin = new Padding(40, 10, 0, 10);
+                        pnl.Margin = new Padding(50, 10, 0, 10);
                         pnl.Padding = new Padding(5, 5, 5, 5);
                         pnl.BorderStyle = BorderStyle.FixedSingle;
                         pnlAnt.Controls.Add(pnl);
@@ -207,14 +221,6 @@ namespace acompanhar_pedido.botoes
                         obs.BorderStyle = BorderStyle.None;
                         obs.Width = 195;
                         obs.Height = 30;
-                        //label hora
-                        hora.AutoSize = false;
-                        hora.Text = $"Hora do pedido: {i["hora_pedido"]}";
-                        hora.BorderStyle = BorderStyle.FixedSingle;
-                        hora.TextAlign = ContentAlignment.MiddleCenter;
-                        hora.Width = 195;
-                        hora.Height = 20;
-                        hora.Font = new Font("Arial", 10);
                         //label hora que ficou pronta
                         hora_pronta.AutoSize = false;
                         hora_pronta.Text = $"Hora de entrega: {i["hora_ficou_pronto"]}";
@@ -223,6 +229,16 @@ namespace acompanhar_pedido.botoes
                         hora_pronta.Width = 195;
                         hora_pronta.Height = 40;
                         hora_pronta.Font = new Font("Arial", 10);
+                        //label com a retirada
+                        string retirada = "BALCÃO";
+                        if (bool.Parse(i["delivery"]) == true) { retirada = "ENTREGA"; }
+                        formRetirada.AutoSize = false;
+                        formRetirada.Text = retirada;
+                        formRetirada.BorderStyle = BorderStyle.FixedSingle;
+                        formRetirada.TextAlign = ContentAlignment.MiddleCenter;
+                        formRetirada.Width = 195;
+                        formRetirada.Height = 40;
+                        formRetirada.Font = new Font("Arial", 10);
                         //cria botão de imprimir o pedido
                         btnPrint.BackColor = Color.Transparent;
                         btnPrint.Name = ind_btn_ant.ToString();
@@ -236,8 +252,9 @@ namespace acompanhar_pedido.botoes
                         pnl.Controls.Add(num_pedido_nome);
                         pnl.Controls.Add(nome_produto);
                         pnl.Controls.Add(obs);
-                        pnl.Controls.Add(hora);
+                        //pnl.Controls.Add(hora);
                         pnl.Controls.Add(hora_pronta);
+                        pnl.Controls.Add(formRetirada);
                         pnl.Controls.Add(btnPrint);
                         ind_btn_ant++;
                     } 

@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cozinha));
-            this.pedidos = new System.Windows.Forms.Label();
+            this.lbpendentes = new System.Windows.Forms.Label();
             this.tPedPronto = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbprontos = new System.Windows.Forms.Label();
             this.setaEntrada = new System.Windows.Forms.PictureBox();
             this.setaSaida = new System.Windows.Forms.PictureBox();
             this.reloadBar = new System.Windows.Forms.ProgressBar();
@@ -49,33 +49,33 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnHistorico)).BeginInit();
             this.SuspendLayout();
             // 
-            // pedidos
+            // lbpendentes
             // 
-            this.pedidos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pedidos.Font = new System.Drawing.Font("Segoe UI Black", 30F, System.Drawing.FontStyle.Bold);
-            this.pedidos.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.pedidos.Location = new System.Drawing.Point(0, 0);
-            this.pedidos.Name = "pedidos";
-            this.pedidos.Size = new System.Drawing.Size(1344, 75);
-            this.pedidos.TabIndex = 1;
-            this.pedidos.Text = "PEDIDOS:";
-            this.pedidos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbpendentes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lbpendentes.Font = new System.Drawing.Font("Segoe UI Black", 20F, System.Drawing.FontStyle.Bold);
+            this.lbpendentes.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lbpendentes.Location = new System.Drawing.Point(0, 0);
+            this.lbpendentes.Name = "lbpendentes";
+            this.lbpendentes.Size = new System.Drawing.Size(1344, 60);
+            this.lbpendentes.TabIndex = 1;
+            this.lbpendentes.Text = "PENDENTES:";
+            this.lbpendentes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tPedPronto
             // 
             this.tPedPronto.Enabled = true;
             this.tPedPronto.Interval = 10000;
             // 
-            // label1
+            // lbprontos
             // 
-            this.label1.Font = new System.Drawing.Font("Segoe UI Black", 30F, System.Drawing.FontStyle.Bold);
-            this.label1.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label1.Location = new System.Drawing.Point(292, 393);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(800, 43);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "PRONTOS:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbprontos.Font = new System.Drawing.Font("Segoe UI Black", 20F, System.Drawing.FontStyle.Bold);
+            this.lbprontos.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lbprontos.Location = new System.Drawing.Point(926, 389);
+            this.lbprontos.Name = "lbprontos";
+            this.lbprontos.Size = new System.Drawing.Size(166, 36);
+            this.lbprontos.TabIndex = 2;
+            this.lbprontos.Text = "PRONTOS:";
+            this.lbprontos.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // setaEntrada
             // 
@@ -97,7 +97,7 @@
             // 
             // reloadBar
             // 
-            this.reloadBar.Location = new System.Drawing.Point(92, 42);
+            this.reloadBar.Location = new System.Drawing.Point(92, 36);
             this.reloadBar.Maximum = 200;
             this.reloadBar.Name = "reloadBar";
             this.reloadBar.Size = new System.Drawing.Size(177, 13);
@@ -113,7 +113,7 @@
             // label2
             // 
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(92, 21);
+            this.label2.Location = new System.Drawing.Point(92, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(177, 16);
             this.label2.TabIndex = 4;
@@ -141,9 +141,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlAnt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlAnt.Controls.Add(this.btnHistorico);
-            this.pnlAnt.Location = new System.Drawing.Point(35, 420);
+            this.pnlAnt.Location = new System.Drawing.Point(35, 416);
             this.pnlAnt.Name = "pnlAnt";
-            this.pnlAnt.Padding = new System.Windows.Forms.Padding(3, 10, 10, 10);
+            this.pnlAnt.Padding = new System.Windows.Forms.Padding(3, 1, 1, 10);
             this.pnlAnt.Size = new System.Drawing.Size(1827, 240);
             this.pnlAnt.TabIndex = 1;
             // 
@@ -151,8 +151,8 @@
             // 
             this.btnHistorico.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnHistorico.Image = ((System.Drawing.Image)(resources.GetObject("btnHistorico.Image")));
-            this.btnHistorico.Location = new System.Drawing.Point(23, 75);
-            this.btnHistorico.Margin = new System.Windows.Forms.Padding(20, 65, 3, 3);
+            this.btnHistorico.Location = new System.Drawing.Point(23, 76);
+            this.btnHistorico.Margin = new System.Windows.Forms.Padding(20, 75, 3, 3);
             this.btnHistorico.Name = "btnHistorico";
             this.btnHistorico.Size = new System.Drawing.Size(68, 62);
             this.btnHistorico.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -167,9 +167,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlGeral.AutoScroll = true;
             this.pnlGeral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlGeral.Location = new System.Drawing.Point(92, 63);
+            this.pnlGeral.Location = new System.Drawing.Point(92, 62);
             this.pnlGeral.Name = "pnlGeral";
-            this.pnlGeral.Padding = new System.Windows.Forms.Padding(5, 10, 10, 10);
+            this.pnlGeral.Padding = new System.Windows.Forms.Padding(5, 1, 10, 10);
             this.pnlGeral.Size = new System.Drawing.Size(2162, 305);
             this.pnlGeral.TabIndex = 0;
             // 
@@ -184,9 +184,9 @@
             this.Controls.Add(this.reloadBar);
             this.Controls.Add(this.setaSaida);
             this.Controls.Add(this.setaEntrada);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lbprontos);
             this.Controls.Add(this.pnlAnt);
-            this.Controls.Add(this.pedidos);
+            this.Controls.Add(this.lbpendentes);
             this.Controls.Add(this.pnlGeral);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Cozinha";
@@ -206,10 +206,10 @@
         #endregion
 
         private DoubleBufferedFlowLayoutPanel pnlGeral;
-        private System.Windows.Forms.Label pedidos;
+        private System.Windows.Forms.Label lbpendentes;
         private System.Windows.Forms.Timer tPedPronto;
         private DoubleBufferedFlowLayoutPanel pnlAnt;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbprontos;
         private System.Windows.Forms.PictureBox setaEntrada;
         private System.Windows.Forms.PictureBox setaSaida;
         private System.Windows.Forms.PictureBox btnHistorico;

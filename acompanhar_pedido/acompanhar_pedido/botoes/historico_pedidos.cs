@@ -115,11 +115,12 @@ namespace acompanhar_pedido.botoes
                         Label obs = new Label();
                         Label hora = new Label();
                         Label valorTotal_formPagamento = new Label();
+                        Label formRetirada = new Label();
                         PictureBox btnPrint = new PictureBox();
                         PictureBox remProd = new PictureBox();
                         //cria o flowpanel com o cliente
                         pnl.Width = 240;
-                        pnl.Height = 210 + Convert.ToInt32(altura);
+                        pnl.Height = 250 + Convert.ToInt32(altura);
                         pnl.BackColor = Color.FromArgb(247, 247, 247);
                         pnl.Margin = new Padding(40, 10, 0, 10);
                         pnl.Padding = new Padding(5, 5, 5, 5);
@@ -169,6 +170,16 @@ namespace acompanhar_pedido.botoes
                         valorTotal_formPagamento.Width = 225;
                         valorTotal_formPagamento.Height = 40;
                         valorTotal_formPagamento.Font = new Font("Arial", 10);
+                        //label com a retirada
+                        string retirada = "BALCÃO";
+                        if (bool.Parse(i["delivery"]) == true) { retirada = "ENTREGA"; }
+                        formRetirada.AutoSize = false;
+                        formRetirada.Text = retirada;
+                        formRetirada.BorderStyle = BorderStyle.FixedSingle;
+                        formRetirada.TextAlign = ContentAlignment.MiddleCenter;
+                        formRetirada.Width = 225;
+                        formRetirada.Height = 40;
+                        formRetirada.Font = new Font("Arial", 10);
                         //cria botão de imprimir o pedido
                         btnPrint.BackColor = Color.Transparent;
                         btnPrint.Name = ind_btn.ToString();
@@ -194,6 +205,7 @@ namespace acompanhar_pedido.botoes
                         pnl.Controls.Add(obs);
                         pnl.Controls.Add(hora);
                         pnl.Controls.Add(valorTotal_formPagamento);
+                        pnl.Controls.Add(formRetirada);
                         pnl.Controls.Add(btnPrint);
                         pnl.Controls.Add(remProd);
                         pnlGeral.Controls.Add(pnl);

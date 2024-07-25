@@ -172,7 +172,8 @@ namespace acompanhar_pedido
                             { "nome_cliente", Convert.ToString(reader["nome_cliente"]) },
                             { "produtos_nome", Convert.ToString(reader["produtos_nome"]) },
                             { "observacoes", Convert.ToString(reader["observacoes"]) },
-                            { "hora_pedido", Convert.ToString(reader["hora_pedido"]) }
+                            { "hora_pedido", Convert.ToString(reader["hora_pedido"]) },
+                            { "delivery", Convert.ToString(reader["delivery"]) }
                             };
                                 filaPedidos.Add(pedido);
                             }
@@ -219,6 +220,7 @@ namespace acompanhar_pedido
                                     { "observacoes", Convert.ToString(reader["observacoes"]) },
                                     { "hora_pedido", Convert.ToString(reader["hora_pedido"]) },
                                     { "hora_ficou_pronto", Convert.ToString(reader["hora_ficou_pronto"]) },
+                                    { "delivery", Convert.ToString(reader["delivery"]) }
                                     };
                                 filaPedidos.Add(pedido);
                             }
@@ -719,7 +721,8 @@ namespace acompanhar_pedido
                                     { "observacoes", reader["observacoes"].ToString() },
                                     { "hora_pedido", reader["hora_pedido"].ToString() },
                                     { "valorTotal", reader["valorTotal"].ToString() },
-                                    { "formaPag", reader["formaPag"].ToString() }
+                                    { "formaPag", reader["formaPag"].ToString() },
+                                    { "delivery", reader["delivery"].ToString() }
                                 };
                             filaCadPed.Add(dicProds);
                         }
@@ -864,7 +867,11 @@ namespace acompanhar_pedido
                             foreach(string prod in produtos_comprados) { nf += $"{prod}\n"; }
                             string retirada = "BALCÃO";
                             if (bool.Parse(reader["delivery"].ToString()) == true) { retirada = "ENTREGA"; }
-                            nf += $"\nOBS: {reader["observacoes"]}\nENDEREÇO:\n{reader["endereco"]}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\n{retirada}\n";
+                            string endereco_bruto = reader["endereco"].ToString();
+                            string endereco = AddLineBreaksEveryNChars(endereco_bruto, 30);
+                            string obs_bruto = reader["observacoes"].ToString();
+                            string obs = AddLineBreaksEveryNChars(endereco_bruto, 30);
+                            nf += $"\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\n{retirada}\n";
                         }
                     }
                     transaction.Commit();
@@ -898,7 +905,11 @@ namespace acompanhar_pedido
                             foreach (string prod in produtos_comprados) { nf += $"{prod}\n"; }
                             string retirada = "BALCÃO";
                             if (bool.Parse(reader["delivery"].ToString()) == true) { retirada = "ENTREGA"; }
-                            nf += $"\nOBS: {reader["observacoes"]}\nENDEREÇO:\n{reader["endereco"]}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\nHorario de entrega: {reader["hora_ficou_pronto"]}\n\n{retirada}\n";
+                            string endereco_bruto = reader["endereco"].ToString();
+                            string endereco = AddLineBreaksEveryNChars(endereco_bruto, 30);
+                            string obs_bruto = reader["observacoes"].ToString();
+                            string obs = AddLineBreaksEveryNChars(endereco_bruto, 30);
+                            nf += $"\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\nHorario de entrega: {reader["hora_ficou_pronto"]}\n\n{retirada}\n";
                         }
                     }
                     transaction.Commit();
@@ -938,6 +949,27 @@ namespace acompanhar_pedido
                 }
                 return lista_pedidos;
             }
+        }
+        //quebra a linha a cada qtd de caracteres determinada pelo dev
+        static string AddLineBreaksEveryNChars(string input, int interval)
+        {
+            if (string.IsNullOrEmpty(input) || interval <= 0)
+            {
+                return input;
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                sb.Append(input[i]);
+                if ((i + 1) % interval == 0)
+                {
+                    sb.Append("\n");
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }
