@@ -242,15 +242,14 @@ namespace acompanhar_pedido
 
         }
         //realiza o cadastro de um pedido novo
-        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string data, string valor,string formaPag)
+        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string data, string valor,string formaPag,bool delivery)
         {
             string resultado = "Erro, nada foi realizado";
-
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                MySqlCommand cadPedido = new MySqlCommand($"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', '{data}', {valor},'{formaPag}',{valor},'{VariaveisGlobais.Usuario}')", conexao,transaction);
+                MySqlCommand cadPedido = new MySqlCommand($"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario,delivery) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', '{data}', {valor},'{formaPag}',{valor},'{VariaveisGlobais.Usuario}',{delivery})", conexao,transaction);
                 MySqlCommand numeroPedido = new MySqlCommand($"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}'", conexao);
                 string a = "";
                 try
@@ -863,7 +862,9 @@ namespace acompanhar_pedido
                             nf += $"CLIENTE: {reader["nome_cliente"]}\n\n";
                             string[] produtos_comprados = reader["produtos_nome"].ToString().Split(',');
                             foreach(string prod in produtos_comprados) { nf += $"{prod}\n"; }
-                            nf += $"\nOBS: {reader["observacoes"]}\nENDEREÇO:\n{reader["endereco"]}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}";
+                            string retirada = "BALCÃO";
+                            if (bool.Parse(reader["delivery"].ToString()) == true) { retirada = "ENTREGA"; }
+                            nf += $"\nOBS: {reader["observacoes"]}\nENDEREÇO:\n{reader["endereco"]}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\n{retirada}\n";
                         }
                     }
                     transaction.Commit();
@@ -895,7 +896,9 @@ namespace acompanhar_pedido
                             nf += $"CLIENTE: {reader["nome_cliente"]}\n\n";
                             string[] produtos_comprados = reader["produtos_nome"].ToString().Split(',');
                             foreach (string prod in produtos_comprados) { nf += $"{prod}\n"; }
-                            nf += $"\nOBS: {reader["observacoes"]}\nENDEREÇO:\n{reader["endereco"]}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\nHorario de entrega: {reader["hora_ficou_pronto"]}";
+                            string retirada = "BALCÃO";
+                            if (bool.Parse(reader["delivery"].ToString()) == true) { retirada = "ENTREGA"; }
+                            nf += $"\nOBS: {reader["observacoes"]}\nENDEREÇO:\n{reader["endereco"]}\n\nPAGAMENTO: {reader["formaPag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valorTotal"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\nHorario de entrega: {reader["hora_ficou_pronto"]}\n\n{retirada}\n";
                         }
                     }
                     transaction.Commit();

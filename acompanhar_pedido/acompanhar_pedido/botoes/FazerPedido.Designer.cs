@@ -55,7 +55,7 @@ namespace acompanhar_pedido.teste
             this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdEndereco = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdCliente = new acompanhar_pedido.PlaceHolderTextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.delivery = new System.Windows.Forms.CheckBox();
             this.pnlTotal.SuspendLayout();
             this.pnlFimExtrato.SuspendLayout();
             this.pnlGeral.SuspendLayout();
@@ -353,22 +353,22 @@ namespace acompanhar_pedido.teste
             this.pcholdCliente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyDown);
             this.pcholdCliente.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyUp);
             // 
-            // checkBox1
+            // delivery
             // 
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(300, 117);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(158, 24);
-            this.checkBox1.TabIndex = 35;
-            this.checkBox1.Text = "Delivery/Entrega";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.delivery.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.delivery.Location = new System.Drawing.Point(300, 117);
+            this.delivery.Name = "delivery";
+            this.delivery.Size = new System.Drawing.Size(158, 24);
+            this.delivery.TabIndex = 35;
+            this.delivery.Text = "Delivery/Entrega";
+            this.delivery.UseVisualStyleBackColor = true;
             // 
             // FazerPedido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1350, 729);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.delivery);
             this.Controls.Add(this.btnHist);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.imprimir);
@@ -420,6 +420,6 @@ namespace acompanhar_pedido.teste
         private System.Windows.Forms.Button btnHist;
         private PlaceHolderTextBox pcholdBuscaProd;
         private System.Windows.Forms.Timer filtraProd;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox delivery;
     }
 }
