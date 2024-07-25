@@ -39,7 +39,9 @@
             this.btnAddpic = new System.Windows.Forms.OpenFileDialog();
             this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
+            this.impListProd = new System.Windows.Forms.Button();
             this.pcholdNomeProd = new acompanhar_pedido.PlaceHolderTextBox();
+            this.impressora = new System.Drawing.Printing.PrintDocument();
             this.pnlCadProd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.valorNumerico)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoProd)).BeginInit();
@@ -160,6 +162,22 @@
             this.label5.TabIndex = 36;
             this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
             // 
+            // impListProd
+            // 
+            this.impListProd.BackColor = System.Drawing.Color.Lime;
+            this.impListProd.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.impListProd.Font = new System.Drawing.Font("Impact", 12F);
+            this.impListProd.ForeColor = System.Drawing.Color.Snow;
+            this.impListProd.Location = new System.Drawing.Point(1073, 524);
+            this.impListProd.Margin = new System.Windows.Forms.Padding(0);
+            this.impListProd.Name = "impListProd";
+            this.impListProd.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.impListProd.Size = new System.Drawing.Size(166, 50);
+            this.impListProd.TabIndex = 37;
+            this.impListProd.Text = "IMPRIMIR LISTA DE PRODUTOS";
+            this.impListProd.UseVisualStyleBackColor = false;
+            this.impListProd.Click += new System.EventHandler(this.impListProd_Click);
+            // 
             // pcholdNomeProd
             // 
             this.pcholdNomeProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Italic);
@@ -171,11 +189,17 @@
             this.pcholdNomeProd.TabIndex = 1;
             this.pcholdNomeProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // impressora
+            // 
+            this.impressora.DocumentName = "senha_pedido";
+            this.impressora.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.impressora_PrintPage);
+            // 
             // Produtos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1293, 592);
+            this.Controls.Add(this.impListProd);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.pnlCadProd);
             this.Controls.Add(this.pnlGeral);
@@ -206,5 +230,7 @@
         private System.Windows.Forms.NumericUpDown valorNumerico;
         private System.Windows.Forms.FlowLayoutPanel pnlGeral;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button impListProd;
+        private System.Drawing.Printing.PrintDocument impressora;
     }
 }

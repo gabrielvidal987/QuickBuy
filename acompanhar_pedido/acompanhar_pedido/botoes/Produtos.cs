@@ -16,11 +16,13 @@ using System.Threading;
 using System.IO;
 using System.Reflection;
 using System.ComponentModel.Design;
+using System.Numerics;
 
 namespace acompanhar_pedido.botoes
 {
     public partial class Produtos : Form
     {
+        string dados_prods;
         string nomeOriginal;
         string fotopadrao = "";
         string foto_caminho;
@@ -100,8 +102,10 @@ namespace acompanhar_pedido.botoes
             pnlGeral.Location = new Point(30, 50);
             pnlGeral.Size = new Size(this.Width - 350, this.Height - 150);
             pnlCadProd.Location = new Point(pnlGeral.Width + 40, 80);
-            pnlCadProd.Size = new Size(240, this.Height - 210);
+            pnlCadProd.Size = new Size(240, this.Height - 230);
             btnCadProd.Location = new Point(37, pnlCadProd.Height - 100);
+            impListProd.Location = new Point(pnlCadProd.Location.X + 37, 600);
+            impListProd.BackColor = Color.FromArgb(141, 172, 222);
             fotoProd.Location = new Point(37, pnlCadProd.Height - 250);
 
         }
@@ -232,6 +236,41 @@ namespace acompanhar_pedido.botoes
             control.Controls[0].BackColor = Color.FromArgb(255, 255, 255);
             control.Controls[1].BackColor = Color.FromArgb(255, 255, 255);
             control.Controls[2].BackColor = Color.FromArgb(255, 255, 255);
+        }
+        private void impListProd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Control control = (Control)sender;
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                dados_prods = sql.imprimeListaProdutos();
+                try
+                {
+                    impressora.Print();
+                    pnlCadProd.Focus();
+                }
+                catch
+                {
+                    MessageBox.Show("Erro ao imprimir pedido");
+                }
+            }
+            catch (Exception er)
+            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        private void impressora_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            try
+            {
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
+                SolidBrush cor = new SolidBrush(Color.Black);
+                Point local = new Point(5, 10);
+                e.Graphics.DrawString(dados_prods, font, cor, local);
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
         }
     }
 }

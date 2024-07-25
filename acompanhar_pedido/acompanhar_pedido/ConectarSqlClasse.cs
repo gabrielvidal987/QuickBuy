@@ -908,5 +908,33 @@ namespace acompanhar_pedido
                 return nf;
             }
         }
+        //imprime uma lista com os produtos e valores
+        public string imprimeListaProdutos()
+        {
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                MySqlCommand pega_dados_prod = new MySqlCommand($"SELECT * FROM produtos WHERE usuario = '{VariaveisGlobais.Usuario}'", conexao, transaction);
+                string lista_pedidos = $"{VariaveisGlobais.Usuario}\n\n\n";
+                try
+                {
+                    using (var reader = pega_dados_prod.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lista_pedidos += $"{reader["nome"]} -> {reader["valor"]}\n\n";
+                        }
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception er)
+                {
+                    transaction.Rollback();
+                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
+                return lista_pedidos;
+            }
+        }
     }
 }
