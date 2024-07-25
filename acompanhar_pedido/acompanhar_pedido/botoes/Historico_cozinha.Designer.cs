@@ -34,6 +34,7 @@
             this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
             this.reset_timer = new System.Windows.Forms.Timer(this.components);
+            this.impressora = new System.Drawing.Printing.PrintDocument();
             this.SuspendLayout();
             // 
             // lbTitulo
@@ -72,6 +73,11 @@
             this.reset_timer.Interval = 5000;
             this.reset_timer.Tick += new System.EventHandler(this.reset_timer_Tick);
             // 
+            // impressora
+            // 
+            this.impressora.DocumentName = "senha_pedido";
+            this.impressora.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.impressora_PrintPage);
+            // 
             // Historico_cozinha
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,5 +100,6 @@
         private System.Windows.Forms.FlowLayoutPanel pnlGeral;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Timer reset_timer;
+        private System.Drawing.Printing.PrintDocument impressora;
     }
 }

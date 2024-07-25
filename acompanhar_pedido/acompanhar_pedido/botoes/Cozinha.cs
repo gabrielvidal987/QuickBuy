@@ -150,6 +150,7 @@ namespace acompanhar_pedido.botoes
         }
         public void CarregaAnt()
         {
+            int ind_btn_ant = 0;
             string asc = "asc";
             try
             {
@@ -224,12 +225,12 @@ namespace acompanhar_pedido.botoes
                         hora_pronta.Font = new Font("Arial", 10);
                         //cria botão de imprimir o pedido
                         btnPrint.BackColor = Color.Transparent;
-                        btnPrint.Name = ind_btn.ToString();
+                        btnPrint.Name = ind_btn_ant.ToString();
                         btnPrint.Size = new Size(20, 20);
                         btnPrint.SizeMode = PictureBoxSizeMode.StretchImage;
                         btnPrint.Cursor = Cursors.Hand;
                         btnPrint.Click += new EventHandler(btnPrintAnt_Click);
-                        btnPrint.Margin = new Padding(185, 5, 0, 0);
+                        btnPrint.Margin = new Padding(175, 5, 0, 0);
                         btnPrint.Image = print_ico;
                         //cria as labels no panel
                         pnl.Controls.Add(num_pedido_nome);
@@ -238,6 +239,7 @@ namespace acompanhar_pedido.botoes
                         pnl.Controls.Add(hora);
                         pnl.Controls.Add(hora_pronta);
                         pnl.Controls.Add(btnPrint);
+                        ind_btn_ant++;
                     } 
                 }
                 catch (Exception er)
@@ -354,11 +356,11 @@ namespace acompanhar_pedido.botoes
             try
             {
                 Control control = (Control)sender;
-                for (int i = 0; i < pnlAnt.Controls.Count; i++)
+                for (int i = 1; i < pnlAnt.Controls.Count; i++)
                 {
-                    if (pnlGeral.Controls[i].Controls[5].Name == control.Name)
+                    if (pnlAnt.Controls[i].Controls[5].Name == control.Name)
                     {
-                        string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                        string numero_pedido = pnlAnt.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                         ConectarSqlClasse sql = new ConectarSqlClasse();
                         dados_nf = sql.imprimePedidoPronto(numero_pedido);
                         try
