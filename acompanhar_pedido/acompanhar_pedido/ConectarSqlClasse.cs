@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using System.Transactions;
 using System.Data.Common;
 using IsolationLevel = System.Data.IsolationLevel;
+using System.Net.Mail;
 
 namespace acompanhar_pedido
 {
@@ -544,6 +545,7 @@ namespace acompanhar_pedido
                 string hora_ficou_pronto = hora;
                 string valorTotal = "0";
                 string formaPag = "";
+                string delivery = "";
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 MySqlCommand pegaDados = new MySqlCommand($"SELECT * FROM pedidos WHERE numero_pedido = {id} AND usuario = '{VariaveisGlobais.Usuario}'", conexao,transaction);
                 MySqlCommand apagaPedido = new MySqlCommand($"DELETE FROM pedidos WHERE numero_pedido = {id} AND usuario = '{VariaveisGlobais.Usuario}'", conexao,transaction);
@@ -560,9 +562,10 @@ namespace acompanhar_pedido
                             hora_pedido = reader["hora_pedido"].ToString();
                             valorTotal = reader["valorTotal"].ToString().Replace(',', '.');
                             formaPag = reader["formaPag"].ToString();
+                            delivery = reader["delivery"].ToString();
                         }
                     }
-                    MySqlCommand filaPronto = new MySqlCommand($"INSERT INTO pedidos_prontos(numero_pedido,nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,hora_ficou_pronto,valorTotal,formaPag,valorLiq,usuario) VALUES({id},'{nome_cliente}','{endereco}','{produtos_nome}','{observacoes}','{hora_pedido}','{hora_ficou_pronto}',{valorTotal},'{formaPag}',{valorTotal},'{VariaveisGlobais.Usuario}')", conexao, transaction);
+                    MySqlCommand filaPronto = new MySqlCommand($"INSERT INTO pedidos_prontos(numero_pedido,nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,hora_ficou_pronto,valorTotal,formaPag,valorLiq,usuario,delivery) VALUES({id},'{nome_cliente}','{endereco}','{produtos_nome}','{observacoes}','{hora_pedido}','{hora_ficou_pronto}',{valorTotal},'{formaPag}',{valorTotal},'{VariaveisGlobais.Usuario}',{delivery})", conexao, transaction);
                     try
                     {
                         filaPronto.ExecuteNonQuery();

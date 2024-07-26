@@ -127,6 +127,8 @@ namespace acompanhar_pedido.botoes
                 {
                     dt = sql.Relatorio(filtro, ordem, nome);
                 }
+                //deixar a coluna de entrega em readonly
+                dt.Columns[11].ReadOnly = true;
                 //tabela que pega a lista dos produtos vendidos
                 listaBruta = sql.ListaVendidos();
                 AdicionaMedia();
@@ -151,7 +153,7 @@ namespace acompanhar_pedido.botoes
                 //calcula os valores liquidos com taxas de maquinas
                 for (int c = 0; c < qtdLinha; c++)
                 {
-                    dt.Rows[c][11] = $"{TimeSpan.Parse(dt.Rows[c][6].ToString())  - TimeSpan.Parse(dt.Rows[c][5].ToString())}";
+                    dt.Rows[c][12] = $"{TimeSpan.Parse(dt.Rows[c][6].ToString())  - TimeSpan.Parse(dt.Rows[c][5].ToString())}";
                     if (dt.Rows[c][8].ToString() == "debito")
                     {
                         dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * deb)).ToString("F");
@@ -169,9 +171,9 @@ namespace acompanhar_pedido.botoes
                     if (c > dt.Rows.Count - 1)
                     {
                         dt.Rows.Add();
-                        dt.Rows[c][12] = listaBruta[c]["produto"]; dt.Rows[c][13] = listaBruta[c]["qtd"];
+                        dt.Rows[c][13] = listaBruta[c]["produto"]; dt.Rows[c][14] = listaBruta[c]["qtd"];
                     }
-                    dt.Rows[c][12] = listaBruta[c]["produto"]; dt.Rows[c][13] = listaBruta[c]["qtd"]; 
+                    dt.Rows[c][13] = listaBruta[c]["produto"]; dt.Rows[c][14] = listaBruta[c]["qtd"]; 
                 }
                 //altera o nome das colunas
                 dt.Columns[0].ColumnName = "Senha";
@@ -185,6 +187,7 @@ namespace acompanhar_pedido.botoes
                 dt.Columns[8].ColumnName = "Forma de pagamento";
                 dt.Columns[9].ColumnName = "Valor líquido";
                 dt.Columns[10].ColumnName = "Operador";
+                dt.Columns[11].ColumnName = "Saida";
                 //atribui os dados do dt ao tabelaVendas
                 tabelaVendas.DataSource = dt;
                 tabelaVendas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -280,9 +283,10 @@ namespace acompanhar_pedido.botoes
                         ws.Cells[0, 8].PutValue("Forma de pagamento");
                         ws.Cells[0, 9].PutValue("Valor líquido");
                         ws.Cells[0, 10].PutValue("Operador");
-                        ws.Cells[0, 11].PutValue("Tempo de espera");
-                        ws.Cells[0, 12].PutValue("ITEM");
-                        ws.Cells[0, 13].PutValue("Total Vendido");
+                        ws.Cells[0, 11].PutValue("Saida");
+                        ws.Cells[0, 12].PutValue("Tempo de espera");
+                        ws.Cells[0, 13].PutValue("ITEM");
+                        ws.Cells[0, 14].PutValue("Total Vendido");
                         string l = "A";
                         for (int c = 0; c < tabelaVendas.RowCount; c++)
                         {

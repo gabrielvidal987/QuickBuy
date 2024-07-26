@@ -242,6 +242,7 @@ namespace acompanhar_pedido.teste
                     clienteExtrato.Text = "Cliente: ";
                     pcholdEndereco.Text = "";
                     boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
+                    delivery.Checked = false;
                     pcholdBuscaProd.Text = "";
                     pcholdObs.Focus();
                     pcholdCliente.Focus();
@@ -315,6 +316,7 @@ namespace acompanhar_pedido.teste
                     pcholdObs.Text = "";
                     totalValorExtrato.Text = "R$0,00";
                     clienteExtrato.Text = "Cliente: ";
+                    delivery.Checked = false;
                     pcholdCliente.Text = "";
                     pcholdEndereco.Text = "";
                     pcholdCliente.Focus();
