@@ -287,68 +287,19 @@ namespace acompanhar_pedido.botoes
                         ws.Cells[0, 12].PutValue("Tempo de espera");
                         ws.Cells[0, 13].PutValue("ITEM");
                         ws.Cells[0, 14].PutValue("Total Vendido");
-                        string l = "A";
                         for (int c = 0; c < tabelaVendas.RowCount; c++)
                         {
-                            for (int i = 0; i < tabelaVendas.ColumnCount; i++)
+                            for(int i = 0; i < tabelaVendas.Columns.Count; i++)
                             {
-                                switch (i)
+                                string valor_celula = tabelaVendas.Rows[c].Cells[i].Value.ToString();
+                                if (valor_celula != "")
                                 {
-                                    case 0:
-                                        l = "A";
-                                        break;
-                                    case 1:
-                                        l = "B";
-                                        break;
-                                    case 2:
-                                        l = "C";
-                                        break;
-                                    case 3:
-                                        l = "D";
-                                        break;
-                                    case 4:
-                                        l = "E";
-                                        break;
-                                    case 5:
-                                        l = "F";
-                                        break;
-                                    case 6:
-                                        l = "G";
-                                        break;
-                                    case 7:
-                                        l = "H";
-                                        break;
-                                    case 8:
-                                        l = "I";
-                                        break;
-                                    case 9:
-                                        l = "J";
-                                        break;
-                                    case 10:
-                                        l = "K";
-                                        break;
-                                    case 11:
-                                        l = "L";
-                                        break;
-                                    case 12:
-                                        l = "N";
-                                        break;
-                                    case 13:
-                                        l = "O";
-                                        break;
-                                    case 14:
-                                        l = "P";
-                                        break;
-                                    case 15:
-                                        l = "Q";
-                                        break;
-                                    case 16:
-                                        l = "R";
-                                        break;
-                                    default:
-                                        return;
+                                    if (i == 11)
+                                    {
+                                        if (bool.Parse(valor_celula)) { valor_celula = "Entrega"; } else { valor_celula = "Balcão"; }
+                                    }
+                                    ws.Cells[c + 1, i].PutValue(valor_celula);
                                 }
-                                ws.Cells[$"{l}{c + 2}"].PutValue(tabelaVendas.Rows[c].Cells[i].Value);
                             }
                         }
                         wb.Save(fl + @"\Relatório de vendas.xlsx", SaveFormat.Xlsx);
