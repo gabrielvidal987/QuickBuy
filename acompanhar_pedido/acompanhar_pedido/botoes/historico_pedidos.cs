@@ -16,6 +16,8 @@ namespace acompanhar_pedido.botoes
     {
         Bitmap apaga_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\delete.png");
         Bitmap print_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\print_ico.png");
+        
+
         string dados_nf;
         public historico_pedidos()
         {

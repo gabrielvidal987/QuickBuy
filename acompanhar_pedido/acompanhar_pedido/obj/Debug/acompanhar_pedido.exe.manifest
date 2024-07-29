@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
-  <asmv1:assemblyIdentity name="acompanhar_pedido.exe" version="1.0.0.29" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
+  <asmv1:assemblyIdentity name="acompanhar_pedido.exe" version="1.0.0.30" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
   <description asmv2:iconFile="iconeApp.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
@@ -50,7 +50,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Gms/Y/WPz1InuBkKnb6+Nsm0REGKd2DdS8QuAcqRxAA=</dsig:DigestValue>
+        <dsig:DigestValue>l/CZxwSUhuBimpBL8UYLjWIYqDmNNgvV+qnAch0xhQQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -399,6 +399,15 @@
       <dsig:DigestValue>FyTPvLEarHPqdtdvsujjeT2A7astNpbMXO05MyY94gc=</dsig:DigestValue>
     </hash>
   </file>
+  <file name="delete.png" size="1948">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>9z42PyKWuI4tRffNEmP6x5w7hAjmgtN8qRIntpKDqLU=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="iconeApp.ico" size="5132">
     <hash>
       <dsig:Transforms>
@@ -406,6 +415,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
       <dsig:DigestValue>5iXT4HgpXdK43qaXlWscvcBzMdWVND6o0A9GwruNzeo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="print_ico.png" size="555">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>bql0sg2R2DRFhj4nqJGjOcTCqcQ5/oWy03k895Qz+3g=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>
