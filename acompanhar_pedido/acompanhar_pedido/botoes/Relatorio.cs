@@ -149,7 +149,7 @@ namespace acompanhar_pedido.botoes
                 if (txCred.Text != "") { cred = double.Parse(txCred.Text.Replace("%", "")) / 100; }
                 dt.Columns.Add("Tempo de espera");
                 dt.Columns.Add("Produto");
-                dt.Columns.Add("QTD vendida");
+                dt.Columns.Add("QTD");
                 //calcula os valores liquidos com taxas de maquinas
                 for (int c = 0; c < qtdLinha; c++)
                 {
@@ -174,6 +174,38 @@ namespace acompanhar_pedido.botoes
                         dt.Rows[c][13] = listaBruta[c]["produto"]; dt.Rows[c][14] = listaBruta[c]["qtd"];
                     }
                     dt.Rows[c][13] = listaBruta[c]["produto"]; dt.Rows[c][14] = listaBruta[c]["qtd"]; 
+                }
+                //adiciona quantidade de entregas e quantidade de balcão
+                int entrega = 0; int balcao = 0;
+                for (int l =  0; l < qtdLinha; l++)
+                {
+                    string a = dt.Rows[l][11].ToString();
+                    if (dt.Rows[l][11].ToString() == "True") { entrega++; }
+                    else { balcao++; }
+                }
+                bool primeira_linha_livre = true;
+                bool segunda_linha_livre = true;
+                for (int l = 0; l < qtdLinha; l++)
+                {
+                    if (dt.Rows[l][13].ToString() == "" && primeira_linha_livre)
+                    {
+                        primeira_linha_livre = false;
+                        dt.Rows[l][13] = "Saída Entrega"; dt.Rows[l][14] = entrega.ToString();
+                        continue;
+                    }
+                    if (dt.Rows[l][13].ToString() == "" && segunda_linha_livre)
+                    {
+                        segunda_linha_livre = false;
+                        dt.Rows[l][13] = "Saída Balcão"; dt.Rows[l][14] = balcao.ToString();
+                        break;
+                    }
+                }
+                if (primeira_linha_livre && segunda_linha_livre)
+                {
+                    dt.Rows.Add();
+                    dt.Rows[dt.Rows.Count - 1][13] = "Saída Entrega"; dt.Rows[dt.Rows.Count - 1][14] = entrega.ToString();
+                    dt.Rows.Add();
+                    dt.Rows[dt.Rows.Count - 1][13] = "Saída Balcão"; dt.Rows[dt.Rows.Count - 1][14] = entrega.ToString();
                 }
                 //altera o nome das colunas
                 dt.Columns[0].ColumnName = "Senha";
@@ -200,7 +232,7 @@ namespace acompanhar_pedido.botoes
             {
                 button1.Width = flowLayoutPanel2.Width - 10;
                 tabelaVendas.Width = flowLayoutPanel2.Width - 10;
-                tabelaVendas.Height = flowLayoutPanel2.Height - 150;
+                tabelaVendas.Height = flowLayoutPanel2.Height - 160;
 
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 entradas.Text = entradaTotal.ToString("F");
