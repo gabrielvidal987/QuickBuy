@@ -30,8 +30,7 @@ namespace acompanhar_pedido
             }
         */
 
-        //STATIC dictionary contendo as infos de acesso ao Banco de dados
-        //private static Dictionary<string, string> res = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText("BDfila.json"));
+        //STATIC dictionary, ele é atualizado pelo atualzirdicionario() que coloca as info do BD
         private static Dictionary<string, string> res = new Dictionary<string, string>();
         public static void AtualizarDicionario(Dictionary<string,string> dadosConn)
         {
