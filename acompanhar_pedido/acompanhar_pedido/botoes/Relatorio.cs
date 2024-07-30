@@ -131,13 +131,13 @@ namespace acompanhar_pedido.botoes
                 dt.Columns[11].ReadOnly = true;
                 //tabela que pega a lista dos produtos vendidos
                 listaBruta = sql.ListaVendidos();
-                AdicionaMedia();
+                FiltraRelatorio();
                 exportExc.Enabled = true;
                 exportExc.BackColor = Color.FromArgb(192, 255, 192);
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
-        public void AdicionaMedia()
+        public void FiltraRelatorio()
         {
             try
             {
@@ -207,6 +207,11 @@ namespace acompanhar_pedido.botoes
                     dt.Rows.Add();
                     dt.Rows[dt.Rows.Count - 1][13] = "Saída Balcão"; dt.Rows[dt.Rows.Count - 1][14] = entrega.ToString();
                 }
+                else if (segunda_linha_livre) 
+                {
+                    dt.Rows.Add();
+                    dt.Rows[dt.Rows.Count - 1][13] = "Saída Balcão"; dt.Rows[dt.Rows.Count - 1][14] = entrega.ToString();
+                }
                 //altera o nome das colunas
                 dt.Columns[0].ColumnName = "Senha";
                 dt.Columns[1].ColumnName = "Nome";
@@ -220,6 +225,33 @@ namespace acompanhar_pedido.botoes
                 dt.Columns[9].ColumnName = "Valor líquido";
                 dt.Columns[10].ColumnName = "Operador";
                 dt.Columns[11].ColumnName = "Saida";
+                //filtra por apenas delivery ou apenas balcão
+                if (btnApenasBalcao.Checked)
+                {
+                    List<DataRow> num_row_to_remove = new List<DataRow>();
+                    for (int l = 0; l < qtdLinha; l++)
+                    {
+                        string a = dt.Rows[l][11].ToString();
+                        if (dt.Rows[l][11].ToString() == "True") { num_row_to_remove.Add(dt.Rows[l]); }
+                    }
+                    foreach (DataRow row in num_row_to_remove)
+                    {
+                        row.Delete();
+                    }
+                }
+                if (btnApenasDelivery.Checked)
+                {
+                    List<DataRow> num_row_to_remove = new List<DataRow>();
+                    for (int l = 0; l < qtdLinha; l++)
+                    {
+                        string a = dt.Rows[l][11].ToString();
+                        if (dt.Rows[l][11].ToString() == "False") { num_row_to_remove.Add(dt.Rows[l]); }
+                    }
+                    foreach (DataRow row in num_row_to_remove)
+                    {
+                        row.Delete();
+                    }
+                }
                 //atribui os dados do dt ao tabelaVendas
                 tabelaVendas.DataSource = dt;
                 tabelaVendas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
