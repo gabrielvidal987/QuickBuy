@@ -157,8 +157,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                MySqlCommand comando = new MySqlCommand($"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' ;", conexao, transaction); 
+                MySqlCommand comando = new MySqlCommand($"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' ;", conexao); 
                 try
                 {
                     using (var reader = comando.ExecuteReader())
@@ -185,11 +184,9 @@ namespace acompanhar_pedido
                             }
                         }
                     }
-                    transaction.Commit();
                 }
                 catch (Exception er)
                 {
-                    transaction.Rollback();
                     MessageBox.Show($"erro ao gerar lista de fila de pedidos: \n {er}");
                 }
             }
