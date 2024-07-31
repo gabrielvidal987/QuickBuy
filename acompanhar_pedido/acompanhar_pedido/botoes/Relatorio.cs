@@ -1,4 +1,5 @@
 ﻿using Aspose.Cells;
+using NAudio.CoreAudioApi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -131,87 +132,135 @@ namespace acompanhar_pedido.botoes
                 dt.Columns[11].ReadOnly = true;
                 //tabela que pega a lista dos produtos vendidos
                 listaBruta = sql.ListaVendidos();
+                //adiciona colunas de tempo, produto e qtd de produto
+                dt.Columns.Add("Tempo de espera");
+                dt.Columns.Add("Produto");
+                dt.Columns.Add("QTD");
+                FiltraDeliveryBalcao();
+                ValorLiq_TEspera();
                 FiltraRelatorio();
                 exportExc.Enabled = true;
                 exportExc.BackColor = Color.FromArgb(192, 255, 192);
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
+        public void FiltraDeliveryBalcao()
+        {
+            //adiciona quantidade de entregas e quantidade de balcão
+            int entrega = 0; int balcao = 0;
+            //preenche a qtd de entrega e balcao
+            for (int l = 0; l < dt.Rows.Count; l++)
+            {
+                if (dt.Rows[l][11].ToString() == "True") { entrega++; }
+                else { balcao++; }
+            }
+            //filtra por apenas delivery ou apenas balcão
+            List<DataRow> num_row_to_remove = new List<DataRow>();
+            if (btnApenasBalcao.Checked)
+            {
+                num_row_to_remove.Clear();
+                for (int l = 0; l < dt.Rows.Count; l++)
+                {
+                    if (dt.Rows[l][11].ToString() == "True") { num_row_to_remove.Add(dt.Rows[l]); }
+                }
+                foreach (DataRow row in num_row_to_remove)
+                {
+                    row.Delete();
+                    dt.AcceptChanges();
+                }
+            }
+            if (btnApenasDelivery.Checked)
+            {
+                num_row_to_remove.Clear();
+                for (int l = 0; l < dt.Rows.Count; l++)
+                {
+                    if (dt.Rows[l][11].ToString() == "False") { num_row_to_remove.Add(dt.Rows[l]); }
+                }
+                foreach (DataRow row in num_row_to_remove)
+                {
+                    row.Delete();
+                    dt.AcceptChanges();
+                }
+            }
+            //adiciona info de qtd vendida de cada modalidade de entrega
+            bool primeira_linha_livre = true;
+            bool segunda_linha_livre = true;
+            for (int l = 0; l < dt.Rows.Count; l++)
+            {
+                if (dt.Rows[l][13].ToString() == "" && primeira_linha_livre)
+                {
+                    primeira_linha_livre = false;
+                    dt.Rows[l][13] = "Saída Entrega"; dt.Rows[l][14] = entrega.ToString();
+                    continue;
+                }
+                if (dt.Rows[l][13].ToString() == "" && segunda_linha_livre)
+                {
+                    segunda_linha_livre = false;
+                    dt.Rows[l][13] = "Saída Balcão"; dt.Rows[l][14] = balcao.ToString();
+                    break;
+                }
+            }
+            if (primeira_linha_livre && segunda_linha_livre)
+            {
+                dt.Rows.Add();
+                dt.Rows[dt.Rows.Count - 1][13] = "Saída Entrega"; dt.Rows[dt.Rows.Count - 1][14] = entrega.ToString();
+                dt.Rows.Add();
+                dt.Rows[dt.Rows.Count - 1][13] = "Saída Balcão"; dt.Rows[dt.Rows.Count - 1][14] = balcao.ToString();
+            }
+            else if (segunda_linha_livre)
+            {
+                dt.Rows.Add();
+                dt.Rows[dt.Rows.Count - 1][13] = "Saída Balcão"; dt.Rows[dt.Rows.Count - 1][14] = balcao.ToString();
+            }
+        }
+        public void ValorLiq_TEspera()
+        {
+            //add media de tempo de espera e valor liquido
+            double deb = 0.015; // 1,5 / 100 = 0.015
+            double cred = 0.015; // 1,5 / 100 = 0.015
+            if (txDeb.Text != "") { deb = double.Parse(txDeb.Text.Replace("%", "")) / 100; }
+            if (txCred.Text != "") { cred = double.Parse(txCred.Text.Replace("%", "")) / 100; }
+            //calcula os valores liquidos com taxas de maquinas
+            for (int c = 0; c < dt.Rows.Count; c++)
+            {
+                dt.Rows[c][12] = $"{TimeSpan.Parse(dt.Rows[c][6].ToString()) - TimeSpan.Parse(dt.Rows[c][5].ToString())}";
+                if (dt.Rows[c][8].ToString() == "debito")
+                {
+                    dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * deb)).ToString("F");
+                }
+                if (dt.Rows[c][8].ToString() == "credito")
+                {
+                    dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * cred)).ToString("F");
+                }
+            }
+        }
         public void FiltraRelatorio()
         {
             try
             {
-                //add media de tempo de espera e valor liquido
-                int qtdLinha = dt.Rows.Count;
-                double deb = 0.015; // 1,5 / 100 = 0.015
-                double cred = 0.015; // 1,5 / 100 = 0.015
-                if (txDeb.Text != "") { deb = double.Parse(txDeb.Text.Replace("%", "")) / 100; }
-                if (txCred.Text != "") { cred = double.Parse(txCred.Text.Replace("%", "")) / 100; }
-                dt.Columns.Add("Tempo de espera");
-                dt.Columns.Add("Produto");
-                dt.Columns.Add("QTD");
-                //calcula os valores liquidos com taxas de maquinas
-                for (int c = 0; c < qtdLinha; c++)
-                {
-                    dt.Rows[c][12] = $"{TimeSpan.Parse(dt.Rows[c][6].ToString())  - TimeSpan.Parse(dt.Rows[c][5].ToString())}";
-                    if (dt.Rows[c][8].ToString() == "debito")
-                    {
-                        dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * deb)).ToString("F");
-                    }
-                    if (dt.Rows[c][8].ToString() == "credito")
-                    {
-                        dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * cred)).ToString("F");
-                    }
-                }
                 //calcula a entrada total baseada na tabela/relatorio gerado
-                for (int c = 0; c <qtdLinha; c++) { entradaTotal += Convert.ToDouble(dt.Rows[c][9]); }
-                //coloca no relatório a qtd de cada produto vendido
+                for (int c = 0; c <dt.Rows.Count; c++) { entradaTotal += Convert.ToDouble(dt.Rows[c][9]); }
+                //coloca no relatório a qtd de cada produto vendido; soma 2 na posição da linha pois as duas primeiras linhas tem a info de qtd de delivery e qtd balcão
                 for (int c = 0; c < listaBruta.Count(); c++) 
                 {
                     if (c > dt.Rows.Count - 1)
                     {
                         dt.Rows.Add();
                         dt.Rows[c][13] = listaBruta[c]["produto"]; dt.Rows[c][14] = listaBruta[c]["qtd"];
-                    }
-                    dt.Rows[c][13] = listaBruta[c]["produto"]; dt.Rows[c][14] = listaBruta[c]["qtd"]; 
-                }
-                //adiciona quantidade de entregas e quantidade de balcão
-                int entrega = 0; int balcao = 0;
-                for (int l =  0; l < qtdLinha; l++)
-                {
-                    string a = dt.Rows[l][11].ToString();
-                    if (dt.Rows[l][11].ToString() == "True") { entrega++; }
-                    else { balcao++; }
-                }
-                bool primeira_linha_livre = true;
-                bool segunda_linha_livre = true;
-                for (int l = 0; l < qtdLinha; l++)
-                {
-                    if (dt.Rows[l][13].ToString() == "" && primeira_linha_livre)
-                    {
-                        primeira_linha_livre = false;
-                        dt.Rows[l][13] = "Saída Entrega"; dt.Rows[l][14] = entrega.ToString();
                         continue;
                     }
-                    if (dt.Rows[l][13].ToString() == "" && segunda_linha_livre)
+                    if (c + 2 > dt.Rows.Count - 1)
                     {
-                        segunda_linha_livre = false;
-                        dt.Rows[l][13] = "Saída Balcão"; dt.Rows[l][14] = balcao.ToString();
-                        break;
+                        dt.Rows.Add();
+                        dt.Rows[c + 2][13] = listaBruta[c]["produto"]; dt.Rows[c + 2][14] = listaBruta[c]["qtd"];
+                        continue;
+                    }
+                    else
+                    {
+                        dt.Rows[c + 2][13] = listaBruta[c]["produto"]; dt.Rows[c + 2][14] = listaBruta[c]["qtd"];
                     }
                 }
-                if (primeira_linha_livre && segunda_linha_livre)
-                {
-                    dt.Rows.Add();
-                    dt.Rows[dt.Rows.Count - 1][13] = "Saída Entrega"; dt.Rows[dt.Rows.Count - 1][14] = entrega.ToString();
-                    dt.Rows.Add();
-                    dt.Rows[dt.Rows.Count - 1][13] = "Saída Balcão"; dt.Rows[dt.Rows.Count - 1][14] = entrega.ToString();
-                }
-                else if (segunda_linha_livre) 
-                {
-                    dt.Rows.Add();
-                    dt.Rows[dt.Rows.Count - 1][13] = "Saída Balcão"; dt.Rows[dt.Rows.Count - 1][14] = entrega.ToString();
-                }
+                
                 //altera o nome das colunas
                 dt.Columns[0].ColumnName = "Senha";
                 dt.Columns[1].ColumnName = "Nome";
@@ -225,33 +274,7 @@ namespace acompanhar_pedido.botoes
                 dt.Columns[9].ColumnName = "Valor líquido";
                 dt.Columns[10].ColumnName = "Operador";
                 dt.Columns[11].ColumnName = "Saida";
-                //filtra por apenas delivery ou apenas balcão
-                if (btnApenasBalcao.Checked)
-                {
-                    List<DataRow> num_row_to_remove = new List<DataRow>();
-                    for (int l = 0; l < qtdLinha; l++)
-                    {
-                        string a = dt.Rows[l][11].ToString();
-                        if (dt.Rows[l][11].ToString() == "True") { num_row_to_remove.Add(dt.Rows[l]); }
-                    }
-                    foreach (DataRow row in num_row_to_remove)
-                    {
-                        row.Delete();
-                    }
-                }
-                if (btnApenasDelivery.Checked)
-                {
-                    List<DataRow> num_row_to_remove = new List<DataRow>();
-                    for (int l = 0; l < qtdLinha; l++)
-                    {
-                        string a = dt.Rows[l][11].ToString();
-                        if (dt.Rows[l][11].ToString() == "False") { num_row_to_remove.Add(dt.Rows[l]); }
-                    }
-                    foreach (DataRow row in num_row_to_remove)
-                    {
-                        row.Delete();
-                    }
-                }
+                
                 //atribui os dados do dt ao tabelaVendas
                 tabelaVendas.DataSource = dt;
                 tabelaVendas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
