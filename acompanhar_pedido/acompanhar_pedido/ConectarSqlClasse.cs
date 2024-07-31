@@ -18,6 +18,7 @@ using System.Transactions;
 using System.Data.Common;
 using IsolationLevel = System.Data.IsolationLevel;
 using System.Net.Mail;
+using System.Management;
 
 namespace acompanhar_pedido
 {
@@ -972,6 +973,30 @@ namespace acompanhar_pedido
             }
 
             return sb.ToString();
+        }
+        public List<bool> pegaListaDelivery()
+        {
+            List<bool> lista_tipo_delivery = new List<bool>();
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                MySqlCommand pega_dados_delivery = new MySqlCommand($"SELECT delivery FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}'", conexao);
+                try
+                {
+                    using (var reader = pega_dados_delivery.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lista_tipo_delivery.Add(Convert.ToBoolean(reader["delivery"]));
+                        }
+                    }
+                }
+                catch (Exception er)
+                {
+                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
+                return lista_tipo_delivery;
+            }
         }
     }
 }

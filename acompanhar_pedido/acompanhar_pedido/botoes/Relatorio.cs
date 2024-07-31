@@ -23,8 +23,6 @@ namespace acompanhar_pedido.botoes
         double entradaTotal = 0;
         DataTable dt = new DataTable();
         List<Dictionary<string, string>> listaBruta = new List<Dictionary<string, string>>();
-
-
         public Relatorio()
         {
             InitializeComponent();
@@ -146,15 +144,14 @@ namespace acompanhar_pedido.botoes
         }
         public void FiltraDeliveryBalcao()
         {
+            ConectarSqlClasse sql = new ConectarSqlClasse();
+            List<bool> lista_delivery = new List<bool>(sql.pegaListaDelivery());
             //adiciona quantidade de entregas e quantidade de balcão
             int entrega = 0; int balcao = 0;
-            //preenche a qtd de entrega e balcao
-            for (int l = 0; l < dt.Rows.Count; l++)
+            foreach(bool delivery in lista_delivery)
             {
-                if (dt.Rows[l][11].ToString() == "True") { entrega++; }
-                else { balcao++; }
+                if (delivery) { entrega++; } else { balcao++; }
             }
-            //filtra por apenas delivery ou apenas balcão
             List<DataRow> num_row_to_remove = new List<DataRow>();
             if (btnApenasBalcao.Checked)
             {
@@ -223,15 +220,19 @@ namespace acompanhar_pedido.botoes
             //calcula os valores liquidos com taxas de maquinas
             for (int c = 0; c < dt.Rows.Count; c++)
             {
-                dt.Rows[c][12] = $"{TimeSpan.Parse(dt.Rows[c][6].ToString()) - TimeSpan.Parse(dt.Rows[c][5].ToString())}";
-                if (dt.Rows[c][8].ToString() == "debito")
+                if (dt.Rows[c][0].ToString() != "")
                 {
-                    dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * deb)).ToString("F");
+                    dt.Rows[c][12] = $"{TimeSpan.Parse(dt.Rows[c][6].ToString()) - TimeSpan.Parse(dt.Rows[c][5].ToString())}";
+                    if (dt.Rows[c][8].ToString() == "debito")
+                    {
+                        dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * deb)).ToString("F");
+                    }
+                    if (dt.Rows[c][8].ToString() == "credito")
+                    {
+                        dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * cred)).ToString("F");
+                    }
                 }
-                if (dt.Rows[c][8].ToString() == "credito")
-                {
-                    dt.Rows[c][9] = (double.Parse(dt.Rows[c][7].ToString()) - (double.Parse(dt.Rows[c][7].ToString()) * cred)).ToString("F");
-                }
+                else { break; }
             }
         }
         public void FiltraRelatorio()
@@ -239,7 +240,11 @@ namespace acompanhar_pedido.botoes
             try
             {
                 //calcula a entrada total baseada na tabela/relatorio gerado
-                for (int c = 0; c <dt.Rows.Count; c++) { entradaTotal += Convert.ToDouble(dt.Rows[c][9]); }
+                for (int c = 0; c <dt.Rows.Count; c++) 
+                {
+                    if (dt.Rows[c][0].ToString() != "") { entradaTotal += Convert.ToDouble(dt.Rows[c][9]); }
+                    else { break; }
+                }
                 //coloca no relatório a qtd de cada produto vendido; soma 2 na posição da linha pois as duas primeiras linhas tem a info de qtd de delivery e qtd balcão
                 for (int c = 0; c < listaBruta.Count(); c++) 
                 {
