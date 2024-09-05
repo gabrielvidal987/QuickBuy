@@ -40,7 +40,7 @@ namespace acompanhar_pedido.botoes
                 Control control = (Control)sender;
                 for (int i = 0; i < pnlGeral.Controls.Count; i++)
                 {
-                    if (pnlGeral.Controls[i].Controls[6].Name == control.Name)
+                    if (pnlGeral.Controls[i].Controls[8].Name == control.Name)
                     {
                         string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                         ConectarSqlClasse sql = new ConectarSqlClasse();
@@ -60,7 +60,7 @@ namespace acompanhar_pedido.botoes
                 Control control = (Control)sender;
                 for (int i = 0; i < pnlGeral.Controls.Count; i++)
                 {
-                    if (pnlGeral.Controls[i].Controls[6].Name == control.Name)
+                    if (pnlGeral.Controls[i].Controls[8].Name == control.Name)
                     {
                         string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                         ConectarSqlClasse sql = new ConectarSqlClasse();
@@ -224,7 +224,9 @@ namespace acompanhar_pedido.botoes
             {
                 return;
             }
-            RecarregaFila();
+            ConectarSqlClasse sql = new ConectarSqlClasse();
+            List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed());
+            if (filaPedidos.Count > 0) { RecarregaFila(); }
         }
     }
 }

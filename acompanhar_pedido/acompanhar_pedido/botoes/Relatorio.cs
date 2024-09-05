@@ -126,6 +126,7 @@ namespace acompanhar_pedido.botoes
                 {
                     dt = sql.Relatorio(filtro, ordem, nome);
                 }
+                dt.Columns.RemoveAt(0);
                 //deixar a coluna de entrega em readonly
                 dt.Columns[11].ReadOnly = true;
                 //tabela que pega a lista dos produtos vendidos

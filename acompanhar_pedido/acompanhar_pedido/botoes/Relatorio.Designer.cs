@@ -41,14 +41,20 @@
             this.btnNomeAZ = new System.Windows.Forms.RadioButton();
             this.btnNomeZA = new System.Windows.Forms.RadioButton();
             this.btnValor = new System.Windows.Forms.RadioButton();
+            this.btnApenasDelivery = new System.Windows.Forms.RadioButton();
+            this.btnApenasBalcao = new System.Windows.Forms.RadioButton();
             this.btnUmNome = new System.Windows.Forms.RadioButton();
+            this.pcholdPesquisa = new acompanhar_pedido.PlaceHolderTextBox();
             this.exportExc = new System.Windows.Forms.Button();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.txDeb = new acompanhar_pedido.PlaceHolderTextBox();
+            this.txCred = new acompanhar_pedido.PlaceHolderTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabelaVendas = new System.Windows.Forms.DataGridView();
             this.pnlES = new System.Windows.Forms.Panel();
             this.saidas = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.resFinal = new acompanhar_pedido.PlaceHolderTextBox();
             this.entradas = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel2 = new System.Windows.Forms.Panel();
@@ -61,12 +67,6 @@
             this.btnAddpic = new System.Windows.Forms.OpenFileDialog();
             this.escolherLocal = new System.Windows.Forms.FolderBrowserDialog();
             this.label7 = new System.Windows.Forms.Label();
-            this.btnApenasDelivery = new System.Windows.Forms.RadioButton();
-            this.btnApenasBalcao = new System.Windows.Forms.RadioButton();
-            this.resFinal = new acompanhar_pedido.PlaceHolderTextBox();
-            this.pcholdPesquisa = new acompanhar_pedido.PlaceHolderTextBox();
-            this.txDeb = new acompanhar_pedido.PlaceHolderTextBox();
-            this.txCred = new acompanhar_pedido.PlaceHolderTextBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
@@ -222,6 +222,30 @@
             this.btnValor.Text = "ORDEM DE VALOR (A-Z)";
             this.btnValor.UseVisualStyleBackColor = true;
             // 
+            // btnApenasDelivery
+            // 
+            this.btnApenasDelivery.AutoSize = true;
+            this.btnApenasDelivery.Location = new System.Drawing.Point(527, 79);
+            this.btnApenasDelivery.Margin = new System.Windows.Forms.Padding(10);
+            this.btnApenasDelivery.Name = "btnApenasDelivery";
+            this.btnApenasDelivery.Size = new System.Drawing.Size(124, 17);
+            this.btnApenasDelivery.TabIndex = 16;
+            this.btnApenasDelivery.TabStop = true;
+            this.btnApenasDelivery.Text = "APENAS DELIVERY";
+            this.btnApenasDelivery.UseVisualStyleBackColor = true;
+            // 
+            // btnApenasBalcao
+            // 
+            this.btnApenasBalcao.AutoSize = true;
+            this.btnApenasBalcao.Location = new System.Drawing.Point(671, 79);
+            this.btnApenasBalcao.Margin = new System.Windows.Forms.Padding(10);
+            this.btnApenasBalcao.Name = "btnApenasBalcao";
+            this.btnApenasBalcao.Size = new System.Drawing.Size(113, 17);
+            this.btnApenasBalcao.TabIndex = 17;
+            this.btnApenasBalcao.TabStop = true;
+            this.btnApenasBalcao.Text = "APENAS BALCÃO";
+            this.btnApenasBalcao.UseVisualStyleBackColor = true;
+            // 
             // btnUmNome
             // 
             this.btnUmNome.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -235,6 +259,22 @@
             this.btnUmNome.TabIndex = 8;
             this.btnUmNome.Text = "APENAS UM NOME";
             this.btnUmNome.UseVisualStyleBackColor = true;
+            // 
+            // pcholdPesquisa
+            // 
+            this.pcholdPesquisa.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pcholdPesquisa.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.pcholdPesquisa.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdPesquisa.Location = new System.Drawing.Point(947, 79);
+            this.pcholdPesquisa.Margin = new System.Windows.Forms.Padding(10);
+            this.pcholdPesquisa.Multiline = true;
+            this.pcholdPesquisa.Name = "pcholdPesquisa";
+            this.pcholdPesquisa.PlaceHolderText = null;
+            this.pcholdPesquisa.Size = new System.Drawing.Size(144, 17);
+            this.pcholdPesquisa.TabIndex = 9;
+            this.pcholdPesquisa.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdPesquisa_KeyDown);
             // 
             // exportExc
             // 
@@ -260,6 +300,30 @@
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
             this.flowLayoutPanel3.Size = new System.Drawing.Size(948, 28);
             this.flowLayoutPanel3.TabIndex = 14;
+            // 
+            // txDeb
+            // 
+            this.txDeb.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.txDeb.ForeColor = System.Drawing.Color.Gray;
+            this.txDeb.Location = new System.Drawing.Point(3, 3);
+            this.txDeb.Name = "txDeb";
+            this.txDeb.PlaceHolderText = "Taxa de débito";
+            this.txDeb.Size = new System.Drawing.Size(127, 23);
+            this.txDeb.TabIndex = 1;
+            this.txDeb.Text = "Taxa de débito";
+            this.txDeb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // txCred
+            // 
+            this.txCred.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
+            this.txCred.ForeColor = System.Drawing.Color.Gray;
+            this.txCred.Location = new System.Drawing.Point(136, 3);
+            this.txCred.Name = "txCred";
+            this.txCred.PlaceHolderText = "Taxa de credito";
+            this.txCred.Size = new System.Drawing.Size(129, 23);
+            this.txCred.TabIndex = 2;
+            this.txCred.Text = "Taxa de crédito";
+            this.txCred.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
@@ -318,6 +382,21 @@
             this.label8.TabIndex = 4;
             this.label8.Text = "*taxa de débito e crédito ja descontada* resultados tirados do relatório gerado";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // resFinal
+            // 
+            this.resFinal.Enabled = false;
+            this.resFinal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Italic);
+            this.resFinal.ForeColor = System.Drawing.Color.Gray;
+            this.resFinal.Location = new System.Drawing.Point(14, 136);
+            this.resFinal.Multiline = true;
+            this.resFinal.Name = "resFinal";
+            this.resFinal.PlaceHolderText = "RESULTADO";
+            this.resFinal.ReadOnly = true;
+            this.resFinal.Size = new System.Drawing.Size(168, 40);
+            this.resFinal.TabIndex = 2;
+            this.resFinal.Text = "RESULTADO";
+            this.resFinal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // entradas
             // 
@@ -432,85 +511,6 @@
             this.label7.Size = new System.Drawing.Size(307, 13);
             this.label7.TabIndex = 36;
             this.label7.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
-            // 
-            // btnApenasDelivery
-            // 
-            this.btnApenasDelivery.AutoSize = true;
-            this.btnApenasDelivery.Location = new System.Drawing.Point(527, 79);
-            this.btnApenasDelivery.Margin = new System.Windows.Forms.Padding(10);
-            this.btnApenasDelivery.Name = "btnApenasDelivery";
-            this.btnApenasDelivery.Size = new System.Drawing.Size(124, 17);
-            this.btnApenasDelivery.TabIndex = 16;
-            this.btnApenasDelivery.TabStop = true;
-            this.btnApenasDelivery.Text = "APENAS DELIVERY";
-            this.btnApenasDelivery.UseVisualStyleBackColor = true;
-            // 
-            // btnApenasBalcao
-            // 
-            this.btnApenasBalcao.AutoSize = true;
-            this.btnApenasBalcao.Location = new System.Drawing.Point(671, 79);
-            this.btnApenasBalcao.Margin = new System.Windows.Forms.Padding(10);
-            this.btnApenasBalcao.Name = "btnApenasBalcao";
-            this.btnApenasBalcao.Size = new System.Drawing.Size(113, 17);
-            this.btnApenasBalcao.TabIndex = 17;
-            this.btnApenasBalcao.TabStop = true;
-            this.btnApenasBalcao.Text = "APENAS BALCÃO";
-            this.btnApenasBalcao.UseVisualStyleBackColor = true;
-            // 
-            // resFinal
-            // 
-            this.resFinal.Enabled = false;
-            this.resFinal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Italic);
-            this.resFinal.ForeColor = System.Drawing.Color.Gray;
-            this.resFinal.Location = new System.Drawing.Point(14, 136);
-            this.resFinal.Multiline = true;
-            this.resFinal.Name = "resFinal";
-            this.resFinal.PlaceHolderText = "RESULTADO";
-            this.resFinal.ReadOnly = true;
-            this.resFinal.Size = new System.Drawing.Size(168, 40);
-            this.resFinal.TabIndex = 2;
-            this.resFinal.Text = "RESULTADO";
-            this.resFinal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // pcholdPesquisa
-            // 
-            this.pcholdPesquisa.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pcholdPesquisa.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.pcholdPesquisa.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdPesquisa.Location = new System.Drawing.Point(947, 79);
-            this.pcholdPesquisa.Margin = new System.Windows.Forms.Padding(10);
-            this.pcholdPesquisa.Multiline = true;
-            this.pcholdPesquisa.Name = "pcholdPesquisa";
-            this.pcholdPesquisa.PlaceHolderText = null;
-            this.pcholdPesquisa.Size = new System.Drawing.Size(144, 17);
-            this.pcholdPesquisa.TabIndex = 9;
-            this.pcholdPesquisa.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdPesquisa_KeyDown);
-            // 
-            // txDeb
-            // 
-            this.txDeb.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.txDeb.ForeColor = System.Drawing.Color.Gray;
-            this.txDeb.Location = new System.Drawing.Point(3, 3);
-            this.txDeb.Name = "txDeb";
-            this.txDeb.PlaceHolderText = "Taxa de débito";
-            this.txDeb.Size = new System.Drawing.Size(127, 23);
-            this.txDeb.TabIndex = 1;
-            this.txDeb.Text = "Taxa de débito";
-            this.txDeb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txCred
-            // 
-            this.txCred.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
-            this.txCred.ForeColor = System.Drawing.Color.Gray;
-            this.txCred.Location = new System.Drawing.Point(136, 3);
-            this.txCred.Name = "txCred";
-            this.txCred.PlaceHolderText = "Taxa de credito";
-            this.txCred.Size = new System.Drawing.Size(129, 23);
-            this.txCred.TabIndex = 2;
-            this.txCred.Text = "Taxa de crédito";
-            this.txCred.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Relatorio
             // 

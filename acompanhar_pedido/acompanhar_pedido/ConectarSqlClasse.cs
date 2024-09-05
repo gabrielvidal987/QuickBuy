@@ -937,7 +937,7 @@ namespace acompanhar_pedido
                     {
                         while (reader.Read())
                         {
-                            lista_pedidos += $"{reader["nome"]} -> {reader["valor"]}\n\n";
+                            lista_pedidos += $"{reader["nome"]} -> R${reader["valor"]}\n\n";
                         }
                     }
                     transaction.Commit();
