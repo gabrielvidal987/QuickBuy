@@ -35,7 +35,7 @@ CREATE TABLE `pedidos` (
   `usuario` varchar(200) DEFAULT NULL,
   `delivery` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`numero_pedido`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-31 12:38:47
+-- Dump completed on 2024-09-06 11:18:06

@@ -23,8 +23,9 @@ DROP TABLE IF EXISTS `pedidos_prontos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pedidos_prontos` (
-  `numero_pedido` int NOT NULL,
-  `nome_cliente` varchar(50) DEFAULT NULL,
+  `insert_sys` int NOT NULL AUTO_INCREMENT,
+  `numero_pedido` int DEFAULT NULL,
+  `nome_cliente` varchar(2000) DEFAULT NULL,
   `endereco` varchar(2000) DEFAULT NULL,
   `produtos_nome` varchar(2000) DEFAULT NULL,
   `observacoes` varchar(500) DEFAULT NULL,
@@ -34,9 +35,9 @@ CREATE TABLE `pedidos_prontos` (
   `formaPag` char(30) DEFAULT NULL,
   `valorLiq` double DEFAULT NULL,
   `usuario` varchar(200) DEFAULT NULL,
-  `delivery` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`numero_pedido`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `delivery` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`insert_sys`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,6 +46,7 @@ CREATE TABLE `pedidos_prontos` (
 
 LOCK TABLES `pedidos_prontos` WRITE;
 /*!40000 ALTER TABLE `pedidos_prontos` DISABLE KEYS */;
+INSERT INTO `pedidos_prontos` VALUES (1,112,'testeee','endereço não cadastrado','1X pizza,1X açai,','sem observações','14:59:51','14:59:57',2.5,'dinheiro',2.5,'desbravadores',0);
 /*!40000 ALTER TABLE `pedidos_prontos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-31 12:38:48
+-- Dump completed on 2024-09-06 11:18:06
