@@ -81,7 +81,7 @@ namespace acompanhar_pedido
             }
             catch
             {
-                MessageBox.Show("Erro ao gerar log e enviar para BD. \n\nContactar Administrador e verificar conexão com internet e BD","ATENÇÃO!!!");
+                MessageBox.Show("Erro ao gerar log e enviar para BD. \n\nContactar Administrador e verificar conexão com internet e BD","ATENÇÃO!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         //insere produto na tabela de produtos

@@ -126,22 +126,26 @@ namespace acompanhar_pedido.botoes
         }
         private void RemProd_Click(object sender, EventArgs e)
         {
-            try
+            var result = MessageBox.Show("Certeza que deseja REMOVER o produto?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
             {
-                Control control = (Control)sender;
-                for(int i = 0; i < pnlGeral.Controls.Count;i++)
+                try
                 {
-                    if (pnlGeral.Controls[i].Controls[3].Name == control.Name)
+                    Control control = (Control)sender;
+                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
                     {
-                        string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString();
-                        ConectarSqlClasse sql = new ConectarSqlClasse();
-                        sql.RemoveProd(nome_produto);
-                        CriaBtns();
+                        if (pnlGeral.Controls[i].Controls[3].Name == control.Name)
+                        {
+                            string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString();
+                            ConectarSqlClasse sql = new ConectarSqlClasse();
+                            sql.RemoveProd(nome_produto);
+                            CriaBtns();
+                        }
                     }
                 }
+                catch (Exception er)
+                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
-            catch (Exception er)
-            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
         public void CriaBtns()
         {
@@ -239,23 +243,27 @@ namespace acompanhar_pedido.botoes
         }
         private void impListProd_Click(object sender, EventArgs e)
         {
-            try
+            var result = MessageBox.Show("Certeza que deseja IMPRIMIR a lista de produtos?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
             {
-                Control control = (Control)sender;
-                ConectarSqlClasse sql = new ConectarSqlClasse();
-                dados_prods = sql.imprimeListaProdutos();
                 try
                 {
-                    impressora.Print();
-                    pnlCadProd.Focus();
+                    Control control = (Control)sender;
+                    ConectarSqlClasse sql = new ConectarSqlClasse();
+                    dados_prods = sql.imprimeListaProdutos();
+                    try
+                    {
+                        impressora.Print();
+                        pnlCadProd.Focus();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Erro ao imprimir pedido");
+                    }
                 }
-                catch
-                {
-                    MessageBox.Show("Erro ao imprimir pedido");
-                }
+                catch (Exception er)
+                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
-            catch (Exception er)
-            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
         private void impressora_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {

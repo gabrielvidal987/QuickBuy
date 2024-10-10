@@ -371,7 +371,7 @@ namespace acompanhar_pedido.teste
                     nomeProd.BorderStyle = BorderStyle.FixedSingle;
                     nomeProd.TextAlign = ContentAlignment.MiddleCenter;
                     nomeProd.Text = item["nome"];
-                    nomeProd.Enabled = false;
+                    nomeProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     valorProd.BackColor = Color.FromArgb(255, 255, 255);
                     valorProd.Font = new Font("Arial", 10);
                     valorProd.ForeColor = Color.Black;
@@ -380,12 +380,11 @@ namespace acompanhar_pedido.teste
                     valorProd.BorderStyle = BorderStyle.FixedSingle;
                     valorProd.TextAlign = ContentAlignment.MiddleCenter;
                     valorProd.Text = $"R${item["valor"].Replace('.',',')}";
-                    valorProd.Enabled = false;
+                    valorProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     fotoProd.BackColor = Color.FromArgb(255, 255, 255);
                     fotoProd.Size = new Size(186, 105);
                     fotoProd.BorderStyle = BorderStyle.FixedSingle;
                     fotoProd.SizeMode = PictureBoxSizeMode.StretchImage;
-                    fotoProd.Enabled = false;
                     try
                     {
                         Image myimage = new Bitmap(item["caminho_foto"]);
@@ -393,6 +392,7 @@ namespace acompanhar_pedido.teste
                     }
                     catch { }
                     fotoProd.BackgroundImageLayout = ImageLayout.Stretch;
+                    fotoProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     pnlGeral.Controls.Add(btn);
                     btn.Controls.Add(nomeProd);
                     btn.Controls.Add(valorProd);
@@ -422,7 +422,29 @@ namespace acompanhar_pedido.teste
             {
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
-
+        }
+        private void produto_lb_pb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Type tipo = sender.GetType();
+                if (tipo.Name == "PictureBox")
+                {
+                    PictureBox picturebox = sender as PictureBox;
+                    var parentButton = picturebox.Parent;
+                    produtobtn_Click(parentButton, e);
+                }
+                else
+                {
+                    Label label = sender as Label;
+                    var parentButton = label.Parent;
+                    produtobtn_Click(parentButton, e);
+                }
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
         }
         private void mouseDown(object sender, EventArgs e)
         {

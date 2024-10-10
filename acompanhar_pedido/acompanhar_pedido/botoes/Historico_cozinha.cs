@@ -141,31 +141,35 @@ namespace acompanhar_pedido.botoes
         }
         private void btnPrintAnt_Click(object sender, EventArgs e)
         {
-            try
+            var result = MessageBox.Show("Certeza que deseja REIMPRIMIR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
             {
-                Control control = (Control)sender;
-                for (int i = 0; i < pnlGeral.Controls.Count; i++)
+                try
                 {
-                    if (pnlGeral.Controls[i].Controls[6].Name == control.Name)
+                    Control control = (Control)sender;
+                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
                     {
-                        string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
-                        ConectarSqlClasse sql = new ConectarSqlClasse();
-                        dados_nf = sql.imprimePedidoPronto(numero_pedido);
-                        try
+                        if (pnlGeral.Controls[i].Controls[6].Name == control.Name)
                         {
-                            impressora.Print();
-                            pnlGeral.Focus();
+                            string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                            ConectarSqlClasse sql = new ConectarSqlClasse();
+                            dados_nf = sql.imprimePedidoPronto(numero_pedido);
+                            try
+                            {
+                                impressora.Print();
+                                pnlGeral.Focus();
+                            }
+                            catch
+                            {
+                                MessageBox.Show("Erro ao imprimir pedido");
+                            }
+                            break;
                         }
-                        catch
-                        {
-                            MessageBox.Show("Erro ao imprimir pedido");
-                        }
-                        break;
                     }
                 }
+                catch (Exception er)
+                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
-            catch (Exception er)
-            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
         private void impressora_PrintPage(object sender, PrintPageEventArgs e)
         {
