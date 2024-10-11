@@ -19,6 +19,7 @@ using acompanhar_pedido.botoes;
 using System.Linq.Expressions;
 using System.Threading;
 using MySqlX.XDevAPI.Common;
+using System.IO;
 
 namespace acompanhar_pedido.teste
 {
@@ -28,6 +29,7 @@ namespace acompanhar_pedido.teste
         string nf;
         Thread t1;
         string texto_filtra = "";
+        Bitmap food_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\food_ico.png");
         public FazerPedido()
         {
             InitializeComponent();
@@ -390,7 +392,10 @@ namespace acompanhar_pedido.teste
                         Image myimage = new Bitmap(item["caminho_foto"]);
                         fotoProd.BackgroundImage = myimage;
                     }
-                    catch { }
+                    catch 
+                    {
+                        fotoProd.Image = food_ico;
+                    }
                     fotoProd.BackgroundImageLayout = ImageLayout.Stretch;
                     fotoProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     pnlGeral.Controls.Add(btn);

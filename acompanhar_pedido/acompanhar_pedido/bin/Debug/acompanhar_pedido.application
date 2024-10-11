@@ -7,14 +7,14 @@
     <framework targetVersion="4.7.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="acompanhar_pedido.exe.manifest" size="24190">
+    <dependentAssembly dependencyType="install" codebase="acompanhar_pedido.exe.manifest" size="23412">
       <assemblyIdentity name="acompanhar_pedido.exe" version="1.0.0.31" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>yHijdo4kuVybKZ7W1OURI9VqxYCu+Co/FFmruPQVmZ0=</dsig:DigestValue>
+        <dsig:DigestValue>8lVqjCPg4SGc5A/nklvknCKeuwf7hP2m7Bx7C+R1pWM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

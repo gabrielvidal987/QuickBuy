@@ -294,9 +294,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="delete.png" />
     <Content Include="iconeApp.ico" />
-    <Content Include="print_ico.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

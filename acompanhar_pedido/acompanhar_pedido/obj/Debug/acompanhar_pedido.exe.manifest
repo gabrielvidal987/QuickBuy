@@ -50,7 +50,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>966N5rTjS08/fICNr+5b4E3q4+5G6WdKxSukgL6f5xw=</dsig:DigestValue>
+        <dsig:DigestValue>dby5q14PPoNGZ8lpjaK0na8TaVKpbSdYeu3PRdJI9Vc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -399,15 +399,6 @@
       <dsig:DigestValue>FyTPvLEarHPqdtdvsujjeT2A7astNpbMXO05MyY94gc=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="delete.png" size="1948">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>9z42PyKWuI4tRffNEmP6x5w7hAjmgtN8qRIntpKDqLU=</dsig:DigestValue>
-    </hash>
-  </file>
   <file name="iconeApp.ico" size="5132">
     <hash>
       <dsig:Transforms>
@@ -415,15 +406,6 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
       <dsig:DigestValue>5iXT4HgpXdK43qaXlWscvcBzMdWVND6o0A9GwruNzeo=</dsig:DigestValue>
-    </hash>
-  </file>
-  <file name="print_ico.png" size="555">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>bql0sg2R2DRFhj4nqJGjOcTCqcQ5/oWy03k895Qz+3g=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>
