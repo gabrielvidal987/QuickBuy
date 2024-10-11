@@ -27,6 +27,7 @@ namespace acompanhar_pedido.botoes
         string fotopadrao = "";
         string foto_caminho;
         string exten = "png";
+        Bitmap food_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\food_ico.png");
         Bitmap apaga_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\delete.png");
         public Produtos()
         {
@@ -44,8 +45,8 @@ namespace acompanhar_pedido.botoes
                 try
                 {
                     string caminho_foto = btnAddpic.FileName.Replace(@"\", @"\\");
-                    List<string> list = new List<string>(caminho_foto.Split('.'));
                     foto_caminho = caminho_foto;
+                    List<string> list = new List<string>(caminho_foto.Split('.'));
                     exten = list[list.Count - 1];
                 }
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
@@ -203,7 +204,10 @@ namespace acompanhar_pedido.botoes
                         Image myimage = new Bitmap(item["caminho_foto"]);
                         fotoProd.BackgroundImage = myimage;
                     }
-                    catch { }
+                    catch 
+                    {
+                        fotoProd.Image = food_ico;
+                    }
                     fotoProd.BackgroundImageLayout = ImageLayout.Stretch;
                     remProd.BackColor = Color.Transparent;
                     remProd.Name = ind_btn.ToString();

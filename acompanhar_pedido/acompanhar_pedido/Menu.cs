@@ -40,7 +40,11 @@ namespace acompanhar_pedido
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 string nomeClube = File.ReadAllText("Usuario.TXT");
-                fotoClube.ImageLocation = sql.FotoClube(nomeClube);
+                string imagem_clube = sql.FotoClube(nomeClube);
+                if (imagem_clube != "")
+                {
+                    fotoClube.ImageLocation = $@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\fotos_clube\{imagem_clube}";
+                }
                 MessageBox.Show("SEJA BEM VINDO CLUBE " + nomeClube.ToUpper(), "BOAS VINDAS");
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }

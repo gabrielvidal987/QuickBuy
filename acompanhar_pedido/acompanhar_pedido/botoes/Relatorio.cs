@@ -17,8 +17,7 @@ namespace acompanhar_pedido.botoes
 {
     public partial class Relatorio : Form
     {
-        string fotopadrao = "C:\\Users\\AP20.APD\\source\\repos\\acompanhar_pedido\\fotos\\semFoto.png";
-        string foto_caminho;
+        string foto_caminho = $@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\semFoto.png";
         string exten = "png";
         double entradaTotal = 0;
         DataTable dt = new DataTable();
@@ -320,13 +319,9 @@ namespace acompanhar_pedido.botoes
                 if (btnAddpic.ShowDialog() == DialogResult.OK)
                 {
                     string caminho_foto = btnAddpic.FileName.Replace(@"\", @"\\");
-                    List<string> list = new List<string>(caminho_foto.Split('.'));
                     foto_caminho = caminho_foto;
+                    List<string> list = new List<string>(caminho_foto.Split('.'));
                     exten = list[list.Count - 1];
-                }
-                else
-                {
-                    foto_caminho = fotopadrao;
                 }
                 Image imagem = new Bitmap(foto_caminho);
                 pictureBox2.Image = imagem;
@@ -345,7 +340,7 @@ namespace acompanhar_pedido.botoes
                         Directory.CreateDirectory(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_clube");
                     }
                     File.Copy(foto_caminho, Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_clube\{nomeClube.Text}.{exten}");
-                    foto_caminho = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()).Replace(@"\", @"\\") + $@"\\fotos_clube\\{nomeClube.Text}.{exten}";
+                    foto_caminho = $@"{nomeClube.Text}.{exten}";
                 }
                 catch { }
                 sql.CriaUsuario(nomeClube.Text.ToLower().Trim(), foto_caminho);

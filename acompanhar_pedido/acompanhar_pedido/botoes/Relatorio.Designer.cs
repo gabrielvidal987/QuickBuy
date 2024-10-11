@@ -500,7 +500,7 @@
             // 
             // btnAddpic
             // 
-            this.btnAddpic.Filter = "JPG(*.jpg)|*.jpg|PNG(*.png)|*.png";
+            this.btnAddpic.Filter = "Imagens (*.jpg;*.jpeg;*.png;*.gif)|*.jpg;*.jpeg;*.png;*.gif";
             // 
             // label7
             // 
