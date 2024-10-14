@@ -328,18 +328,18 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
-        private void button2_Click(object sender, EventArgs e)
+        private void btn_Criar_Usuario_Click(object sender, EventArgs e)
         {
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 try
                 {
-                    if (!Directory.Exists(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_clube"))
+                    if (!Directory.Exists(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_usuario"))
                     {
-                        Directory.CreateDirectory(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_clube");
+                        Directory.CreateDirectory(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_usuario");
                     }
-                    File.Copy(foto_caminho, Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_clube\{nomeClube.Text}.{exten}");
+                    File.Copy(foto_caminho, Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_usuario\{nomeClube.Text}.{exten}");
                     foto_caminho = $@"{nomeClube.Text}.{exten}";
                 }
                 catch { }

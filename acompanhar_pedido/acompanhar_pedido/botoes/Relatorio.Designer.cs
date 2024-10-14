@@ -58,7 +58,7 @@
             this.entradas = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnCriarUsuario = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -421,7 +421,7 @@
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.button2);
+            this.panel2.Controls.Add(this.btnCriarUsuario);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.pictureBox2);
@@ -432,18 +432,18 @@
             this.panel2.Size = new System.Drawing.Size(200, 353);
             this.panel2.TabIndex = 9;
             // 
-            // button2
+            // btnCriarUsuario
             // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(14, 310);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(168, 32);
-            this.button2.TabIndex = 10;
-            this.button2.Text = "CRIAR USUÁRIO";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnCriarUsuario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnCriarUsuario.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCriarUsuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCriarUsuario.Location = new System.Drawing.Point(14, 310);
+            this.btnCriarUsuario.Name = "btnCriarUsuario";
+            this.btnCriarUsuario.Size = new System.Drawing.Size(168, 32);
+            this.btnCriarUsuario.TabIndex = 10;
+            this.btnCriarUsuario.Text = "CRIAR USUÁRIO";
+            this.btnCriarUsuario.UseVisualStyleBackColor = false;
+            this.btnCriarUsuario.Click += new System.EventHandler(this.btn_Criar_Usuario_Click);
             // 
             // label6
             // 
@@ -573,7 +573,7 @@
         private System.Windows.Forms.OpenFileDialog btnAddpic;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button exportExc;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnCriarUsuario;
         private System.Windows.Forms.FolderBrowserDialog escolherLocal;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
         private PlaceHolderTextBox txCred;

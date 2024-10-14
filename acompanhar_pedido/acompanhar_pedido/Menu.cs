@@ -43,9 +43,8 @@ namespace acompanhar_pedido
                 string imagem_clube = sql.FotoClube(nomeClube);
                 if (imagem_clube != "")
                 {
-                    fotoClube.ImageLocation = $@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\fotos_clube\{imagem_clube}";
+                    fotoClube.ImageLocation = $@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\fotos_usuario\{imagem_clube}";
                 }
-                MessageBox.Show("SEJA BEM VINDO CLUBE " + nomeClube.ToUpper(), "BOAS VINDAS");
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
 
