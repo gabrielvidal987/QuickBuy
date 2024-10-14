@@ -17,6 +17,8 @@ using System.IO;
 using System.Reflection;
 using System.ComponentModel.Design;
 using System.Numerics;
+using Aspose.Cells;
+using Font = System.Drawing.Font;
 
 namespace acompanhar_pedido.botoes
 {
@@ -24,11 +26,12 @@ namespace acompanhar_pedido.botoes
     {
         string dados_prods;
         string nomeOriginal;
-        string fotopadrao = "";
+        string fotopadrao = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos","semFoto.png");
         string foto_caminho;
+        string nome_foto_produto;
         string exten = "png";
-        Bitmap food_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\food_ico.png");
-        Bitmap apaga_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\delete.png");
+        Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"food_ico.png"));
+        Bitmap apaga_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"delete.png"));
         public Produtos()
         {
             InitializeComponent();
@@ -44,6 +47,7 @@ namespace acompanhar_pedido.botoes
             {
                 try
                 {
+                    foto_caminho = null;
                     string caminho_foto = btnAddpic.FileName.Replace(@"\", @"\\");
                     foto_caminho = caminho_foto;
                     List<string> list = new List<string>(caminho_foto.Split('.'));
@@ -72,21 +76,24 @@ namespace acompanhar_pedido.botoes
                 string valor = valorNumerico.Value.ToString().Replace(',', '.');
                 try
                 {
-                    if (!Directory.Exists(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_produtos"))
+                    if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos")))
                     {
-                        Directory.CreateDirectory(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_produtos");
+                        Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos"));
                     }
-                    if (foto_caminho != null )
+                    if (foto_caminho != null && foto_caminho != "")
                     {
-                        File.Copy(foto_caminho, Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_produtos\{nome}.{exten}");
-                        foto_caminho = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()).Replace(@"\", @"\\") + $@"\\fotos_produtos\\{nome}.{exten}";
+                        File.Copy(foto_caminho, Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos",$"{nome}.{exten}"), overwrite: true);
+                        nome_foto_produto = $"{nome}.{exten}";
                     }
+                    else { nome_foto_produto = $"semFoto.png"; }
                 }
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-                MessageBox.Show(sql.InsertProduto(nome, valor, foto_caminho, nomeOriginal));
+                MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal));
                 pcholdNomeProd.Text = string.Empty;
                 valorNumerico.Value = 0;
                 try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.BackgroundImage = imagemPadrao; } catch { }
+                nomeOriginal = null;
+                foto_caminho = null;
                 pcholdNomeProd.Focus();
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
@@ -114,6 +121,8 @@ namespace acompanhar_pedido.botoes
         {
             try
             {
+                nomeOriginal = null;
+                foto_caminho = null;
                 Control control = (Control)sender;
                 pcholdNomeProd.Focus();
                 pcholdNomeProd.Text = control.Controls[0].Text.ToString();
@@ -201,7 +210,7 @@ namespace acompanhar_pedido.botoes
                     fotoProd.Enabled = false;
                     try
                     {
-                        Image myimage = new Bitmap(item["caminho_foto"]);
+                        Image myimage = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos",item["caminho_foto"]));
                         fotoProd.BackgroundImage = myimage;
                     }
                     catch 

@@ -17,7 +17,7 @@ namespace acompanhar_pedido.botoes
 {
     public partial class Relatorio : Form
     {
-        string foto_caminho = $@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\semFoto.png";
+        string foto_caminho = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"semFoto.png");
         string exten = "png";
         double entradaTotal = 0;
         DataTable dt = new DataTable();
@@ -335,12 +335,12 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 try
                 {
-                    if (!Directory.Exists(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_usuario"))
+                    if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_usuario")))
                     {
-                        Directory.CreateDirectory(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_usuario");
+                        Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_usuario"));
                     }
-                    File.Copy(foto_caminho, Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + $@"\fotos_usuario\{nomeClube.Text}.{exten}");
-                    foto_caminho = $@"{nomeClube.Text}.{exten}";
+                    File.Copy(foto_caminho, Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_usuario",$"{nomeClube.Text}.{exten}"), overwrite: true);
+                    foto_caminho = $"{nomeClube.Text}.{exten}";
                 }
                 catch { }
                 sql.CriaUsuario(nomeClube.Text.ToLower().Trim(), foto_caminho);

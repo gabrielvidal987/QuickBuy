@@ -35,12 +35,12 @@
             this.lbCadProd = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.pcholdNomeProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.fotoProd = new System.Windows.Forms.PictureBox();
             this.btnAddpic = new System.Windows.Forms.OpenFileDialog();
             this.pnlGeral = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
             this.impListProd = new System.Windows.Forms.Button();
-            this.pcholdNomeProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.impressora = new System.Drawing.Printing.PrintDocument();
             this.pnlCadProd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.valorNumerico)).BeginInit();
@@ -122,6 +122,17 @@
             this.label1.TabIndex = 23;
             this.label1.Text = "NOME/SABOR:";
             // 
+            // pcholdNomeProd
+            // 
+            this.pcholdNomeProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Italic);
+            this.pcholdNomeProd.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdNomeProd.Location = new System.Drawing.Point(24, 127);
+            this.pcholdNomeProd.Name = "pcholdNomeProd";
+            this.pcholdNomeProd.PlaceHolderText = null;
+            this.pcholdNomeProd.Size = new System.Drawing.Size(189, 30);
+            this.pcholdNomeProd.TabIndex = 1;
+            this.pcholdNomeProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // fotoProd
             // 
             this.fotoProd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("fotoProd.BackgroundImage")));
@@ -140,7 +151,7 @@
             // 
             // btnAddpic
             // 
-            this.btnAddpic.Filter = "JPG(*.jpg)|*.jpg|PNG(*.png)|*.png";
+            this.btnAddpic.Filter = "Imagens (JPG,PNG,JPEG)|*.jpg;*.png;*.jpeg";
             // 
             // pnlGeral
             // 
@@ -177,17 +188,6 @@
             this.impListProd.Text = "IMPRIMIR LISTA DE PRODUTOS";
             this.impListProd.UseVisualStyleBackColor = false;
             this.impListProd.Click += new System.EventHandler(this.impListProd_Click);
-            // 
-            // pcholdNomeProd
-            // 
-            this.pcholdNomeProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Italic);
-            this.pcholdNomeProd.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdNomeProd.Location = new System.Drawing.Point(24, 127);
-            this.pcholdNomeProd.Name = "pcholdNomeProd";
-            this.pcholdNomeProd.PlaceHolderText = null;
-            this.pcholdNomeProd.Size = new System.Drawing.Size(189, 30);
-            this.pcholdNomeProd.TabIndex = 1;
-            this.pcholdNomeProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // impressora
             // 

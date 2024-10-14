@@ -92,43 +92,20 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                bool criar = true;
-                List<string> lista = new List<string>();
-                MySqlCommand pesquisa = new MySqlCommand($"SELECT * FROM produtos WHERE usuario = '{VariaveisGlobais.Usuario}';", conexao,transaction);
                 try
                 {
-                    using (var leitura = pesquisa.ExecuteReader())
+                    if (nomeOriginal != null && nomeOriginal != "") 
                     {
-                        while (leitura.Read())
-                        {
-                            lista.Add(Convert.ToString(leitura["nome"]));
-                        }
+                        MySqlCommand insere = new MySqlCommand($"UPDATE produtos SET nome = '{nome}', valor = {valor} where nome = '{nomeOriginal}' AND usuario = '{VariaveisGlobais.Usuario}'", conexao, transaction);
+                        insere.ExecuteNonQuery();
+                        retorno = $"Produto {nomeOriginal} alterado com sucesso!!";
+                        transaction.Commit();
                     }
-                    foreach (string produto in lista)
-                    {
-                        if (produto.Equals(nomeOriginal))
-                        {
-                            try
-                            {
-                                MySqlCommand insere = new MySqlCommand($"UPDATE produtos SET nome = '{nome}', valor = {valor} where nome = '{nomeOriginal}' AND usuario = '{VariaveisGlobais.Usuario}'", conexao, transaction);
-                                insere.ExecuteNonQuery();
-                                retorno = $"Produto {nomeOriginal} alterado com sucesso!!";
-                                criar = false;
-                                transaction.Commit();
-                                break;
-                            }
-                            catch (Exception er)
-                            {
-                                transaction.Rollback();
-                                EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-                            }
-                        }
-                    }
-                    if (criar == true)
+                    else
                     {
                         try
                         {
-                            MySqlCommand insere = new MySqlCommand($"INSERT INTO produtos(nome,valor, caminho_foto,usuario) VALUES('{nome}',{valor},'{caminho}','{VariaveisGlobais.Usuario}')", conexao,transaction);
+                            MySqlCommand insere = new MySqlCommand($"INSERT INTO produtos(nome,valor, caminho_foto,usuario) VALUES('{nome}',{valor},'{caminho}','{VariaveisGlobais.Usuario}')", conexao, transaction);
                             insere.ExecuteNonQuery();
                             retorno = $"Adicionado {nome} com valor {valor} na tabela de produtos";
                             transaction.Commit();

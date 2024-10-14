@@ -29,7 +29,7 @@ namespace acompanhar_pedido.teste
         string nf;
         Thread t1;
         string texto_filtra = "";
-        Bitmap food_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\food_ico.png");
+        Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"food_ico.png"));
         public FazerPedido()
         {
             InitializeComponent();
@@ -389,7 +389,7 @@ namespace acompanhar_pedido.teste
                     fotoProd.SizeMode = PictureBoxSizeMode.StretchImage;
                     try
                     {
-                        Image myimage = new Bitmap(item["caminho_foto"]);
+                        Image myimage = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", item["caminho_foto"]));
                         fotoProd.BackgroundImage = myimage;
                     }
                     catch 

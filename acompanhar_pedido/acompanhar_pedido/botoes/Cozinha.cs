@@ -20,7 +20,7 @@ namespace acompanhar_pedido.botoes
     public partial class Cozinha : Form
     {
         Thread t1;
-        Bitmap print_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\print_ico.png");
+        Bitmap print_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"print_ico.png"));
         string dados_nf;
         int ind_btn = 0;
 

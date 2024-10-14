@@ -16,7 +16,7 @@ namespace acompanhar_pedido.botoes
 {
     public partial class Historico_cozinha : Form
     {
-        Bitmap print_ico = new Bitmap($@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\print_ico.png");
+        Bitmap print_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"print_ico.png"));
         string dados_nf;
         public Historico_cozinha()
         {

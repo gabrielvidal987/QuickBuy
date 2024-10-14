@@ -26,7 +26,7 @@ namespace acompanhar_pedido.botoes
         int varSenhaAnt2 = 0;
         int varSenhaAnt3 = 0;
         string mudaSenha = "";
-        string curDir = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()) + @"\somTrocaSenha.mp3";
+        string curDir = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"somTrocaSenha.mp3");
         public Fila()
         {
             InitializeComponent();

@@ -43,7 +43,7 @@ namespace acompanhar_pedido
                 string imagem_clube = sql.FotoClube(nomeClube);
                 if (imagem_clube != "")
                 {
-                    fotoClube.ImageLocation = $@"{Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())}\fotos_usuario\{imagem_clube}";
+                    fotoClube.ImageLocation = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_usuario",imagem_clube);
                 }
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
