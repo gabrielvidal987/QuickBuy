@@ -30,6 +30,7 @@ namespace acompanhar_pedido.botoes
         string foto_caminho;
         string nome_foto_produto;
         string exten = "png";
+        List<string> produtos_nome = new List<string>();
         Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"food_ico.png"));
         Bitmap apaga_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"delete.png"));
         public Produtos()
@@ -68,36 +69,40 @@ namespace acompanhar_pedido.botoes
         }
         private void btnCadProd_Click(object sender, EventArgs e)
         {
-            try
+            if (pcholdNomeProd.Text != null && pcholdNomeProd.Text != "" && valorNumerico.Value != 0 && !produtos_nome.Contains(pcholdNomeProd.Text) )
             {
-                ConectarSqlClasse sql = new ConectarSqlClasse();
-                string nome = pcholdNomeProd.Text;
-                //é preciso converter em string e tirar a virgula para enviar o comando ao sql
-                string valor = valorNumerico.Value.ToString().Replace(',', '.');
                 try
                 {
-                    if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos")))
+                    ConectarSqlClasse sql = new ConectarSqlClasse();
+                    string nome = pcholdNomeProd.Text;
+                    //é preciso converter em string e tirar a virgula para enviar o comando ao sql
+                    string valor = valorNumerico.Value.ToString().Replace(',', '.');
+                    try
                     {
-                        Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos"));
+                        if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos")))
+                        {
+                            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos"));
+                        }
+                        if (foto_caminho != null && foto_caminho != "")
+                        {
+                            File.Copy(foto_caminho, Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{nome}.{exten}"), overwrite: true);
+                            nome_foto_produto = $"{nome}.{exten}";
+                        }
+                        else { nome_foto_produto = $"semFoto.png"; }
                     }
-                    if (foto_caminho != null && foto_caminho != "")
-                    {
-                        File.Copy(foto_caminho, Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos",$"{nome}.{exten}"), overwrite: true);
-                        nome_foto_produto = $"{nome}.{exten}";
-                    }
-                    else { nome_foto_produto = $"semFoto.png"; }
+                    catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+                    MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal));
+                    pcholdNomeProd.Text = string.Empty;
+                    valorNumerico.Value = 0;
+                    try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.BackgroundImage = imagemPadrao; } catch { }
+                    nomeOriginal = null;
+                    foto_caminho = null;
+                    pcholdNomeProd.Focus();
                 }
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-                MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal));
-                pcholdNomeProd.Text = string.Empty;
-                valorNumerico.Value = 0;
-                try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.BackgroundImage = imagemPadrao; } catch { }
-                nomeOriginal = null;
-                foto_caminho = null;
-                pcholdNomeProd.Focus();
+                CriaBtns();
             }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-            CriaBtns();
+            else { MessageBox.Show("Não são aceitos produtos sem nome, nomes iguais ou valor zerado"); }
         }
         public void EsteticaFundo()
         {
@@ -168,6 +173,7 @@ namespace acompanhar_pedido.botoes
                 int ind_btn = 0;
                 foreach (Dictionary<string, string> item in listaProd)
                 {
+                    produtos_nome.Add(item["nome"]);
                     int quantLetras = item["nome"].ToList().Count;
                     if (quantLetras < 15) { quantLetras = 15; }
                     double altura = quantLetras / 10 * 20;

@@ -57,20 +57,23 @@ namespace acompanhar_pedido
             }
         }
         //envia um log com dados de tipo de erro, origem e mensagem de erro e hora e salva no banco de dados
-        public static void EnviaLog(string tipo, string origem, string erro)
+        public static bool EnviaLog(string tipo, string origem, string erro)
         {
+            bool sucess = false;
             string hora = DateTime.Now.ToString("yyyy/MM/dd-HH:mm:ss");
             try
             {
                 using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
                 {
                     conexao.Open();
+                    string comando_geraLog = $"INSERT INTO log_erro (usuario,hora,tipo,origem,erro) VALUES ('{VariaveisGlobais.Usuario}','{hora}','{tipo}','{origem}','{erro.Replace("'","-")}');";
                     MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                    MySqlCommand geraLog = new MySqlCommand($"INSERT INTO log_erro (usuario,hora,tipo,origem,erro) VALUES ('{VariaveisGlobais.Usuario}','{hora}','{tipo}','{origem}','{erro}');", conexao, transaction);
+                    MySqlCommand geraLog = new MySqlCommand(comando_geraLog, conexao, transaction);
                     try
                     {
                         geraLog.ExecuteNonQuery();
                         transaction.Commit();
+                        sucess = true;
                     }
                     catch (Exception er)
                     {
@@ -83,6 +86,7 @@ namespace acompanhar_pedido
             {
                 MessageBox.Show("Erro ao gerar log e enviar para BD. \n\nContactar Administrador e verificar conexão com internet e BD","ATENÇÃO!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return sucess;
         }
         //insere produto na tabela de produtos
         public string InsertProduto(string nome, string valor, string caminho, string nomeOriginal)
@@ -96,7 +100,8 @@ namespace acompanhar_pedido
                 {
                     if (nomeOriginal != null && nomeOriginal != "") 
                     {
-                        MySqlCommand insere = new MySqlCommand($"UPDATE produtos SET nome = '{nome}', valor = {valor} where nome = '{nomeOriginal}' AND usuario = '{VariaveisGlobais.Usuario}'", conexao, transaction);
+                        string comando_insere = $"UPDATE produtos SET nome = '{nome}', valor = {valor} where nome = '{nomeOriginal}' AND usuario = '{VariaveisGlobais.Usuario}'";
+                        MySqlCommand insere = new MySqlCommand(comando_insere, conexao, transaction);
                         insere.ExecuteNonQuery();
                         retorno = $"Produto {nomeOriginal} alterado com sucesso!!";
                         transaction.Commit();
@@ -105,7 +110,8 @@ namespace acompanhar_pedido
                     {
                         try
                         {
-                            MySqlCommand insere = new MySqlCommand($"INSERT INTO produtos(nome,valor, caminho_foto,usuario) VALUES('{nome}',{valor},'{caminho}','{VariaveisGlobais.Usuario}')", conexao, transaction);
+                            string comando_insere = $"INSERT INTO produtos(nome,valor, caminho_foto,usuario) VALUES('{nome}',{valor},'{caminho}','{VariaveisGlobais.Usuario}')";
+                            MySqlCommand insere = new MySqlCommand(comando_insere, conexao, transaction);
                             insere.ExecuteNonQuery();
                             retorno = $"Adicionado {nome} com valor {valor} na tabela de produtos";
                             transaction.Commit();
