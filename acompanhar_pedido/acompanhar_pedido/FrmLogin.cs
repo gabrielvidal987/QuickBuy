@@ -13,9 +13,18 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace acompanhar_pedido
 {
+    public class Config
+    {
+        public string Server { get; set; }
+        public string Uid { get; set; }
+        public string Pwd { get; set; }
+        public string Database { get; set; }
+    }
+
     public partial class FrmLogin : Form
     {
         Thread t1;
@@ -109,18 +118,24 @@ namespace acompanhar_pedido
             resultConexao.Text = "";
             try
             {
+                string json = File.ReadAllText("last_conn_json.json");
+                var config = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
                 Dictionary<string, string> conn = new Dictionary<string, string>()
                 {
-                    { "server", string.IsNullOrEmpty(server.Text) ? "localhost" : server.Text },
-                    { "uid", string.IsNullOrEmpty(uid.Text) ? "root" : uid.Text },
-                    { "pwd", string.IsNullOrEmpty(password.Text) ? "Vid@l9871" : password.Text },
-                    { "database", string.IsNullOrEmpty(database.Text) ? "acompanha_pedidosschema" : database.Text }
+                    { "server", string.IsNullOrEmpty(server.Text) ? config["server"] : server.Text },
+                    { "uid", string.IsNullOrEmpty(uid.Text) ? config["root"] : uid.Text },
+                    { "pwd", string.IsNullOrEmpty(password.Text) ? config["pwd"] : password.Text },
+                    { "database", string.IsNullOrEmpty(database.Text) ? config["database"] : database.Text }
                 };
                 ConectarSqlClasse.AtualizarDicionario(conn);
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 string res_conn = $"{sql.ConectDataBase()}";
                 if (res_conn == "Conexão com o banco de dados realizada com sucesso!!!")
                 {
+                    // Reescreve o JSON a partir do dicionário
+                    string newJson = JsonConvert.SerializeObject(config, Formatting.Indented);
+                    File.WriteAllText("last_conn_json.json", newJson);
+
                     resultConexao.Text += res_conn;
                     txtSenha.Enabled = true;
                     btnLogin.Enabled = true;

@@ -206,9 +206,7 @@
       <DependentUpon>Relatorio.cs</DependentUpon>
     </Compile>
     <Compile Include="ConectarSqlClasse.cs" />
-    <Compile Include="FrmLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="FrmLogin.cs" />
     <Compile Include="FrmLogin.Designer.cs">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </Compile>
