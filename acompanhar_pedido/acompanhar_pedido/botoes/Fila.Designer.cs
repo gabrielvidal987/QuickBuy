@@ -37,8 +37,8 @@
             this.lbSenhaAnt2 = new System.Windows.Forms.Label();
             this.lbSenhaAnt1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tMedEspera = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.tMedEspera = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -162,6 +162,17 @@
             this.panel1.Size = new System.Drawing.Size(1476, 781);
             this.panel1.TabIndex = 17;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(1157, 56);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(302, 13);
+            this.label5.TabIndex = 36;
+            this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
+            // 
             // tMedEspera
             // 
             this.tMedEspera.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -178,17 +189,6 @@
             this.tMedEspera.TabIndex = 17;
             this.tMedEspera.Text = "TEMPO MÉDIO DE ESPERA:";
             this.tMedEspera.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(1157, 56);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(302, 13);
-            this.label5.TabIndex = 36;
-            this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
             // 
             // timer1
             // 

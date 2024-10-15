@@ -111,11 +111,23 @@ namespace acompanhar_pedido.botoes
         }
         private async void timer1_Tick(object sender, EventArgs e)
         {
-            ConectarSqlClasse sql = new ConectarSqlClasse();
-            totalSenhas = sql.Senhas().Count();
-            Thread thread = new Thread(new ThreadStart(TocaSom));
-            thread.Start();
-            TrocaSenha();
+            try
+            {
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                totalSenhas = sql.Senhas().Count();
+                Thread thread = new Thread(new ThreadStart(TocaSom));
+                thread.Start();
+                TrocaSenha();
+            }
+            catch (Exception er)
+            {
+                timer1.Stop();
+                bool sucess_log = ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                if (sucess_log)
+                {
+                    timer1.Start();
+                }
+            }
         }
     }
 }

@@ -226,15 +226,27 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
-        private void timer1_Tick(object sender, EventArgs e)
+        private void reset_tela_Tick(object sender, EventArgs e)
         {
-            if (pnlGeral.AutoScrollPosition.Y != 0)
+            try
             {
-                return;
+                if (pnlGeral.AutoScrollPosition.Y != 0)
+                {
+                    return;
+                }
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed());
+                if (filaPedidos.Count > 0) { RecarregaFila(); }
             }
-            ConectarSqlClasse sql = new ConectarSqlClasse();
-            List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed());
-            if (filaPedidos.Count > 0) { RecarregaFila(); }
+            catch (Exception er)
+            {
+                reset_tela.Stop();
+                bool sucess_log = ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                if (sucess_log)
+                {
+                    reset_tela.Start();
+                }
+            }
         }
     }
 }

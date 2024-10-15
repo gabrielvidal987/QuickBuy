@@ -59,7 +59,6 @@ namespace acompanhar_pedido
         //envia um log com dados de tipo de erro, origem e mensagem de erro e hora e salva no banco de dados
         public static bool EnviaLog(string tipo, string origem, string erro)
         {
-            bool sucess = false;
             string hora = DateTime.Now.ToString("yyyy/MM/dd-HH:mm:ss");
             try
             {
@@ -73,20 +72,27 @@ namespace acompanhar_pedido
                     {
                         geraLog.ExecuteNonQuery();
                         transaction.Commit();
-                        sucess = true;
                     }
-                    catch (Exception er)
+                    catch
                     {
                         transaction.Rollback();
-                        MessageBox.Show($"Erro ao gerar log: \n {er}");
                     }
                 }
             }
             catch
             {
                 MessageBox.Show("Erro ao gerar log e enviar para BD. \n\nContactar Administrador e verificar conexão com internet e BD","ATENÇÃO!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult acesso_retornado = MessageBox.Show("O acesso ao Banco de Dados foi retornado?\nSe for marcado 'NÃO' o programa será fechado","Confirmação",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                if (acesso_retornado == DialogResult.Yes)
+                {
+                    return true;
+                }
+                else
+                {
+                    Application.Exit();
+                }
             }
-            return sucess;
+            return true;
         }
         //insere produto na tabela de produtos
         public string InsertProduto(string nome, string valor, string caminho, string nomeOriginal)

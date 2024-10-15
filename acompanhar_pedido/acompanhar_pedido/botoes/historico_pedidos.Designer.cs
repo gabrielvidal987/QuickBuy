@@ -72,7 +72,7 @@
             // 
             this.reset_tela.Enabled = true;
             this.reset_tela.Interval = 10000;
-            this.reset_tela.Tick += new System.EventHandler(this.timer1_Tick);
+            this.reset_tela.Tick += new System.EventHandler(this.reset_tela_Tick);
             // 
             // impressora
             // 

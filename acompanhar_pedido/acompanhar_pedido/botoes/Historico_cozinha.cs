@@ -133,11 +133,23 @@ namespace acompanhar_pedido.botoes
         }
         private void reset_timer_Tick(object sender, EventArgs e)
         {
-            if (pnlGeral.AutoScrollPosition.Y != 0)
+            try
             {
-                return;
+                if (pnlGeral.AutoScrollPosition.Y != 0)
+                {
+                    return;
+                }
+                RecarregaFila();
             }
-            RecarregaFila();
+            catch (Exception er)
+            {
+                reset_timer.Stop();
+                bool sucess_log = ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                if (sucess_log)
+                {
+                    reset_timer.Start();
+                }
+            }
         }
         private void btnPrintAnt_Click(object sender, EventArgs e)
         {

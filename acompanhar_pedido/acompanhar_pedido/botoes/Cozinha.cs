@@ -324,6 +324,7 @@ namespace acompanhar_pedido.botoes
         {
             try
             {
+                reloadBar.Value = 0;
                 for (int i = 0; i <= 200; i++)
                 {
                     if (reloadBar.Value != 200)
@@ -337,7 +338,12 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er)
             {
-                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                reload.Stop();
+                bool sucess_log = ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                if (sucess_log)
+                {
+                    reload.Start();
+                }
             }
         }
         private void btnPrint_Click(object sender, EventArgs e)
