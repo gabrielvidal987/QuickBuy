@@ -3,14 +3,16 @@ import threading
 import time
 import copy
 import mysql.connector
+import json
 
 usuario = None
 password = None
 host = None
 database = None
 log_usuario = None
-page = None
+page_flet = None
 ultimos_resultados = []
+primeira_vez = True
 
 def busca_log():
     # Configurações da conexão
@@ -44,7 +46,7 @@ def busca_log():
     return resultados
 
 def atualiza_page():
-    global page_flet
+    global page_flet,ultimos_resultados,primeira_vez
     try:
         def clear_page():
             page_flet.controls.clear()  # Remove todos os componentes da página
@@ -52,13 +54,13 @@ def atualiza_page():
         resultados = busca_log()
         novo_log = False
         for res in resultados:
-            for ult_res in ultimos_resultados:
-                if res != ult_res:
-                    novo_log = True
-                    break
-                if novo_log:
-                    break
-        if novo_log:
+            if res in ultimos_resultados:
+                continue
+            else:
+                novo_log = True
+                break
+        if novo_log or primeira_vez:
+            primeira_vez = False
             table = ft.DataTable(
                 border=ft.border.all(5,"#fdbf07"),
                 border_radius=10,
@@ -88,6 +90,8 @@ def atualiza_page():
             page_flet.add(container_table)
             print('pagina atualizada...')
             time.sleep(5)
+        else:
+            ultimos_resultados = resultados
     except:
         pass
     
@@ -96,7 +100,7 @@ def thread_atualiza_page():
     while True:
         thread = threading.Thread(target=atualiza_page)
         thread.start()
-        time.sleep(5)
+        time.sleep(10)
     
 def dados_connect():
     global page_flet
@@ -106,22 +110,37 @@ def dados_connect():
     )
 
     def passa_dados_conn(e):
-        global usuario,password,host,database,log_usuario
-        if usuario_input.value and senha_input.value and host_input.value and database_input.value:
-            usuario = usuario_input.value
-            password = senha_input.value
-            host = host_input.value
-            database = database_input.value
-            log_usuario = log_usuario_input.value
+        global usuario,password,host,database,log_usuario,page_flet
+        if usuario_input.value and senha_input.value and host_input.value and database_input.value and log_usuario_input.value or log_usuario_input.value and config_default.value:
+            container_connect.content.controls.pop()
+            container_connect.content.controls.append(ft.ProgressRing())
+            page_flet.update()
+            if config_default.value:
+                configs_default_log = {}
+                with open('log_config_default.json','r') as f:
+                    configs_default_log = json.load(f)
+                usuario = configs_default_log["usuario"]
+                password = configs_default_log["password"]
+                host = configs_default_log["host"]
+                database = configs_default_log["database"]
+                log_usuario = log_usuario_input.value
+            else:
+                usuario = usuario_input.value
+                password = senha_input.value
+                host = host_input.value
+                database = database_input.value
+                log_usuario = log_usuario_input.value
             thread_atualiza_page()
+            # atualiza_page()
         else:
             page_flet.open(alert)
         
-    usuario_input = ft.TextField(label="Usuário",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20)
-    senha_input = ft.TextField(label="Senha",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20)
-    host_input = ft.TextField(label="Host",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20)
-    database_input = ft.TextField(label="Database",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20)
-    log_usuario_input = ft.TextField(label="Usuário em que os logs são registrados",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20)
+    usuario_input = ft.TextField(label="Usuário",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20,on_submit=passa_dados_conn)
+    senha_input = ft.TextField(label="Senha",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20,on_submit=passa_dados_conn)
+    host_input = ft.TextField(label="Host",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20,on_submit=passa_dados_conn)
+    database_input = ft.TextField(label="Database",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20,on_submit=passa_dados_conn)
+    log_usuario_input = ft.TextField(label="Usuário em que os logs são registrados",text_align=ft.TextAlign.CENTER,color="#ffffff",label_style=ft.TextStyle(size=20,color="#7a7b7c"),text_size=20,on_submit=passa_dados_conn)
+    config_default = ft.Checkbox(label="Usar configurações padrão", value=False)
     container_connect = ft.Container(
         bgcolor="#2f2f2f",
         margin=30,
@@ -136,6 +155,7 @@ def dados_connect():
                 senha_input,
                 database_input,
                 log_usuario_input,
+                config_default,
                 ft.ElevatedButton("CONECTAR!",bgcolor=ft.colors.AMBER,color=ft.colors.BLACK,on_click=passa_dados_conn,width=150,height=50)
             ],
             alignment=ft.MainAxisAlignment.CENTER,
