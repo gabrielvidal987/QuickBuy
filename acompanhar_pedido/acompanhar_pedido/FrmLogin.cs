@@ -1,4 +1,5 @@
 ﻿using acompanhar_pedido.botoes;
+using Google.Protobuf.WellKnownTypes;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System;
@@ -17,13 +18,6 @@ using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace acompanhar_pedido
 {
-    public class Config
-    {
-        public string Server { get; set; }
-        public string Uid { get; set; }
-        public string Pwd { get; set; }
-        public string Database { get; set; }
-    }
 
     public partial class FrmLogin : Form
     {
@@ -39,14 +33,14 @@ namespace acompanhar_pedido
         public FrmLogin()
         {
             InitializeComponent();
-            
+
         }
         private void Login()
         {
             if (txtSenha.Text == "")
             {
                 MessageBox.Show("Preencha a senha");
-                txtSenha.Focus(); 
+                txtSenha.Focus();
                 return;
             }
             if (File.Exists("Usuario.TXT"))
@@ -75,11 +69,11 @@ namespace acompanhar_pedido
         private void abrirMenu(object obj)
         {
             try { Application.Run(new Menu()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-            
+
         }
         private void FrmLogin_Load(object sender, EventArgs e)
         {
-            btnLogin.BackColor = Color.FromArgb(0,54,209);
+            btnLogin.BackColor = Color.FromArgb(0, 54, 209);
             btnLogin.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 58, 225);
             btnLogin.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 47, 184);
             txtSenha.Location = new Point(panel2.Location.X + 3, panel2.Location.Y - 100);
@@ -101,7 +95,7 @@ namespace acompanhar_pedido
         }
         private void txtSenha_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 Login();
             }
@@ -123,7 +117,7 @@ namespace acompanhar_pedido
                 Dictionary<string, string> conn = new Dictionary<string, string>()
                 {
                     { "server", string.IsNullOrEmpty(server.Text) ? config["server"] : server.Text },
-                    { "uid", string.IsNullOrEmpty(uid.Text) ? config["root"] : uid.Text },
+                    { "uid", string.IsNullOrEmpty(uid.Text) ? config["uid"] : uid.Text },
                     { "pwd", string.IsNullOrEmpty(password.Text) ? config["pwd"] : password.Text },
                     { "database", string.IsNullOrEmpty(database.Text) ? config["database"] : database.Text }
                 };
@@ -133,6 +127,10 @@ namespace acompanhar_pedido
                 if (res_conn == "Conexão com o banco de dados realizada com sucesso!!!")
                 {
                     // Reescreve o JSON a partir do dicionário
+                    foreach(var key_value_pair in conn)
+                    {
+                        config[key_value_pair.Key] = key_value_pair.Value;
+                    }
                     string newJson = JsonConvert.SerializeObject(config, Formatting.Indented);
                     File.WriteAllText("last_conn_json.json", newJson);
 
@@ -150,8 +148,8 @@ namespace acompanhar_pedido
                 {
                     resultConexao.Text += res_conn;
                 }
-            } 
-            catch 
+            }
+            catch
             {
                 resultConexao.Text += "Conexão sem sucesso....";
             }

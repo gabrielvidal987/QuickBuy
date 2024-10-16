@@ -235,8 +235,7 @@ namespace acompanhar_pedido.botoes
                     return;
                 }
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed());
-                if (filaPedidos.Count > 0) { RecarregaFila(); }
+                RecarregaFila();
             }
             catch (Exception er)
             {
