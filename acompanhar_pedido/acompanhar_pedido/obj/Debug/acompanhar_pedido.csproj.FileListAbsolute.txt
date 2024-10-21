@@ -387,3 +387,4 @@ C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\aco
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.exe
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.pdb
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.FrmLogin.resources
+C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.botoes.RealizarPagamento.resources

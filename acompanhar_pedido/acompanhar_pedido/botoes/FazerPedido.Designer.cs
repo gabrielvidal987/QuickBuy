@@ -56,6 +56,7 @@ namespace acompanhar_pedido.teste
             this.pcholdEndereco = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdCliente = new acompanhar_pedido.PlaceHolderTextBox();
             this.delivery = new System.Windows.Forms.CheckBox();
+            this.pagamento_efetuado = new System.Windows.Forms.CheckBox();
             this.pnlTotal.SuspendLayout();
             this.pnlFimExtrato.SuspendLayout();
             this.pnlGeral.SuspendLayout();
@@ -363,11 +364,22 @@ namespace acompanhar_pedido.teste
             this.delivery.Text = "Delivery/Entrega";
             this.delivery.UseVisualStyleBackColor = true;
             // 
+            // pagamento_efetuado
+            // 
+            this.pagamento_efetuado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pagamento_efetuado.Location = new System.Drawing.Point(464, 110);
+            this.pagamento_efetuado.Name = "pagamento_efetuado";
+            this.pagamento_efetuado.Size = new System.Drawing.Size(182, 38);
+            this.pagamento_efetuado.TabIndex = 36;
+            this.pagamento_efetuado.Text = "Pagamento efetuado";
+            this.pagamento_efetuado.UseVisualStyleBackColor = true;
+            // 
             // FazerPedido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1350, 729);
+            this.Controls.Add(this.pagamento_efetuado);
             this.Controls.Add(this.delivery);
             this.Controls.Add(this.btnHist);
             this.Controls.Add(this.label5);
@@ -421,5 +433,6 @@ namespace acompanhar_pedido.teste
         private PlaceHolderTextBox pcholdBuscaProd;
         private System.Windows.Forms.Timer filtraProd;
         private System.Windows.Forms.CheckBox delivery;
+        private System.Windows.Forms.CheckBox pagamento_efetuado;
     }
 }

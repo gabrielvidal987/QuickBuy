@@ -12,14 +12,12 @@ using System.Windows.Forms;
 
 namespace acompanhar_pedido.botoes
 {
-    public partial class historico_pedidos : Form
+    public partial class RealizarPagamento : Form
     {
-        Bitmap apaga_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"delete.png"));
+        Bitmap apaga_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "delete.png"));
         Bitmap print_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "print_ico.png"));
-        
-
         string dados_nf;
-        public historico_pedidos()
+        public RealizarPagamento()
         {
             InitializeComponent();
             Estetica();
@@ -31,78 +29,8 @@ namespace acompanhar_pedido.botoes
             pnlGeral.Width = this.Width - 60;
             pnlGeral.Height = this.Height - 150;
             pnlGeral.Location = new Point(Top = lbTitulo.Width);
+            pnlGeral.AutoScroll = true;
             RecarregaFila();
-        }
-        private void RemPedido_Click(object sender, EventArgs e)
-        {
-            var result = MessageBox.Show("Certeza que deseja DELETAR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
-            {
-                try
-                {
-                    Control control = (Control)sender;
-                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
-                    {
-                        if (pnlGeral.Controls[i].Controls[8].Name == control.Name)
-                        {
-                            string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
-                            ConectarSqlClasse sql = new ConectarSqlClasse();
-                            sql.RemovePedido(numero_pedido);
-                            RecarregaFila();
-                            break;
-                        }
-                    }
-                }
-                catch (Exception er)
-                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-            }
-        }
-        private void btnPrint_Click(object sender, EventArgs e)
-        {
-            var result = MessageBox.Show("Certeza que deseja REIMPRIMIR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                try
-                {
-                    Control control = (Control)sender;
-                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
-                    {
-                        if (pnlGeral.Controls[i].Controls[8].Name == control.Name)
-                        {
-                            string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
-                            ConectarSqlClasse sql = new ConectarSqlClasse();
-                            dados_nf = sql.ImprimePedidoHistorico(numero_pedido);
-                            try
-                            {
-                                impressora.Print();
-                                pnlGeral.Focus();
-                            }
-                            catch
-                            {
-                                MessageBox.Show("Erro ao imprimir pedido");
-                            }
-                            break;
-                        }
-                    }
-                }
-                catch (Exception er)
-                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-            }
-        }
-        private void impressora_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            try
-            {
-                ConectarSqlClasse sql = new ConectarSqlClasse();
-                Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
-                SolidBrush cor = new SolidBrush(Color.Black);
-                Point local = new Point(5, 10);
-                e.Graphics.DrawString(dados_nf, font, cor, local);
-            }
-            catch (Exception er)
-            {
-                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-            }
         }
         public void RecarregaFila()
         {
@@ -110,8 +38,8 @@ namespace acompanhar_pedido.botoes
             {
                 pnlGeral.Controls.Clear();
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed(false));
-                if (filaPedidos.Count > 0 )
+                List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed(true));
+                if (filaPedidos.Count > 0)
                 {
                     int ind_btn = 0;
                     foreach (Dictionary<string, string> i in filaPedidos)
@@ -127,11 +55,12 @@ namespace acompanhar_pedido.botoes
                         Label valorTotal_formPagamento = new Label();
                         Label formRetirada = new Label();
                         Label pagamento = new Label();
+                        CheckBox btnPagamentoRealizado = new CheckBox();
                         PictureBox btnPrint = new PictureBox();
                         PictureBox remProd = new PictureBox();
                         //cria o flowpanel com o cliente
                         pnl.Width = 240;
-                        pnl.Height = 290 + Convert.ToInt32(altura);
+                        pnl.Height = 340 + Convert.ToInt32(altura);
                         pnl.BackColor = Color.FromArgb(247, 247, 247);
                         pnl.Margin = new Padding(40, 10, 0, 10);
                         pnl.Padding = new Padding(5, 5, 5, 5);
@@ -180,7 +109,8 @@ namespace acompanhar_pedido.botoes
                         valorTotal_formPagamento.TextAlign = ContentAlignment.MiddleCenter;
                         valorTotal_formPagamento.Width = 225;
                         valorTotal_formPagamento.Height = 40;
-                        valorTotal_formPagamento.Font = new Font("Arial", 10);
+                        valorTotal_formPagamento.Font = new Font("Arial", 12, FontStyle.Bold);
+                        valorTotal_formPagamento.ForeColor = ColorTranslator.FromHtml("#006400");
                         //label com a retirada
                         string retirada = "BALCÃO";
                         if (bool.Parse(i["delivery"]) == true) { retirada = "ENTREGA"; }
@@ -203,6 +133,15 @@ namespace acompanhar_pedido.botoes
                         pagamento.Height = 40;
                         pagamento.Font = new Font("Arial", 10, FontStyle.Bold);
                         pagamento.ForeColor = ColorTranslator.FromHtml(cor_fonte);
+                        //cria botão de realizar pagamento  
+                        btnPagamentoRealizado.Margin = new Padding(10, 5, 0, 5);
+                        btnPagamentoRealizado.Text = "PAGAMENTO REALIZADO";
+                        btnPagamentoRealizado.TextAlign = ContentAlignment.MiddleCenter;
+                        btnPagamentoRealizado.Font = new Font("Arial", 10, FontStyle.Bold);
+                        btnPagamentoRealizado.Click += new System.EventHandler(aprovarPagamento_Click);
+                        btnPagamentoRealizado.AutoSize = false;
+                        btnPagamentoRealizado.Height = 30;
+                        btnPagamentoRealizado.Width = 212;
                         //cria botão de imprimir o pedido
                         btnPrint.BackColor = Color.Transparent;
                         btnPrint.Name = ind_btn.ToString();
@@ -230,6 +169,7 @@ namespace acompanhar_pedido.botoes
                         pnl.Controls.Add(valorTotal_formPagamento);
                         pnl.Controls.Add(pagamento);
                         pnl.Controls.Add(formRetirada);
+                        pnl.Controls.Add(btnPagamentoRealizado);
                         pnl.Controls.Add(btnPrint);
                         pnl.Controls.Add(remProd);
                         pnlGeral.Controls.Add(pnl);
@@ -239,6 +179,90 @@ namespace acompanhar_pedido.botoes
                 else { MessageBox.Show("Sem pedidos registrados ainda!!"); }
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        private void RemPedido_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Certeza que deseja DELETAR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    Control control = (Control)sender;
+                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
+                    {
+                        if (pnlGeral.Controls[i].Controls[8].Name == control.Name)
+                        {
+                            string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                            ConectarSqlClasse sql = new ConectarSqlClasse();
+                            sql.RemovePedido(numero_pedido);
+                            RecarregaFila();
+                            break;
+                        }
+                    }
+                }
+                catch (Exception er)
+                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+            }
+        }
+        private void aprovarPagamento_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Pagamento realizado com sucesso?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    Control control = (Control)sender;
+                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
+                    {
+                        if (pnlGeral.Controls[i].Controls[8].Name == control.Name)
+                        {
+                            string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                            ConectarSqlClasse sql = new ConectarSqlClasse();
+                            sql.AprovaPagamento(numero_pedido);
+                            RecarregaFila();
+                            break;
+                        }
+                    }
+                }
+                catch (Exception er)
+                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+            }
+        }
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Certeza que deseja REIMPRIMIR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    Control control = (Control)sender;
+                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
+                    {
+                        if (pnlGeral.Controls[i].Controls[8].Name == control.Name)
+                        {
+                            string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
+                            ConectarSqlClasse sql = new ConectarSqlClasse();
+                            dados_nf = sql.ImprimePedidoHistorico(numero_pedido);
+                            try
+                            {
+                                impressora.Print();
+                                pnlGeral.Focus();
+                            }
+                            catch
+                            {
+                                MessageBox.Show("Erro ao imprimir pedido");
+                            }
+                            break;
+                        }
+                    }
+                }
+                catch (Exception er)
+                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+            }
+        }
+        private void impressora_PrintPage(object sender, PrintPageEventArgs e)
+        {
+
         }
         private void reset_tela_Tick(object sender, EventArgs e)
         {

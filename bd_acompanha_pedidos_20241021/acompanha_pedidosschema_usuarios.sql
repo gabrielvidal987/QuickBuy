@@ -16,31 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `log_erro`
+-- Table structure for table `usuarios`
 --
 
-DROP TABLE IF EXISTS `log_erro`;
+DROP TABLE IF EXISTS `usuarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `log_erro` (
-  `id_log` int NOT NULL AUTO_INCREMENT,
-  `usuario` varchar(200) DEFAULT NULL,
-  `hora` varchar(100) DEFAULT NULL,
-  `tipo` varchar(2000) DEFAULT NULL,
-  `origem` varchar(2000) DEFAULT NULL,
-  `erro` varchar(10000) DEFAULT NULL,
-  PRIMARY KEY (`id_log`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `usuarios` (
+  `senha` varchar(100) NOT NULL,
+  `foto_clube` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`senha`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `log_erro`
+-- Dumping data for table `usuarios`
 --
 
-LOCK TABLES `log_erro` WRITE;
-/*!40000 ALTER TABLE `log_erro` DISABLE KEYS */;
-INSERT INTO `log_erro` VALUES (1,'desbravadores','2024/10/14-14:20:09','tipo1','origem1','erro1'),(2,'desbravadores','2024/10/14-14:21:09','tipo2','origem2','erro2'),(3,'desbravadores','2024/10/14-14:22:09','tipo3','origem3','erro3'),(4,'desbravadores','2024/10/14-14:23:09','tipo4','origem4','erro4'),(5,'desbravadores','2024/10/14-14:25:09','tipo5','origem5','erro5'),(6,'desbravadores','2024/10/14-14:26:09','tipo6','origem6','erro6'),(7,'desbravadores','2024/10/14-14:27:09','tipo7','origem7','erro7'),(8,'desbravadores','2024/10/14-14:27:09','tipo7','origem7','C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\bin\\Debug\\fotos_produtos\\pitiça.pn porque ele está sendo usado por outro processo.');
-/*!40000 ALTER TABLE `log_erro` ENABLE KEYS */;
+LOCK TABLES `usuarios` WRITE;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES ('campestre','campestre.png'),('campestrejunior','campestrejunior.jpg'),('desbravadores','desbravadores.jpg'),('marpaulista','marpaulista.png');
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-14 16:27:28
+-- Dump completed on 2024-10-21 12:43:43

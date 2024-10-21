@@ -199,6 +199,12 @@
     <Compile Include="botoes\Produtos.Designer.cs">
       <DependentUpon>Produtos.cs</DependentUpon>
     </Compile>
+    <Compile Include="botoes\RealizarPagamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="botoes\RealizarPagamento.Designer.cs">
+      <DependentUpon>RealizarPagamento.cs</DependentUpon>
+    </Compile>
     <Compile Include="botoes\Relatorio.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -244,6 +250,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="botoes\Produtos.resx">
       <DependentUpon>Produtos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="botoes\RealizarPagamento.resx">
+      <DependentUpon>RealizarPagamento.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="botoes\Relatorio.resx">
       <DependentUpon>Relatorio.cs</DependentUpon>

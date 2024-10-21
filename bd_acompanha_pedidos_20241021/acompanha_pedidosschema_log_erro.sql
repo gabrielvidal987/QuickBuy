@@ -1,0 +1,55 @@
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
+--
+-- Host: localhost    Database: acompanha_pedidosschema
+-- ------------------------------------------------------
+-- Server version	8.0.36
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `log_erro`
+--
+
+DROP TABLE IF EXISTS `log_erro`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `log_erro` (
+  `id_log` int NOT NULL AUTO_INCREMENT,
+  `usuario` varchar(200) DEFAULT NULL,
+  `hora` varchar(100) DEFAULT NULL,
+  `tipo` varchar(2000) DEFAULT NULL,
+  `origem` varchar(2000) DEFAULT NULL,
+  `erro` varchar(10000) DEFAULT NULL,
+  PRIMARY KEY (`id_log`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `log_erro`
+--
+
+LOCK TABLES `log_erro` WRITE;
+/*!40000 ALTER TABLE `log_erro` DISABLE KEYS */;
+INSERT INTO `log_erro` VALUES (1,'desbravadores','2024/10/14-14:20:09','tipo1','origem1','erro1'),(2,'desbravadores','2024/10/14-14:21:09','tipo2','origem2','erro2'),(3,'desbravadores','2024/10/14-14:22:09','tipo3','origem3','erro3'),(4,'desbravadores','2024/10/14-14:23:09','tipo4','origem4','erro4'),(5,'desbravadores','2024/10/14-14:25:09','tipo5','origem5','erro5'),(6,'desbravadores','2024/10/14-14:26:09','tipo6','origem6','erro6'),(7,'desbravadores','2024/10/14-14:27:09','tipo7','origem7','erro7'),(8,'desbravadores','2024/10/14-14:27:09','tipo7','origem7','C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\bin\\Debug\\fotos_produtos\\pitiça.pn porque ele está sendo usado por outro processo.'),(9,'desbravadores','2024/10/21-10:49:29','System.Collections.Generic.KeyNotFoundException','   em System.Collections.Generic.Dictionary`2.get_Item(TKey key)\r\n   em acompanhar_pedido.botoes.historico_pedidos.RecarregaFila() na C:UsersAP26DesktopQuickBuyacompanhar_pedidoacompanhar_pedidootoeshistorico_pedidos.cs:linha 196','A chave fornecida não estava presente no dicionário.'),(10,'desbravadores','2024/10/21-12:17:32','System.Exception','   em System.ComponentModel.BaseNumberConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)\r\n   em System.Drawing.ColorConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)\r\n   em System.Drawing.ColorTranslator.FromHtml(String htmlColor)\r\n   em acompanhar_pedido.botoes.RealizarPagamento.RecarregaFila() na C:UsersAP26DesktopQuickBuyacompanhar_pedidoacompanhar_pedidootoesRealizarPagamento.cs:linha 135','26ff6e não é um valor válido para Int32.'),(11,'desbravadores','2024/10/21-12:18:13','System.Exception','   em System.ComponentModel.BaseNumberConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)\r\n   em System.Drawing.ColorConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)\r\n   em System.Drawing.ColorTranslator.FromHtml(String htmlColor)\r\n   em acompanhar_pedido.botoes.RealizarPagamento.RecarregaFila() na C:UsersAP26DesktopQuickBuyacompanhar_pedidoacompanhar_pedidootoesRealizarPagamento.cs:linha 135','26ff6e não é um valor válido para Int32.');
+/*!40000 ALTER TABLE `log_erro` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-10-21 12:43:43

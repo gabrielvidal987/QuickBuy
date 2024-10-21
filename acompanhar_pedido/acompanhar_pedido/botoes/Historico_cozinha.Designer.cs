@@ -88,6 +88,7 @@
             this.Controls.Add(this.lbTitulo);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Historico_cozinha";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Historico_cozinha";
             this.ResumeLayout(false);
             this.PerformLayout();

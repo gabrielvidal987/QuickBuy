@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.pnlTopo = new System.Windows.Forms.Panel();
+            this.btnPagamento = new System.Windows.Forms.Button();
             this.tbnMusic = new System.Windows.Forms.Button();
             this.btnFila = new System.Windows.Forms.Button();
             this.btnProdutos = new System.Windows.Forms.Button();
@@ -59,6 +60,7 @@
             // 
             // pnlTopo
             // 
+            this.pnlTopo.Controls.Add(this.btnPagamento);
             this.pnlTopo.Controls.Add(this.tbnMusic);
             this.pnlTopo.Controls.Add(this.btnFila);
             this.pnlTopo.Controls.Add(this.btnProdutos);
@@ -73,14 +75,29 @@
             this.pnlTopo.Size = new System.Drawing.Size(1234, 92);
             this.pnlTopo.TabIndex = 0;
             // 
+            // btnPagamento
+            // 
+            this.btnPagamento.AccessibleDescription = "Cadastro de pedidos";
+            this.btnPagamento.AccessibleName = "Pedidos";
+            this.btnPagamento.BackColor = System.Drawing.Color.Transparent;
+            this.btnPagamento.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnPagamento.Image = ((System.Drawing.Image)(resources.GetObject("btnPagamento.Image")));
+            this.btnPagamento.Location = new System.Drawing.Point(397, 7);
+            this.btnPagamento.Margin = new System.Windows.Forms.Padding(0);
+            this.btnPagamento.Name = "btnPagamento";
+            this.btnPagamento.Size = new System.Drawing.Size(85, 79);
+            this.btnPagamento.TabIndex = 17;
+            this.btnPagamento.UseVisualStyleBackColor = false;
+            this.btnPagamento.Click += new System.EventHandler(this.btnPagamento_Click);
+            // 
             // tbnMusic
             // 
             this.tbnMusic.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.tbnMusic.Location = new System.Drawing.Point(925, 28);
+            this.tbnMusic.Location = new System.Drawing.Point(1072, 28);
             this.tbnMusic.Name = "tbnMusic";
             this.tbnMusic.Size = new System.Drawing.Size(96, 36);
             this.tbnMusic.TabIndex = 6;
-            this.tbnMusic.Text = "Adicionar som de troca de senha";
+            this.tbnMusic.Text = "Adicionar som da troca de senha";
             this.tbnMusic.UseVisualStyleBackColor = true;
             this.tbnMusic.Click += new System.EventHandler(this.tbnMusic_Click);
             // 
@@ -91,7 +108,7 @@
             this.btnFila.BackColor = System.Drawing.Color.Transparent;
             this.btnFila.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnFila.Image = ((System.Drawing.Image)(resources.GetObject("btnFila.Image")));
-            this.btnFila.Location = new System.Drawing.Point(686, 7);
+            this.btnFila.Location = new System.Drawing.Point(802, 7);
             this.btnFila.Margin = new System.Windows.Forms.Padding(0);
             this.btnFila.Name = "btnFila";
             this.btnFila.Size = new System.Drawing.Size(85, 79);
@@ -106,7 +123,7 @@
             this.btnProdutos.BackColor = System.Drawing.Color.Transparent;
             this.btnProdutos.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnProdutos.Image = ((System.Drawing.Image)(resources.GetObject("btnProdutos.Image")));
-            this.btnProdutos.Location = new System.Drawing.Point(438, 6);
+            this.btnProdutos.Location = new System.Drawing.Point(532, 7);
             this.btnProdutos.Margin = new System.Windows.Forms.Padding(0);
             this.btnProdutos.Name = "btnProdutos";
             this.btnProdutos.Size = new System.Drawing.Size(85, 79);
@@ -121,7 +138,7 @@
             this.btnCozinha.BackColor = System.Drawing.Color.Transparent;
             this.btnCozinha.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCozinha.Image = ((System.Drawing.Image)(resources.GetObject("btnCozinha.Image")));
-            this.btnCozinha.Location = new System.Drawing.Point(561, 7);
+            this.btnCozinha.Location = new System.Drawing.Point(667, 7);
             this.btnCozinha.Margin = new System.Windows.Forms.Padding(0);
             this.btnCozinha.Name = "btnCozinha";
             this.btnCozinha.Size = new System.Drawing.Size(85, 79);
@@ -162,7 +179,7 @@
             this.btnRelatorio.BackColor = System.Drawing.Color.Transparent;
             this.btnRelatorio.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRelatorio.Image = ((System.Drawing.Image)(resources.GetObject("btnRelatorio.Image")));
-            this.btnRelatorio.Location = new System.Drawing.Point(814, 7);
+            this.btnRelatorio.Location = new System.Drawing.Point(937, 7);
             this.btnRelatorio.Margin = new System.Windows.Forms.Padding(0);
             this.btnRelatorio.Name = "btnRelatorio";
             this.btnRelatorio.Size = new System.Drawing.Size(85, 79);
@@ -177,7 +194,7 @@
             this.btnPedido.BackColor = System.Drawing.Color.Transparent;
             this.btnPedido.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPedido.Image = ((System.Drawing.Image)(resources.GetObject("btnPedido.Image")));
-            this.btnPedido.Location = new System.Drawing.Point(312, 7);
+            this.btnPedido.Location = new System.Drawing.Point(262, 7);
             this.btnPedido.Margin = new System.Windows.Forms.Padding(0);
             this.btnPedido.Name = "btnPedido";
             this.btnPedido.Size = new System.Drawing.Size(85, 79);
@@ -404,5 +421,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnPagamento;
     }
 }

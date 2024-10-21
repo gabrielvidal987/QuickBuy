@@ -55,6 +55,7 @@ namespace acompanhar_pedido
             //painel topo
             pnlTopo.BackColor = Color.FromArgb(198, 213, 239);
             btnProdutos.BackColor = Color.FromArgb(141, 172, 222);
+            btnPagamento.BackColor = Color.FromArgb(141, 172, 222);
             btnPedido.BackColor = Color.FromArgb(141, 172, 222);
             btnCozinha.BackColor = Color.FromArgb(141, 172, 222);
             btnRelatorio.BackColor = Color.FromArgb(141, 172, 222);
@@ -93,6 +94,16 @@ namespace acompanhar_pedido
             try
             {
                 t1 = new Thread(abrirPedido);
+                t1.SetApartmentState(ApartmentState.STA);
+                t1.Start();
+            }
+            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+        }
+        private void btnPagamento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                t1 = new Thread(abrirPagamento);
                 t1.SetApartmentState(ApartmentState.STA);
                 t1.Start();
             }
@@ -157,8 +168,10 @@ namespace acompanhar_pedido
         private void abrirPedido(object obj)
         {
             try { Application.Run(new FazerPedido()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-            
-
+        }
+        private void abrirPagamento(object obj)
+        {
+            try { Application.Run(new RealizarPagamento()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
         private void abrirProdutos(object obj)
         {

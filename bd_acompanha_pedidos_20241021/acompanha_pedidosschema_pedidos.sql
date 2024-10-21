@@ -16,30 +16,37 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `produtos`
+-- Table structure for table `pedidos`
 --
 
-DROP TABLE IF EXISTS `produtos`;
+DROP TABLE IF EXISTS `pedidos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `produtos` (
-  `id_produto` int NOT NULL AUTO_INCREMENT,
-  `nome` varchar(500) DEFAULT NULL,
-  `valor` varchar(50) DEFAULT NULL,
-  `caminho_foto` varchar(2000) DEFAULT NULL,
+CREATE TABLE `pedidos` (
+  `numero_pedido` int NOT NULL AUTO_INCREMENT,
+  `nome_cliente` varchar(50) DEFAULT NULL,
+  `endereco` varchar(2000) DEFAULT NULL,
+  `produtos_nome` varchar(2000) DEFAULT NULL,
+  `observacoes` varchar(500) DEFAULT NULL,
+  `hora_pedido` char(50) DEFAULT NULL,
+  `valorTotal` double DEFAULT NULL,
+  `formaPag` char(30) DEFAULT NULL,
+  `valorLiq` double DEFAULT NULL,
   `usuario` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id_produto`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `delivery` tinyint(1) DEFAULT '0',
+  `pagamento_aprovado` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`numero_pedido`)
+) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `produtos`
+-- Dumping data for table `pedidos`
 --
 
-LOCK TABLES `produtos` WRITE;
-/*!40000 ALTER TABLE `produtos` DISABLE KEYS */;
-INSERT INTO `produtos` VALUES (26,'açai','2.50','açai.png','desbravadores'),(28,'suci','1.00','suci.png','desbravadores'),(42,'pitiça','1.50','pitiça.png','desbravadores');
-/*!40000 ALTER TABLE `produtos` ENABLE KEYS */;
+LOCK TABLES `pedidos` WRITE;
+/*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
+INSERT INTO `pedidos` VALUES (114,'reetest51','554te84','1X açai,1X suci,','sem observações','14:34:47',3.5,'dinheiro',3.5,'desbravadores',0,0),(115,'tetste','endereco','1X açai,1X suci,','sem observações','11:11:42',3.5,'dinheiro',3.5,'desbravadores',0,0),(116,'teste534','endereço não cadastrado','1X açai,1X pitiça,','sem observações','11:11:46',4,'dinheiro',4,'desbravadores',0,1);
+/*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-14 16:27:28
+-- Dump completed on 2024-10-21 12:43:44

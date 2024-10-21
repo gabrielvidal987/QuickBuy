@@ -267,9 +267,11 @@ namespace acompanhar_pedido.teste
             string endereco_bruto = pcholdEndereco.Text;
             string endereco = AddLineBreaksEveryNChars(endereco_bruto, 30);
             string retirada = "BALCÃO";
+            bool pagamento_ja_efetuado = false;
             bool entrega = false;
             if (delivery.Checked) { entrega = true; retirada = "ENTREGA"; }
             if (pcholdEndereco.Text.Length < 5) { endereco = "endereço não cadastrado"; }
+            if (pagamento_efetuado.Checked) { pagamento_ja_efetuado = true; }
             nf = $"Cliente: {nome_cliente}\n";
             try 
             { 
@@ -294,7 +296,7 @@ namespace acompanhar_pedido.teste
                     string formaPag = boxPgto.Text.ToLower().Replace('é', 'e');
                     nf += $"\n\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {formaPag}\n---------------------------------\nVALOR TOTAL: R${totalValorExtrato.Text.Replace("R$", "")}\n---------------------------------";
                     ConectarSqlClasse sql = new ConectarSqlClasse();
-                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, hora_pedido, valorTotal, formaPag,entrega);
+                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, hora_pedido, valorTotal, formaPag,entrega, pagamento_ja_efetuado);
                     nf += $"\n\nHorario do pedido: {hora_pedido}";
                     nf += $"\n\n{retirada}\n";
 

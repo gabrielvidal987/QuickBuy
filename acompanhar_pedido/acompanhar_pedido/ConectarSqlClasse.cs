@@ -146,7 +146,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string comando_sql = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' ;";
+                string comando_sql = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pagamento_aprovado = true ;";
                 MySqlCommand comando = new MySqlCommand(comando_sql, conexao); 
                 try
                 {
@@ -163,7 +163,8 @@ namespace acompanhar_pedido
                             { "produtos_nome", Convert.ToString(reader["produtos_nome"]) },
                             { "observacoes", Convert.ToString(reader["observacoes"]) },
                             { "hora_pedido", Convert.ToString(reader["hora_pedido"]) },
-                            { "delivery", Convert.ToString(reader["delivery"]) }
+                            { "delivery", Convert.ToString(reader["delivery"]) },
+                            { "pagamento_aprovado", Convert.ToString(reader["pagamento_aprovado"]) }
                             };
                                 filaPedidos.Add(pedido);
                             }
@@ -209,7 +210,8 @@ namespace acompanhar_pedido
                                     { "observacoes", Convert.ToString(reader["observacoes"]) },
                                     { "hora_pedido", Convert.ToString(reader["hora_pedido"]) },
                                     { "hora_ficou_pronto", Convert.ToString(reader["hora_ficou_pronto"]) },
-                                    { "delivery", Convert.ToString(reader["delivery"]) }
+                                    { "delivery", Convert.ToString(reader["delivery"]) },
+                                    { "pagamento_aprovado", Convert.ToString(reader["pagamento_aprovado"]) }
                                     };
                                 filaPedidos.Add(pedido);
                             }
@@ -233,7 +235,7 @@ namespace acompanhar_pedido
 
         }
         //realiza o cadastro de um pedido novo
-        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string data, string valor,string formaPag,bool delivery)
+        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string data, string valor,string formaPag,bool delivery,bool pagamento_efetuado)
         {
             string resultado = "Erro, nada foi realizado";
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -241,7 +243,7 @@ namespace acompanhar_pedido
                 long novonumero_gerado = 0;
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string str_cadPedido_sql = $"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario,delivery) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', '{data}', {valor},'{formaPag}',{valor},'{VariaveisGlobais.Usuario}',{delivery});";
+                string str_cadPedido_sql = $"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario,delivery,pagamento_aprovado) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', '{data}', {valor},'{formaPag}',{valor},'{VariaveisGlobais.Usuario}',{delivery},{pagamento_efetuado});";
                 MySqlCommand cadPedido = new MySqlCommand(str_cadPedido_sql, conexao,transaction);
                 string a = "";
                 try
@@ -548,7 +550,8 @@ namespace acompanhar_pedido
                             delivery = reader["delivery"].ToString();
                         }
                     }
-                    MySqlCommand filaPronto = new MySqlCommand($"INSERT INTO pedidos_prontos(numero_pedido,nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,hora_ficou_pronto,valorTotal,formaPag,valorLiq,usuario,delivery) VALUES({id},'{nome_cliente}','{endereco}','{produtos_nome}','{observacoes}','{hora_pedido}','{hora_ficou_pronto}',{valorTotal},'{formaPag}',{valorTotal},'{VariaveisGlobais.Usuario}',{delivery})", conexao, transaction);
+                    string filaPronto_comand = $"INSERT INTO pedidos_prontos(numero_pedido,nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,hora_ficou_pronto,valorTotal,formaPag,valorLiq,usuario,delivery,pagamento_aprovado) VALUES({id},'{nome_cliente}','{endereco}','{produtos_nome}','{observacoes}','{hora_pedido}','{hora_ficou_pronto}',{valorTotal},'{formaPag}',{valorTotal},'{VariaveisGlobais.Usuario}',{delivery},true)";
+                    MySqlCommand filaPronto = new MySqlCommand(filaPronto_comand, conexao, transaction);
                     try
                     {
                         filaPronto.ExecuteNonQuery();
@@ -689,8 +692,8 @@ namespace acompanhar_pedido
             }
             return horarios;
         }
-        //retorna lista de pedidos cadastrado para usar na tela de histórico de pedidos. *retorna mais infos do que o filaPedidos()
-        public List<Dictionary<string,string>> FilaCadPed()
+        //retorna lista de pedidos cadastrado para usar na tela de histórico de pedidos. *retorna mais infos do que o filaPedidos() *caso esteja com pagamento_efetuado false virá tudo,caso contrario virá apenas pagamento pendente
+        public List<Dictionary<string,string>> FilaCadPed(bool somente_pagamento_pendente)
         {
             List<Dictionary<string, string>> filaCadPed = new List<Dictionary<string, string>>();
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -698,6 +701,7 @@ namespace acompanhar_pedido
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 string pegaCadPed_comando = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' ORDER BY numero_pedido DESC;";
+                if (somente_pagamento_pendente) { pegaCadPed_comando = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pagamento_aprovado = false ORDER BY numero_pedido DESC;"; }
                 MySqlCommand pegaCadPed = new MySqlCommand(pegaCadPed_comando, conexao, transaction);
                 try
                 {
@@ -715,7 +719,8 @@ namespace acompanhar_pedido
                                     { "hora_pedido", reader["hora_pedido"].ToString() },
                                     { "valorTotal", reader["valorTotal"].ToString() },
                                     { "formaPag", reader["formaPag"].ToString() },
-                                    { "delivery", reader["delivery"].ToString() }
+                                    { "delivery", reader["delivery"].ToString() },
+                                    { "pagamento_aprovado", reader["pagamento_aprovado"].ToString() }
                                 };
                             filaCadPed.Add(dicProds);
                         }
@@ -835,6 +840,30 @@ namespace acompanhar_pedido
                     apagaProduto.ExecuteNonQuery();
                     transaction.Commit();
                     resultado = "Pedido removido com sucesso!";
+                }
+                catch (Exception er)
+                {
+                    transaction.Rollback();
+                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
+            }
+            MessageBox.Show(resultado);
+        }
+        //Aprova o pagamento (atualiza a coluna de pagamento para true no pedido determinado)
+        public void AprovaPagamento(string numero_pedido)
+        {
+            string resultado = "Não foi possivel aprovar o pagamento do pedido";
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                string aprova_pagamento_comando = $"UPDATE pedidos SET pagamento_aprovado = True WHERE usuario = '{VariaveisGlobais.Usuario}' and numero_pedido = {numero_pedido};";
+                MySqlCommand aprova_pagamento = new MySqlCommand(aprova_pagamento_comando, conexao, transaction);
+                try
+                {
+                    aprova_pagamento.ExecuteNonQuery();
+                    transaction.Commit();
+                    resultado = "Pagamento do pedido aprovado com sucesso!";
                 }
                 catch (Exception er)
                 {
