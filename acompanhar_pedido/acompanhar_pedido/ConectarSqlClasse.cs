@@ -245,7 +245,6 @@ namespace acompanhar_pedido
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 string str_cadPedido_sql = $"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario,delivery,pagamento_aprovado) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', '{data}', {valor},'{formaPag}',{valor},'{VariaveisGlobais.Usuario}',{delivery},{pagamento_efetuado});";
                 MySqlCommand cadPedido = new MySqlCommand(str_cadPedido_sql, conexao,transaction);
-                string a = "";
                 try
                 {
                     cadPedido.ExecuteNonQuery();
@@ -409,47 +408,29 @@ namespace acompanhar_pedido
             }
         }
         //traz uma fila com os produtos vendidos
-        public List<Dictionary<string,string>> ListaVendidos()
+        public List<Dictionary<string, string>> ListaProdVendidos()
         {
-            List<string> listaBruta = new List<string>();
-            List<string> listaProdutos = new List<string>();
-            List<Dictionary<string, string>> listaDicVendidos = new List<Dictionary<string, string>>();
+            List<Dictionary<string,string>> listaProdutos = new List<Dictionary<string, string>>();
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string comando_sql = $"SELECT produtos_nome FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' ;";
+                string comando_sql = $"SELECT * FROM produtos WHERE usuario = '{VariaveisGlobais.Usuario}' ;";
                 MySqlCommand comando = new MySqlCommand(comando_sql, conexao);
-                string lista_produtos_comando = $"SELECT nome from produtos where usuario = '{VariaveisGlobais.Usuario}';";
-                MySqlCommand lista_produtos = new MySqlCommand(lista_produtos_comando, conexao);
                 try
                 {
-                    //traz a lista bruta dos produtos vendidos de "pedidos_prontos"
+                    //traz a lista bruta dos produtos
                     using (var reader = comando.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             try
                             {
-                                foreach(var prod in reader["produtos_nome"].ToString().Split(','))
+                                Dictionary<string, string> pedido = new Dictionary<string, string>
                                 {
-                                    if (prod != "") { listaBruta.Add(prod);}
-                                }
-                            }
-                            catch (Exception er)
-                            {
-                                EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-                                break;
-                            }
-                        }
-                    }
-                    //traz uma lista dos produtos que existem naquele usuário
-                    using (var reader = lista_produtos.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            try
-                            {
-                                listaProdutos.Add(reader["nome"].ToString());
+                                { "nome", Convert.ToString(reader["nome"]) },
+                                { "qtd_vendido", Convert.ToString(reader["qtd_vendido"]) }
+                                };
+                                listaProdutos.Add(pedido);
                             }
                             catch (Exception er)
                             {
@@ -464,55 +445,7 @@ namespace acompanhar_pedido
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                 }
             }
-            //cria um dicionario para cada produto contendo nome e qtd vendida e no fim add esse dicionario em uma lista
-            for (int i = 0; i < listaBruta.Count; i++)
-            {
-                string itemAtualListaBruta = listaBruta[i];
-                bool criar = true;
-                foreach (var dic in listaDicVendidos)
-                {
-                    string[] partes = itemAtualListaBruta.Split(new[] { ' ' }, 2);
-                    if (dic["produto"].Contains(partes[1]))
-                    {
-                        criar = false;
-                        int qtdAntiga = int.Parse(dic["qtd"]);
-                        int qtdNova = int.Parse(itemAtualListaBruta.Split(' ')[0].Replace("X", ""));
-                        int qtdFinal = qtdAntiga + qtdNova;
-                        dic["qtd"] = qtdFinal.ToString();
-                        break;
-                    }
-                    else { criar = true; }
-                }
-                if (criar)
-                {
-                    string[] partes = itemAtualListaBruta.Split(new[] { ' ' }, 2);
-                    Dictionary<string, string> dict = new Dictionary<string, string>()
-                    {
-                        { "produto",partes[1] },
-                        { "qtd", partes[0].Replace("X","") }
-                    };
-                    listaDicVendidos.Add(dict);
-                }
-            }
-            //cria o dicionario dos produtos que não venderam nenhuma unidade e add na fila do listaDicVendidos
-            foreach (string prod in listaProdutos)
-            {
-                bool produto_vendido = false;
-                foreach(Dictionary<string,string> dict in listaDicVendidos)
-                {
-                    if (dict["produto"] == prod) { produto_vendido = true; }
-                }
-                if (!produto_vendido)
-                {
-                    Dictionary<string, string> dict = new Dictionary<string, string>()
-                    {
-                        { "produto",prod },
-                        { "qtd", "0" }
-                    };
-                    listaDicVendidos.Add(dict);
-                }
-            }
-            return listaDicVendidos;
+            return listaProdutos;
         }
         //apaga o pedido da fila e joga na fila dos prontos
         public void ApagaPedidoFila(int id, string hora)
@@ -564,6 +497,26 @@ namespace acompanhar_pedido
                         MessageBox.Show("Erro ao apagar pedido da lista ");
                         EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                     }
+                }
+                catch (Exception er)
+                {
+                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
+            }
+        }
+        //atualiza a quantidade de tal produto utilizado
+        public void AumentaQtdUtilizadaProduto(string nome_produto, int qtd_produto)
+        {
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                string atualizaQtd_comando = $"UPDATE produtos SET qtd_vendido = qtd_vendido + {qtd_produto} WHERE usuario = '{VariaveisGlobais.Usuario}' AND nome = '{nome_produto}';";
+                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                MySqlCommand atualizaQtd = new MySqlCommand(atualizaQtd_comando, conexao, transaction);
+                try
+                {
+                    atualizaQtd.ExecuteNonQuery();
+                    transaction.Commit();
                 }
                 catch (Exception er)
                 {

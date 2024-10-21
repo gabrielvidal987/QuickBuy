@@ -271,7 +271,6 @@ namespace acompanhar_pedido.botoes
         {
             try
             {
-                ConectarSqlClasse sql = new ConectarSqlClasse();
                 for (int j = 0; j < pnlGeral.Controls.Count; j++)
                 {
                     int check = 0;
@@ -289,9 +288,17 @@ namespace acompanhar_pedido.botoes
                         var r = MessageBox.Show("Pedido completo?", "Atenção", MessageBoxButtons.YesNo);
                         if (r == DialogResult.Yes)
                         {
+                            ConectarSqlClasse sql = new ConectarSqlClasse();
                             DateTime hora = DateTime.Now;
                             string horario_fechamento = hora.ToString("HH:mm:ss");
                             pnlGeral.Controls.Remove(pnlGeral.Controls[j]);
+                            foreach (Control h in pnlGeral.Controls[j].Controls[1].Controls)
+                            {
+                                string[] texto_prod = h.Text.Split('X');
+                                int qtd_prod = int.Parse(texto_prod[0]);
+                                string nome_prod = texto_prod[1].Trim();
+                                sql.AumentaQtdUtilizadaProduto(nome_prod, qtd_prod);
+                            }
                             sql.ApagaPedidoFila(numero_pedido, horario_fechamento);
                             RecarregaFila();
                         }

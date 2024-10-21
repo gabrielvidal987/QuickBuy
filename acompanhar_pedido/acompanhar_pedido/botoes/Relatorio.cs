@@ -126,10 +126,11 @@ namespace acompanhar_pedido.botoes
                     dt = sql.Relatorio(filtro, ordem, nome);
                 }
                 dt.Columns.RemoveAt(0);
+                dt.Columns.RemoveAt(12);
                 //deixar a coluna de entrega em readonly
                 dt.Columns[11].ReadOnly = true;
                 //tabela que pega a lista dos produtos vendidos
-                listaBruta = sql.ListaVendidos();
+                listaBruta = sql.ListaProdVendidos();
                 //adiciona colunas de tempo, produto e qtd de produto
                 dt.Columns.Add("Tempo de espera");
                 dt.Columns.Add("Produto");
@@ -251,18 +252,18 @@ namespace acompanhar_pedido.botoes
                     if (c > dt.Rows.Count - 1)
                     {
                         dt.Rows.Add();
-                        dt.Rows[c][13] = listaBruta[c]["produto"]; dt.Rows[c][14] = listaBruta[c]["qtd"];
+                        dt.Rows[c][13] = listaBruta[c]["nome"]; dt.Rows[c][14] = listaBruta[c]["qtd_vendido"];
                         continue;
                     }
                     if (c + 2 > dt.Rows.Count - 1)
                     {
                         dt.Rows.Add();
-                        dt.Rows[c + 2][13] = listaBruta[c]["produto"]; dt.Rows[c + 2][14] = listaBruta[c]["qtd"];
+                        dt.Rows[c + 2][13] = listaBruta[c]["nome"]; dt.Rows[c + 2][14] = listaBruta[c]["qtd_vendido"];
                         continue;
                     }
                     else
                     {
-                        dt.Rows[c + 2][13] = listaBruta[c]["produto"]; dt.Rows[c + 2][14] = listaBruta[c]["qtd"];
+                        dt.Rows[c + 2][13] = listaBruta[c]["nome"]; dt.Rows[c + 2][14] = listaBruta[c]["qtd_vendido"];
                     }
                 }
                 

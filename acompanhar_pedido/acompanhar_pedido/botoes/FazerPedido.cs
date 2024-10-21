@@ -273,6 +273,15 @@ namespace acompanhar_pedido.teste
             if (pcholdEndereco.Text.Length < 5) { endereco = "endereço não cadastrado"; }
             if (pagamento_efetuado.Checked) { pagamento_ja_efetuado = true; }
             nf = $"Cliente: {nome_cliente}\n";
+            foreach (var item in extratoLista)
+            {
+                nome_produto = item["nome"];
+                string quantidade = $"{item["quantidade"]}X";
+                produto_quantidade += $"{quantidade} {nome_produto},";
+                string texto_item = $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
+                string texto_item_formatado = AddLineBreaksEveryNChars(texto_item, 30);
+                nf += texto_item_formatado;
+            }
             try 
             { 
                 if (obs == "")
@@ -281,21 +290,12 @@ namespace acompanhar_pedido.teste
                 }
                 var horario = DateTime.Now;
                 string valorTotal = totalValorExtrato.Text.Replace("R$", "").Replace(',', '.');
-                foreach (var item in extratoLista)
-                {
-                    nome_produto = item["nome"];
-                    string quantidade = $"{item["quantidade"]}X";
-                    produto_quantidade += $"{quantidade} {nome_produto},";
-                    string texto_item = $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
-                    string texto_item_formatado = AddLineBreaksEveryNChars(texto_item, 30);
-                    nf += texto_item_formatado;
-                }
                 if (nome_cliente != "" && nome_produto != "sem produto")
                 {
+                    ConectarSqlClasse sql = new ConectarSqlClasse();
                     string hora_pedido = horario.ToString("HH:mm:ss");
                     string formaPag = boxPgto.Text.ToLower().Replace('é', 'e');
                     nf += $"\n\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {formaPag}\n---------------------------------\nVALOR TOTAL: R${totalValorExtrato.Text.Replace("R$", "")}\n---------------------------------";
-                    ConectarSqlClasse sql = new ConectarSqlClasse();
                     nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, hora_pedido, valorTotal, formaPag,entrega, pagamento_ja_efetuado);
                     nf += $"\n\nHorario do pedido: {hora_pedido}";
                     nf += $"\n\n{retirada}\n";
@@ -321,6 +321,7 @@ namespace acompanhar_pedido.teste
                     totalValorExtrato.Text = "R$0,00";
                     clienteExtrato.Text = "Cliente: ";
                     delivery.Checked = false;
+                    pagamento_efetuado.Checked = false;
                     pcholdCliente.Text = "";
                     pcholdEndereco.Text = "";
                     pcholdCliente.Focus();
