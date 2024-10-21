@@ -272,7 +272,7 @@ namespace acompanhar_pedido
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 string limpaProdutosComand = $"Delete FROM {tabelaProdutos} WHERE usuario = '{VariaveisGlobais.Usuario}';";
                 MySqlCommand limpaProdutos = new MySqlCommand(limpaProdutosComand, conexao,transaction);
-                string limpaVendasComand = $"Delete FROM {tabelaVendas} WHERE usuario = '{VariaveisGlobais.Usuario}';";
+                string limpaVendasComand = $"Delete FROM {tabelaVendas} WHERE usuario = '{VariaveisGlobais.Usuario}';UPDATE produtos SET qtd_vendido = 0 WHERE usuario = '{VariaveisGlobais.Usuario}'; ";
                 MySqlCommand limpaVendas = new MySqlCommand(limpaVendasComand, conexao,transaction);
                 string limpaPedidosComand = $"Delete FROM {tabelaPedidos} WHERE usuario = '{VariaveisGlobais.Usuario}';";
                 MySqlCommand limpaPedidos = new MySqlCommand(limpaPedidosComand, conexao,transaction);
