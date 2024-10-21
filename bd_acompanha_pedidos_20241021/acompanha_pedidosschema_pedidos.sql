@@ -36,7 +36,7 @@ CREATE TABLE `pedidos` (
   `delivery` tinyint(1) DEFAULT '0',
   `pagamento_aprovado` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`numero_pedido`)
-) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `pedidos` (
 
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
-INSERT INTO `pedidos` VALUES (114,'reetest51','554te84','1X açai,1X suci,','sem observações','14:34:47',3.5,'dinheiro',3.5,'desbravadores',0,0),(115,'tetste','endereco','1X açai,1X suci,','sem observações','11:11:42',3.5,'dinheiro',3.5,'desbravadores',0,0),(116,'teste534','endereço não cadastrado','1X açai,1X pitiça,','sem observações','11:11:46',4,'dinheiro',4,'desbravadores',0,1);
+INSERT INTO `pedidos` VALUES (120,'te','endereço não cadastrado','1X açai,1X suci,','sem observações','14:41:01',3.5,'dinheiro',3.5,'desbravadores',0,0),(122,'bnrtb','endereço não cadastrado','1X açai,1X pitiça,','sem observações','14:41:05',4,'dinheiro',4,'desbravadores',0,1),(124,'erverv','endereço não cadastrado','1X açai,1X suci,','sem observações','14:41:08',3.5,'dinheiro',3.5,'desbravadores',0,1),(125,'erver','endereço não cadastrado','1X açai,','sem observações','14:41:12',2.5,'dinheiro',2.5,'desbravadores',0,1);
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-21 12:43:44
+-- Dump completed on 2024-10-21 16:01:26

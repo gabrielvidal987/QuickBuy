@@ -38,7 +38,7 @@ CREATE TABLE `pedidos_prontos` (
   `delivery` tinyint(1) DEFAULT NULL,
   `pagamento_aprovado` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`insert_sys`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,6 @@ CREATE TABLE `pedidos_prontos` (
 
 LOCK TABLES `pedidos_prontos` WRITE;
 /*!40000 ALTER TABLE `pedidos_prontos` DISABLE KEYS */;
-INSERT INTO `pedidos_prontos` VALUES (2,119,'esse ja foi pago','endereço não cadastrado','1X suci,1X açai,','sem observações','12:39:37','12:40:19',3.5,'dinheiro',3.5,'desbravadores',0,1),(3,118,'esse fica pendente','endereço não cadastrado','1X suci,1X açai,','sem observações','12:39:32','12:40:29',3.5,'dinheiro',3.5,'desbravadores',0,1),(4,117,'gabriel3r ','endereço não cadastrado','1X açai,1X pitiça,','sem observações','11:11:50','12:42:40',4,'dinheiro',4,'desbravadores',0,1);
 /*!40000 ALTER TABLE `pedidos_prontos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-21 12:43:44
+-- Dump completed on 2024-10-21 16:01:26

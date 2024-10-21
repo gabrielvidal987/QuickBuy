@@ -28,6 +28,7 @@ CREATE TABLE `produtos` (
   `valor` varchar(50) DEFAULT NULL,
   `caminho_foto` varchar(2000) DEFAULT NULL,
   `usuario` varchar(200) DEFAULT NULL,
+  `qtd_vendido` int DEFAULT '0',
   PRIMARY KEY (`id_produto`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +39,7 @@ CREATE TABLE `produtos` (
 
 LOCK TABLES `produtos` WRITE;
 /*!40000 ALTER TABLE `produtos` DISABLE KEYS */;
-INSERT INTO `produtos` VALUES (26,'açai','2.50','açai.png','desbravadores'),(28,'suci','1.00','suci.png','desbravadores'),(42,'pitiça','1.50','pitiça.png','desbravadores');
+INSERT INTO `produtos` VALUES (26,'açai','2.50','açai.png','desbravadores',0),(28,'suci','1.00','suci.png','desbravadores',0),(42,'pitiça','1.50','pitiça.png','desbravadores',0);
 /*!40000 ALTER TABLE `produtos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-21 12:43:43
+-- Dump completed on 2024-10-21 16:01:26
