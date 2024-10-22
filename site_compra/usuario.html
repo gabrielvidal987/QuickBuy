@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBuy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style>
+        button {
+            background-color: #ffffff; /* Cor de fundo */
+            color: white; /* Cor do texto */
+            border: none; /* Remove a borda padrão */
+            padding: 10px 15px; /* Padding do botão */
+            font-size: 16px; /* Tamanho da fonte */
+            cursor: pointer; /* Muda o cursor ao passar por cima */
+            border-radius: 5px; /* Borda arredondada */
+            transition: background-color 0.3s; /* Efeito de transição */
+            width: 5em;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 3 colunas */
+            grid-template-rows: repeat(2, auto); /* 2 linhas */
+            gap: 0px; /* Espaço entre as células */
+            max-width: 500px; /* Largura máxima do grid */
+            width: 100%; /* Largura total até a largura máxima */
+            margin: 0 auto; /* Centraliza o grid horizontalmente */
+            border-radius: 10px; /* Borda arredondada no contêiner */
+        }
+
+        .grid-item {
+            border: 1px solid #e7e7e7; /* Borda das células */
+            padding: 10px; /* Espaçamento interno */
+            text-align: center; /* Centraliza o conteúdo */
+            font-weight: bold;
+            border-radius: 8px; /* Borda arredondada */
+        }
+
+        .lblForm {
+            font-size: 1.25em; /* Tamanho da fonte das labels */
+            display: block; /* Faz a label ocupar toda a largura */
+        }
+
+        input[type="text"] {
+            width: 80%; /* Largura total do input */
+            padding: 15px; /* Padding do input */
+            font-size: 1em; /* Tamanho da fonte do input */
+            border: 1px solid #ccc; /* Borda do input */
+            border-radius: 5px; /* Borda arredondada */
+            margin-bottom: 5px; /* Margem abaixo do input */
+            text-align: center;
+        }
+
+        .button.is-primary.is-fullwidth.is-large {
+            margin: 0 auto;
+            margin-top: 1em;
+        }
+
+        @media(max-width: 800px) {
+        }
+        /* Ajuste para telas entre 801px e 1000px */
+        @media (min-width: 801px) and (max-width: 1000px) {
+        }
+        /* Ajuste para telas grandes (acima de 1000px) */
+        @media (min-width: 1001px) {
+            input[type="text"] {
+                width: 40%; /* Largura total do input */
+                font-size: 1em; /* Tamanho da fonte do input */
+            }
+            .button.is-primary.is-fullwidth.is-large {
+                width: 50%;
+                margin: 0 auto;
+                margin-top: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container has-text-centered">
+            <label class="lblForm" for="nome">Nome completo:</label><br>
+            <input type="text" id="nome" placeholder="Digite seu nome">
+            <br><br>
+            <label class="lblForm" for="endereco">Endereco:</label><br>
+            <input type="text" id="endereco" placeholder="Digite seu endereco *opcional*">
+            <br><br>
+            <div class="grid-container has-text-centered">
+                <!-- Primeira linha com Labels -->
+                <div class="grid-item">
+                    <label for="btnComerAqui">Comer aqui</label>
+                </div>
+                <div class="grid-item">
+                    <label for="entrega">Entregar em casa</label><br>
+                </div>
+                
+                <!-- Última linha com Botões -->
+                <div class="grid-item">
+                    <button class="image-button" id="btnComerAqui" onclick="setDeliveryMode(this,'balcão')">
+                        <img src="imagens/hamburguer.png" alt="Comer no restaurante">
+                    </button>
+                </div>
+                <div class="grid-item">
+                    <button class="image-button" id="entrega" onclick="setDeliveryMode(this,'entrega')">
+                        <img src="imagens/entregador.png" alt="Entregar em casa">
+                    </button>
+                </div>
+            </div>
+            <div class="container has-text-centered">
+                <button class="button is-primary is-fullwidth is-large" onclick="window.location.href = 'produtos.html'">
+                    SELECIONAR ITENS &rarr;
+                </button>
+            </div>
+    </section>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>&copy; 2024 Meu Site</p>
+        </div>
+    </footer>
+    
+    <script>
+        const cor_padrao_btn = '#ffffff';
+        let botaoAtivo = null;
+        function setDeliveryMode(btn,deliveryMode) {
+            localStorage.setItem('deliveryMode', deliveryMode);
+            const celulaGrid = btn.parentElement;
+            if (botaoAtivo != null) { 
+                var celulaGridParent = botaoAtivo.parentElement;
+                botaoAtivo.style.backgroundColor = cor_padrao_btn 
+                celulaGridParent.style.backgroundColor = cor_padrao_btn;
+            }
+            else {botaoAtivo = btn}
+            botaoAtivo = btn
+            btn.style.backgroundColor = '#c7c7c7'; // Cor mais escura
+            celulaGrid.style.backgroundColor = '#c7c7c7'; // Cor mais escura
+        }
+    </script>
+</body>
+</html>
