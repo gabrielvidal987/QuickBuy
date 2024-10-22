@@ -56,8 +56,8 @@ namespace acompanhar_pedido.botoes
                     Label pagamento = new Label();
                     PictureBox btnPrint = new PictureBox();
                     //cria o flowpanel com o cliente
-                    pnl.Width = 280;
-                    pnl.Height = 210 + Convert.ToInt32(altura);
+                    pnl.Width = 240;
+                    pnl.Height = 250 + Convert.ToInt32(altura);
                     pnl.BackColor = Color.FromArgb(247, 247, 247);
                     pnl.Margin = new Padding(40, 10, 0, 10);
                     pnl.Padding = new Padding(5, 5, 5, 5);
@@ -113,7 +113,7 @@ namespace acompanhar_pedido.botoes
                     //label pagamento_status
                     string pagamento_status = "PAGAMENTO PENDENTE";
                     string cor_fonte = "#ff2626";
-                    if (bool.Parse(i["pagamento_aprovado"]) == true) { retirada = "PAGAMENTO APROVADO"; cor_fonte = "#006400"; }
+                    if (bool.Parse(i["pagamento_aprovado"]) == true) { pagamento_status = "PAGAMENTO APROVADO"; cor_fonte = "#006400"; }
                     pagamento.AutoSize = false;
                     pagamento.Text = pagamento_status;
                     pagamento.BorderStyle = BorderStyle.FixedSingle;

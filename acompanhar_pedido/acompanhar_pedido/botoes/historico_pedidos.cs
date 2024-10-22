@@ -194,7 +194,7 @@ namespace acompanhar_pedido.botoes
                         //label pagamento_status
                         string pagamento_status = "PAGAMENTO PENDENTE";
                         string cor_fonte = "#ff2626";
-                        if (bool.Parse(i["pagamento_aprovado"]) == true) { retirada = "PAGAMENTO APROVADO"; cor_fonte = "#006400"; }
+                        if (bool.Parse(i["pagamento_aprovado"]) == true) { pagamento_status = "PAGAMENTO APROVADO"; cor_fonte = "#006400"; }
                         pagamento.AutoSize = false;
                         pagamento.Text = pagamento_status;
                         pagamento.BorderStyle = BorderStyle.FixedSingle;

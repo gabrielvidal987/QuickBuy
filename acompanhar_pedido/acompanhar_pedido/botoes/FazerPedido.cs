@@ -392,8 +392,15 @@ namespace acompanhar_pedido.teste
                     fotoProd.SizeMode = PictureBoxSizeMode.StretchImage;
                     try
                     {
-                        Image myimage = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", item["caminho_foto"]));
-                        fotoProd.BackgroundImage = myimage;
+                        if (item["caminho_foto"] != "semFoto.png")
+                        {
+                            Image myimage = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", item["caminho_foto"]));
+                            fotoProd.BackgroundImage = myimage;
+                        }
+                        else
+                        {
+                            fotoProd.Image = food_ico;
+                        }
                     }
                     catch 
                     {

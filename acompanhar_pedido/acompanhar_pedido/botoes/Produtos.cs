@@ -88,7 +88,7 @@ namespace acompanhar_pedido.botoes
                             File.Copy(foto_caminho, Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{nome}.{exten}"), overwrite: true);
                             nome_foto_produto = $"{nome}.{exten}";
                         }
-                        else { nome_foto_produto = $"semFoto.png"; }
+                        else { nome_foto_produto = $""; }
                     }
                     catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
                     MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal));
