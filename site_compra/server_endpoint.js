@@ -1,8 +1,6 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
-const multer = require('multer');
-const path = require('path');
 const app = express();
 const PORT = 3000;
 
@@ -28,8 +26,9 @@ app.use(cors());
 app.use(express.json()); // Mover essa linha para cima
 
 // Endpoint para obter os produtos disponiveis
-app.get('/api/produtos:usuario_nome', (req, res) => {
+app.get('/api/produtos/:usuario_nome', (req, res) => {
     const usuario = req.params.usuario_nome;
+    console.log(`Requisição de produtos do usuario: ${usuario}`)
     db.query(`SELECT * FROM produtos WHERE usuario = '${usuario}'`, (err, results) => {
         if (err) throw err;
         res.json(results);
@@ -39,5 +38,4 @@ app.get('/api/produtos:usuario_nome', (req, res) => {
 // Iniciar o servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
-    db.query(`INSERT INTO log_eventos(funcao, evento) VALUES ('server.js','Servidor rodando na porta ${PORT}')`);
 });

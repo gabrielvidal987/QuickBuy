@@ -3,32 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teste de API de Produtos</title>
-    <script>
-        async function buscarProdutos() {
-            const usuarioNome = document.getElementById('usuarioNome').value;
-            const response = await fetch(`http://localhost:3000/api/produtos/${usuarioNome}`);
-            
-            if (response.ok) {
-                const produtos = await response.json();
-                const produtosList = document.getElementById('produtosList');
-                produtosList.innerHTML = ''; // Limpar lista anterior
+    <title>QuickBuy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style>
+        button {
+            background-color: #4CAF50; /* Cor de fundo */
+            color: white; /* Cor do texto */
+            border: none; /* Remove a borda padrão */
+            padding: 10px 15px; /* Padding do botão */
+            font-size: 16px; /* Tamanho da fonte */
+            cursor: pointer; /* Muda o cursor ao passar por cima */
+            border-radius: 5px; /* Borda arredondada */
+            transition: background-color 0.3s; /* Efeito de transição */
+        }
 
-                produtos.forEach(produto => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `ID: ${produto.id_produto}, Nome: ${produto.nome}, Valor: ${produto.valor}, Qtd Vendido: ${produto.qtd_vendido}`;
-                    produtosList.appendChild(listItem);
-                });
-            } else {
-                console.error('Erro ao buscar produtos:', response.status);
+        button:hover {
+            background-color: #45a049; /* Cor ao passar o mouse */
+        }
+
+        input.quantity {
+            width: 60px; /* Largura do input */
+            text-align: center; /* Centraliza o texto */
+            padding: 10px; /* Padding do input */
+            border: 1px solid #ccc; /* Borda do input */
+            border-radius: 5px; /* Borda arredondada */
+            margin: 0 10px; /* Margem horizontal entre o input e os botões */
+            font-size: 16px; /* Tamanho da fonte */
+        }
+        @media(max-width: 800px) {
+            #cards-container .column {
+                flex: 0 0 100%; /* Dois itens por linha */
+                max-width: 100%; /* Limita a largura máxima */
+            }
+            input.quantity {
+                width: 60%;
+            }
+            .card .title {
+                font-size: 5em; /* Tamanho da fonte do título */
+                font-weight: bold; /* Negrito */
+                color: #313131; /* Cor do texto */
+            }
+            .card .subtitle {
+                font-size: 3em; /* Tamanho da fonte do subtítulo */
+                color: #666; /* Cor do texto */
+            }
+            .card {
+                background-color: #fff; /* Cor de fundo da carta */
+                border: 1px solid #ccc; /* Borda da carta */
+                border-radius: 10px; /* Cantos arredondados */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra para a carta */
+                padding: 15px; /* Espaçamento interno */
+                text-align: center; /* Centraliza o texto dentro da carta */
+                width: 98%; /* Largura fixa para as cartas */
+            }
+            #cards-container {
+                display: flex; /* Usar flexbox para layout */
+                flex-wrap: wrap; /* Permite que as colunas quebrem para a próxima linha */
+                justify-content: center; /* Centraliza os itens horizontalmente */
+                align-items: center; /* Centraliza os itens verticalmente */
+                margin: 10px; /* Margem ao redor do contêiner */
             }
         }
-    </script>
+        /* Ajuste para telas entre 801px e 1000px */
+        @media (min-width: 801px) and (max-width: 1000px) {
+            #cards-container .column {
+                flex: 0 0 50%; /* Dois itens por linha */
+                max-width: 50%; /* Limita a largura máxima */
+            }
+            input.quantity {
+                width: 50%;
+            }
+            .card .title {
+                font-size: 3em; /* Tamanho da fonte do título */
+                font-weight: bold; /* Negrito */
+                color: #313131; /* Cor do texto */
+            }
+            .card .subtitle {
+                font-size: 2em; /* Tamanho da fonte do subtítulo */
+                color: #666; /* Cor do texto */
+            }
+            .card {
+                background-color: #fff; /* Cor de fundo da carta */
+                border: 1px solid #ccc; /* Borda da carta */
+                border-radius: 10px; /* Cantos arredondados */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra para a carta */
+                padding: 15px; /* Espaçamento interno */
+                text-align: center; /* Centraliza o texto dentro da carta */
+                width: 300px; /* Largura fixa para as cartas */
+            }
+            #cards-container {
+                display: flex; /* Usar flexbox para layout */
+                flex-wrap: wrap; /* Permite que as colunas quebrem para a próxima linha */
+                justify-content: center; /* Centraliza os itens horizontalmente */
+                align-items: center; /* Centraliza os itens verticalmente */
+                margin: 10px; /* Margem ao redor do contêiner */
+            }
+        }
+        /* Ajuste para telas grandes (acima de 1000px) */
+        @media (min-width: 1001px) {
+            #cards-container .column {
+                flex: 0 0 25%; /* Quatro itens por linha */
+                max-width: 25%; /* Limita a largura máxima */
+            }
+            input.quantity {
+                width: 30%;
+            }
+            .card .title {
+                font-size: 2em; /* Tamanho da fonte do título */
+                font-weight: bold; /* Negrito */
+                color: #313131; /* Cor do texto */
+            }
+            .card .subtitle {
+                font-size: 3em; /* Tamanho da fonte do subtítulo */
+                color: #666; /* Cor do texto */
+            }
+            .card {
+                background-color: #fff; /* Cor de fundo da carta */
+                border: 1px solid #ccc; /* Borda da carta */
+                border-radius: 10px; /* Cantos arredondados */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra para a carta */
+                padding: 15px; /* Espaçamento interno */
+                text-align: center; /* Centraliza o texto dentro da carta */
+                width: 300px; /* Largura fixa para as cartas */
+            }
+            #cards-container {
+                display: flex; /* Usar flexbox para layout */
+                flex-wrap: wrap; /* Permite que as colunas quebrem para a próxima linha */
+                justify-content: center; /* Centraliza os itens horizontalmente */
+                align-items: center; /* Centraliza os itens verticalmente */
+                margin: 10px; /* Margem ao redor do contêiner */
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Buscar Produtos</h1>
-    <input type="text" id="usuarioNome" placeholder="Digite o nome do usuário">
-    <button onclick="buscarProdutos()">Buscar</button>
-    <ul id="produtosList"></ul>
+    <nav class="navbar is-primary">
+        <div class="container has-text-centered">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="#">QuickBuy</a>
+            </div>
+        </div>
+    </nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline" id="cards-container">
+                <!-- Os cards serão inseridos aqui -->
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container has-text-centered">
+            <h1 class="title">PROSSEGUIR COM A COMPRA</h1>
+            <button class="button is-primary is-fullwidth is-large">
+                &rarr;
+            </button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>&copy; 2024 Meu Site</p>
+        </div>
+    </footer>
+    
+    <script>
+        const urlServ = 'http://localhost:3000';
+        document.addEventListener('DOMContentLoaded', () => {
+            const cardsContainer = document.getElementById('cards-container');
+            const usuario_venda = 'desbravadores';
+            fetch(`${urlServ}/api/produtos/${usuario_venda}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na rede: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length === 0) {
+                    cardsContainer.innerHTML = '<p>Nenhum produto encontrado.</p>';
+                } else {
+                    data.forEach(item => {
+                        const produto_div = document.createElement('div');
+                        produto_div.className = 'column ';
+                        produto_div.innerHTML = `
+                            <div class="card">
+                                <div class="card-content">
+                                    <p class="title">${item.nome}</p>
+                                    <p class="subtitle">${item.valor}</p>
+                                    <img src="food_ico.png" alt="${item.nome}">
+                                </div>
+                                <div class="card-content">
+                                    <div class="quantity-control">
+                                        <button class="decrement" onclick="alterar_valor('${item.nome}','subtrair')">-</button>
+                                        <input type="number" class="quantity" value="0" id="qtd_${item.nome}" readonly>
+                                        <button class="increment" onclick="alterar_valor('${item.nome}','somar')">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        cardsContainer.appendChild(produto_div);
+                    });
+                }
+            })
+            .catch(error => console.error('Erro ao buscar os dados:', error));
+            
+        });
+        // função para alterar a quantidade
+        function alterar_valor(item_nome,operacao) {
+            var qtd = document.getElementById(`qtd_${item_nome}`)
+            // Obtém o valor atual como número
+            var valorAtual = parseInt(qtd.value) || 0; // Usa 0 se o valor não for um número
+            if (operacao == "subtrair") {
+                if (valorAtual > 0) { // Verifica se pode subtrair
+                    qtd.value = valorAtual - 1; // Decrementa
+                }
+            } else if (operacao == "somar") {
+                qtd.value = valorAtual + 1; // Incrementa
+            }
+        };
+    </script>
 </body>
 </html>
