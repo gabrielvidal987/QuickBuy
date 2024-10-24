@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuickBuy</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         button {
             background-color: #4CAF50; /* Cor de fundo */
@@ -37,6 +38,10 @@
             background-color: #fbc806;
             color: #000000;
             font-weight: bold;
+        }
+        #observacoes {
+            width: 100%;
+            padding: 3em;
         }
         @media(max-width: 800px) {
             #cards-container .column {
@@ -156,12 +161,16 @@
             <div class="columns is-multiline" id="cards-container">
                 <!-- Os cards serão inseridos aqui -->
             </div>
+            <div class="card-content has-text-centered">
+                <label for="observacoes">OBSERVAÇÕES</label>
+                <input type="text" id="observacoes" placeholder="Digite aqui as observações e restrições do seu produto...">
+            </div>
         </div>
     </section>
     <section class="section">
         <div class="container has-text-centered">
             <button class="button is-primary is-fullwidth is-large" style="background-color: #ed1c24" onclick="passa_pagina()">
-                PROSSEGUIR COM A COMPRA
+                CONFIRMAR DADOS <i class="fas fa-arrow-right" style="margin-left: 1em;"></i>
             </button>
         </div>
     </section>
@@ -171,6 +180,7 @@
         const cardsContainer = document.getElementById('cards-container');
         function load_itens() {
             const usuario_venda = 'desbravadores';
+            document.getElementById('observacoes').value = '';
             fetch(`${urlServ}/api/produtos/${usuario_venda}`)
             .then(response => {
                 if (!response.ok) {
@@ -233,10 +243,9 @@
                 let string_prod = `${qtd_prod}X ${nome_prod}`
                 lista_prod.push(string_prod)
             }
-            console.log(lista_prod)
-            console.log(valor_total)
             localStorage.setItem('lista_prod', lista_prod);
             localStorage.setItem('valor_total', valor_total);
+            localStorage.setItem('obs', document.getElementById('observacoes').value);
             window.location.href = 'extrato.html';
         }
         load_itens()

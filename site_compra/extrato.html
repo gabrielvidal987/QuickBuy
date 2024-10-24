@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBuy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .button.is-primary.is-fullwidth.is-large {
+            margin: 0 auto;
+            margin-top: 1em;
+            font-weight: bold;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr); /* 3 colunas */
+            grid-template-rows: repeat(2, auto); /* 2 linhas */
+            gap: 0px; /* Espaço entre as células */
+            max-width: 500px; /* Largura máxima do grid */
+            width: 100%; /* Largura total até a largura máxima */
+            margin: 0 auto; /* Centraliza o grid horizontalmente */
+            border-radius: 10px; /* Borda arredondada no contêiner */
+        }
+        .grid-container-prod {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 3 colunas */
+            grid-template-rows: repeat(2, auto); /* 2 linhas */
+            gap: 0px; /* Espaço entre as células */
+            max-width: 500px; /* Largura máxima do grid */
+            width: 100%; /* Largura total até a largura máxima */
+            margin: 0 auto; /* Centraliza o grid horizontalmente */
+            border-radius: 10px; /* Borda arredondada no contêiner */
+        }
+        .grid-item {
+            border-bottom: 1px dotted #000000; /* Borda das células */
+            padding: 10px; /* Espaçamento interno */
+            text-align: center; /* Centraliza o conteúdo */
+            font-weight: bold;
+        }
+        .nf_central {
+            background-color: #e6edc6;
+            border-radius: 5px;
+            width: 60%;
+            padding-top: 3em;
+            padding-bottom: 4em;
+        }
+        #nome_cliente, #div_valor_final, #endereco_cliente, #retirada, .produto{
+            font-size: 30px;
+        }
+        #div_obs {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        #form_pagamento {
+            margin-top: 0.5em;
+            margin-bottom: 1em;
+            font-size: 25px;
+        }
+        @media(max-width: 800px) {
+        }
+        /* Ajuste para telas entre 801px e 1000px */
+        @media (min-width: 801px) and (max-width: 1000px) {
+        }
+        /* Ajuste para telas grandes (acima de 1000px) */
+        @media (min-width: 1001px) {
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container has-text-centered">
+            <div class="container has-text-centered nf_central">
+                <div class="grid-container has-text-centered" id="div_grid">
+                    <div class="grid-item">
+                        <label id="nome_cliente"></label>
+                    </div>
+                    <div class="grid-item endereco" id="endereco_cliente_div" style="display: none;">
+                        <label id="endereco_cliente" style="display: none;"></label>
+                    </div>
+                    <div class="grid-item">
+                        <label id="retirada"></label>
+                    </div>
+                </div>
+                <div class="grid-container-prod has-text-centered" id="div_grid_prod">
+                    <div class="grid-item produto">
+                        <label>- PRODUTO -</label>
+                    </div>
+                    <div class="grid-item produto">
+                        <label>- QTD -</label>
+                    </div>
+                </div>
+                <div class="grid-container has-text-centered" id="div_obs"></div>
+                <div class="grid-container has-text-centered" id="div_valor_final"></div>
+                <div class="grid-container has-text-centered" id="pagamento">
+                    <label style="font-size: 20px;margin-top: 1em;">---forma de pagamento---</label>
+                    <select id="form_pagamento" class="has-text-centered">
+                        <option value="Dinheiro">DINHEIRO</option>
+                        <option value="Pix">PIX</option>
+                        <option value="Débito">DÉBITO</option>
+                        <option value="Crédito">CRÉDITO</option>
+                    </select>
+                </div>
+            </div>
+            <div class="container has-text-centered">
+                <button class="button is-primary is-fullwidth is-large" onclick="editar_produtos()" style="background-color: #ed1c24;">
+                    <i class="fas fa-arrow-left" style="margin-right: 1em;"></i>EDITAR PRODUTOS
+                </button>
+                <button class="button is-primary is-fullwidth is-large" onclick="passa_pagina()" style="background-color: #ed1c24;">
+                    CONFIRMAR COMPRA <i class="fas fa-arrow-right" style="margin-left: 1em;"></i>
+                </button>
+            </div>
+    </section>
+    
+    <script>
+        function carrega_dados() {
+            //preenche a tabela com o nome e endereço do cliente
+            let nome = document.getElementById('nome_cliente')
+            let retirada = document.getElementById('retirada')
+            let obs = document.getElementById('div_obs')
+            const div_table_prod = document.getElementById('div_grid_prod')
+            const div_table_valor_final = document.getElementById('div_valor_final')
+            nome.innerHTML = `${localStorage.getItem('clienteNome').toUpperCase()}`
+            retirada.innerHTML = `${localStorage.getItem('deliveryMode').toUpperCase()}`
+            obs.innerHTML = `Observações:  \n${localStorage.getItem('obs').toUpperCase()}`
+            if (localStorage.getItem('deliveryMode') == 'entrega') {
+                let endereco = document.getElementById('endereco_cliente')
+                let endereco_div = document.getElementById('endereco_cliente_div')
+                endereco.style.display = "";
+                endereco_div.style.display = "";
+                endereco.innerHTML = `${localStorage.getItem('clienteEndereco').toUpperCase()}`
+            }
+            //cria a tabela dos produtos
+            let lista_produtos = localStorage.getItem('lista_prod').split(',')
+            for (let prod of lista_produtos) {
+                let partes = prod.split(' ');
+                let qtd = partes[0].replace('X','');
+                let nome = partes[1];
+                let produto_nome = document.createElement('div');
+                produto_nome.className = 'grid-item';
+                produto_nome.style.fontSize = "20px";
+                produto_nome.innerHTML = `
+                    <label>${nome}</label>
+                `;
+                let produto_qtd = document.createElement('div');
+                produto_qtd.className = 'grid-item';
+                produto_qtd.style.fontSize = "20px";
+                produto_qtd.innerHTML = `
+                    <label>${qtd}</label>
+                `;
+                div_table_prod.appendChild(produto_nome);
+                div_table_prod.appendChild(produto_qtd);
+            }
+            //
+            const valor_total_div = document.createElement('div');
+            valor_total_div.className = 'grid-item';
+            valor_total_div.innerHTML = `
+                <label>VALOR TOTAL: R$${localStorage.getItem('valor_total').replace('.',',')}</label>
+            `;
+            div_table_valor_final.appendChild(valor_total_div);
+
+        }
+        function passa_pagina() {
+            localStorage.setItem('pagamento',document.getElementById('form_pagamento').value)
+            console.log(localStorage.getItem('pagamento'))
+            window.location.href = 'final.html'
+        }
+        function editar_produtos() {
+            window.location.href = 'produtos.html'
+        }
+        carrega_dados()
+    </script>
+</body>
+</html>

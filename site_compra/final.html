@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBuy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style>
+        .button.is-primary.is-fullwidth.is-large {
+            margin: 0 auto;
+            margin-top: 1em;
+            font-weight: bold;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr); /* 3 colunas */
+            grid-template-rows: repeat(2, auto); /* 2 linhas */
+            gap: 0px; /* Espaço entre as células */
+            max-width: 500px; /* Largura máxima do grid */
+            width: 100%; /* Largura total até a largura máxima */
+            margin: 0 auto; /* Centraliza o grid horizontalmente */
+            border-radius: 10px; /* Borda arredondada no contêiner */
+        }
+        .grid-item {
+            padding: 10px; /* Espaçamento interno */
+            text-align: center; /* Centraliza o conteúdo */
+            font-weight: bold;
+            border-radius: 8px; /* Borda arredondada */
+        }
+        .nf_central {
+            background-color: rgb(201, 201, 201);
+            border-radius: 5px;
+            width: 60%;
+            padding: 3em;
+        }
+        #nome_cliente, #div_valor_final, #endereco_cliente, #retirada, .produto{
+            font-size: 25px;
+        }
+        @media(max-width: 800px) {
+        }
+        /* Ajuste para telas entre 801px e 1000px */
+        @media (min-width: 801px) and (max-width: 1000px) {
+        }
+        /* Ajuste para telas grandes (acima de 1000px) */
+        @media (min-width: 1001px) {
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container has-text-centered">
+            <div class="container has-text-centered nf_central">
+                <div class="grid-container has-text-centered" id="div_grid">
+                    <div class="grid-item">
+                        <label>PEDIDO REALIZADO COM SUCESSO!!</br></label>
+                    </div>
+                    <div class="grid-item">
+                        <label id="senha"></label>
+                    </div>
+                    <div class="grid-item">
+                        <label>Para concluir a compra basta realizar o pagamento enviando a sua senha para o contato do whatsapp (11)91234-5678</br> ou apresentar a senha diretamente ao caixa</br></br></br>Muito Obrigado!</label>
+                    </div>
+                </div>
+            </div>
+            </br>
+            </br>
+            </br>
+            <div class="container has-text-centered">
+                <button class="button is-primary is-fullwidth is-large" onclick="passa_pagina()" style="background-color: #ed1c24;">
+                    REALIZAR OUTRO PEDIDO
+                </button>
+            </div>
+    </section>
+    
+    <script>
+        function carrega_dados() {
+            //preenche a tabela com o nome e endereço do cliente
+            let senha = document.getElementById('senha')
+            senha.innerHTML = `SUA SENHA É: ${localStorage.getItem('senha')}`
+            retirada.innerHTML = `${localStorage.getItem('deliveryMode').toUpperCase()}`
+            if (localStorage.getItem('deliveryMode') == 'entrega') {
+                let endereco = document.getElementById('endereco_cliente')
+                let endereco_div = document.getElementById('endereco_cliente_div')
+                endereco.style.display = "";
+                endereco_div.style.display = "";
+                endereco.innerHTML = `${localStorage.getItem('clienteEndereco').toUpperCase()}`
+            }
+            //cria a tabela dos produtos
+            let lista_produtos = localStorage.getItem('lista_prod').split(',')
+            for (let prod of lista_produtos) {
+                let partes = prod.split(' ');
+                let qtd = partes[0].replace('X','');
+                let nome = partes[1];
+                let produto_nome = document.createElement('div');
+                produto_nome.className = 'grid-item';
+                produto_nome.style.fontSize = "20px";
+                produto_nome.innerHTML = `
+                    <label>${nome}</label>
+                `;
+                let produto_qtd = document.createElement('div');
+                produto_qtd.className = 'grid-item';
+                produto_qtd.style.fontSize = "20px";
+                produto_qtd.innerHTML = `
+                    <label>${qtd}</label>
+                `;
+                div_table_prod.appendChild(produto_nome);
+                div_table_prod.appendChild(produto_qtd);
+            }
+            //
+            const valor_total_div = document.createElement('div');
+            valor_total_div.className = 'grid-item';
+            valor_total_div.innerHTML = `
+                <label>VALOR TOTAL: R$${localStorage.getItem('valor_total').replace('.',',')}</label>
+            `;
+            div_table_valor_final.appendChild(valor_total_div);
+
+        }
+        function passa_pagina() {
+            window.location.href = 'final.html'
+        }
+        carrega_dados()
+    </script>
+</body>
+</html>

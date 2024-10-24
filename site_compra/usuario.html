@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuickBuy</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         button {
             background-color: #ffffff; /* Cor de fundo */
@@ -109,12 +111,14 @@
             </div>
             <div class="container has-text-centered">
                 <button class="button is-primary is-fullwidth is-large" onclick="passa_pagina()" style="background-color: #ed1c24;">
-                    SELECIONAR ITENS &rarr;
+                    SELECIONAR ITENS <i class="fas fa-arrow-right" style="margin-left: 1em;"></i>
                 </button>
             </div>
     </section>
     
     <script>
+        // Limpa todo o localStorage
+        localStorage.clear();
         const cor_padrao_btn = '#ffffff';
         let botaoAtivo = null;
         function setDeliveryMode(btn,deliveryMode) {
@@ -141,6 +145,7 @@
             const lbinp = document.getElementById('endereco')
             lb.style.display = "none";
             lbinp.style.display = "none";
+
         }
         function passa_pagina() {
             const nome = document.getElementById('nome');
@@ -150,19 +155,22 @@
                 if (localStorage.getItem('deliveryMode') == 'entrega') {
                     if (endereco.value) {
                         localStorage.setItem('clienteEndereco', endereco.value);
-                        window.location.href = 'produtos.html'
                     }
                     else {
                         endereco.focus()
+                        return
                     }
-                }
-                else {
-                    window.location.href = 'produtos.html'
                 }
             }
             else {
                 nome.focus()
+                return
             }
+            if (!localStorage.getItem('deliveryMode')) {
+                alert("Selecione a forma de retirada")
+                return
+            }
+            window.location.href = 'produtos.html'
         }
     </script>
 </body>
