@@ -28,7 +28,7 @@
             border-radius: 8px; /* Borda arredondada */
         }
         .nf_central {
-            background-color: rgb(201, 201, 201);
+            background-color: #e6edc6;
             border-radius: 5px;
             width: 60%;
             padding: 3em;
@@ -36,10 +36,23 @@
         #nome_cliente, #div_valor_final, #endereco_cliente, #retirada, .produto{
             font-size: 25px;
         }
+        #senha {
+            font-size: 35px;
+        }
+        hr {
+            border: 2px dotted #000000;
+            background-color: transparent;
+        }
         @media(max-width: 800px) {
+            .nf_central {
+                width: 100%;
+            }
         }
         /* Ajuste para telas entre 801px e 1000px */
         @media (min-width: 801px) and (max-width: 1000px) {
+            .nf_central {
+                width: 100%;
+            }
         }
         /* Ajuste para telas grandes (acima de 1000px) */
         @media (min-width: 1001px) {
@@ -52,13 +65,15 @@
             <div class="container has-text-centered nf_central">
                 <div class="grid-container has-text-centered" id="div_grid">
                     <div class="grid-item">
-                        <label>PEDIDO REALIZADO COM SUCESSO!!</br></label>
+                        <label><strong>PEDIDO REALIZADO COM SUCESSO!!</strong> </br></label>
                     </div>
                     <div class="grid-item">
+                        <hr>
                         <label id="senha"></label>
+                        <hr>
                     </div>
                     <div class="grid-item">
-                        <label>Para concluir a compra basta realizar o pagamento enviando a sua senha para o contato do whatsapp (11)91234-5678</br> ou apresentar a senha diretamente ao caixa</br></br></br>Muito Obrigado!</label>
+                        <label>Para concluir sua compra: </br> </br><strong>PARA RETIRAR</strong></br> Apresente a senha diretamente ao caixa e realize o pagamento </br></br><strong>PARA ENTREGA</strong></br>Envie a senha e informe o modo de pagamento para o </br>WhatsApp</label> <a href="https://wa.me/5511920190935" target="_blank">(11)92019-0935</a> </br></br></br>Muito Obrigado!
                     </div>
                 </div>
             </div>
@@ -66,7 +81,7 @@
             </br>
             </br>
             <div class="container has-text-centered">
-                <button class="button is-primary is-fullwidth is-large" onclick="passa_pagina()" style="background-color: #ed1c24;">
+                <button class="button is-primary is-fullwidth is-large" onclick="voltar_home()" style="background-color: #ed1c24;">
                     REALIZAR OUTRO PEDIDO
                 </button>
             </div>
@@ -76,7 +91,7 @@
         function carrega_dados() {
             //preenche a tabela com o nome e endereço do cliente
             let senha = document.getElementById('senha')
-            senha.innerHTML = `SUA SENHA É: ${localStorage.getItem('senha')}`
+            senha.innerHTML = `SUA SENHA: </br> ${localStorage.getItem('senha')}`
             retirada.innerHTML = `${localStorage.getItem('deliveryMode').toUpperCase()}`
             if (localStorage.getItem('deliveryMode') == 'entrega') {
                 let endereco = document.getElementById('endereco_cliente')
@@ -115,8 +130,8 @@
             div_table_valor_final.appendChild(valor_total_div);
 
         }
-        function passa_pagina() {
-            window.location.href = 'final.html'
+        function voltar_home() {
+            window.location.href = 'index.html'
         }
         carrega_dados()
     </script>

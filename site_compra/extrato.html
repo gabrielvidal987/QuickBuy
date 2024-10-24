@@ -57,10 +57,54 @@
             margin-bottom: 1em;
             font-size: 25px;
         }
+        .text-prod {
+            font-size: 20px;
+        }
         @media(max-width: 800px) {
+            #nome_cliente, #div_valor_final, #endereco_cliente, #retirada, .produto{
+                font-size: 25px;
+            }
+            .nf_central {
+                background-color: #e6edc6;
+                border-radius: 5px;
+                width: 100%;
+                padding-top: 3em;
+                padding-bottom: 4em;
+            }
+            .text-prod {
+                font-size: 16px;
+            }
+            #form_pagamento {
+                margin-top: 0.5em;
+                margin-bottom: 1em;
+                font-size: 25px;
+                margin-left: 2.5em;
+                margin-right: 2.5em;
+                background-color: white;
+            }
         }
         /* Ajuste para telas entre 801px e 1000px */
         @media (min-width: 801px) and (max-width: 1000px) {
+            #nome_cliente, #div_valor_final, #endereco_cliente, #retirada, .produto{
+                font-size: 20px;
+            }
+            .nf_central {
+                background-color: #e6edc6;
+                border-radius: 5px;
+                width: 100%;
+                padding-top: 3em;
+                padding-bottom: 4em;
+            }
+            .text-prod {
+                font-size: 20px;
+            }
+            #form_pagamento {
+                margin-top: 0.5em;
+                margin-bottom: 1em;
+                font-size: 25px;
+                margin-left: 2.5em;
+                margin-right: 2.5em;
+            }
         }
         /* Ajuste para telas grandes (acima de 1000px) */
         @media (min-width: 1001px) {
@@ -103,11 +147,11 @@
                 </div>
             </div>
             <div class="container has-text-centered">
-                <button class="button is-primary is-fullwidth is-large" onclick="editar_produtos()" style="background-color: #ed1c24;">
-                    <i class="fas fa-arrow-left" style="margin-right: 1em;"></i>EDITAR PRODUTOS
-                </button>
                 <button class="button is-primary is-fullwidth is-large" onclick="passa_pagina()" style="background-color: #ed1c24;">
                     CONFIRMAR COMPRA <i class="fas fa-arrow-right" style="margin-left: 1em;"></i>
+                </button>
+                <button class="button is-primary is-fullwidth is-large" onclick="editar_produtos()" style="background-color: #ed1c24;">
+                    <i class="fas fa-arrow-left" style="margin-right: 1em;"></i>VOLTAR
                 </button>
             </div>
     </section>
@@ -135,16 +179,14 @@
             for (let prod of lista_produtos) {
                 let partes = prod.split(' ');
                 let qtd = partes[0].replace('X','');
-                let nome = partes[1];
+                let nome = prod.replace(partes[0],'');
                 let produto_nome = document.createElement('div');
-                produto_nome.className = 'grid-item';
-                produto_nome.style.fontSize = "20px";
+                produto_nome.className = 'grid-item text-prod';
                 produto_nome.innerHTML = `
                     <label>${nome}</label>
                 `;
                 let produto_qtd = document.createElement('div');
-                produto_qtd.className = 'grid-item';
-                produto_qtd.style.fontSize = "20px";
+                produto_qtd.className = 'grid-item text-prod';
                 produto_qtd.innerHTML = `
                     <label>${qtd}</label>
                 `;
