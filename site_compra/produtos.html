@@ -22,29 +22,43 @@
         }
 
         input.quantity {
-            width: 60px; /* Largura do input */
+            width: 60%; /* Largura do input */
             text-align: center; /* Centraliza o texto */
             padding: 10px; /* Padding do input */
             border: 1px solid #ccc; /* Borda do input */
             border-radius: 5px; /* Borda arredondada */
             margin: 0 10px; /* Margem horizontal entre o input e os botões */
             font-size: 16px; /* Tamanho da fonte */
+            
+        }
+        .btnoper {
+            height: 2.5em;
+            width: 2.5em;
+            background-color: #fbc806;
+            color: #000000;
+            font-weight: bold;
         }
         @media(max-width: 800px) {
             #cards-container .column {
                 flex: 0 0 100%; /* Dois itens por linha */
                 max-width: 100%; /* Limita a largura máxima */
             }
+            .btnoper {
+                height: 3em;
+                width: 3em;
+            }
             input.quantity {
-                width: 60%;
+                width: 40%;
+                height: 3em;
+                font-weight: bold;
             }
             .card .title {
-                font-size: 5em; /* Tamanho da fonte do título */
+                font-size: 3em; /* Tamanho da fonte do título */
                 font-weight: bold; /* Negrito */
                 color: #313131; /* Cor do texto */
             }
             .card .subtitle {
-                font-size: 3em; /* Tamanho da fonte do subtítulo */
+                font-size: 2em; /* Tamanho da fonte do subtítulo */
                 color: #666; /* Cor do texto */
             }
             .card {
@@ -137,14 +151,6 @@
     </style>
 </head>
 <body>
-    <nav class="navbar is-primary">
-        <div class="container has-text-centered">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="#">QuickBuy</a>
-            </div>
-        </div>
-    </nav>
-    
     <section class="section">
         <div class="container">
             <div class="columns is-multiline" id="cards-container">
@@ -154,21 +160,15 @@
     </section>
     <section class="section">
         <div class="container has-text-centered">
-            <button class="button is-primary is-fullwidth is-large">
+            <button class="button is-primary is-fullwidth is-large" style="background-color: #ed1c24" onclick="passa_pagina()">
                 PROSSEGUIR COM A COMPRA
             </button>
         </div>
     </section>
-
-    <footer class="footer">
-        <div class="content has-text-centered">
-            <p>&copy; 2024 Meu Site</p>
-        </div>
-    </footer>
-    
     <script>
-        const urlServ = 'http://localhost:3000';
-        document.addEventListener('DOMContentLoaded', () => {
+        // const urlServ = 'http://localhost:3000';
+        const urlServ = 'http://192.168.1.3:3000';
+        function load_itens() {
             const cardsContainer = document.getElementById('cards-container');
             const usuario_venda = 'desbravadores';
             fetch(`${urlServ}/api/produtos/${usuario_venda}`)
@@ -189,14 +189,14 @@
                             <div class="card">
                                 <div class="card-content">
                                     <p class="title">${item.nome}</p>
-                                    <p class="subtitle">${item.valor}</p>
+                                    <p class="subtitle">R$${item.valor.replace(".", ",")}</p>
                                     <img src="food_ico.png" alt="${item.nome}">
                                 </div>
                                 <div class="card-content">
                                     <div class="quantity-control">
-                                        <button class="decrement" onclick="alterar_valor('${item.nome}','subtrair')">-</button>
+                                        <button class="btnoper decrement" onclick="alterar_valor('${item.nome}','subtrair')">-</button>
                                         <input type="number" class="quantity" value="0" id="qtd_${item.nome}" readonly>
-                                        <button class="increment" onclick="alterar_valor('${item.nome}','somar')">+</button>
+                                        <button class="btnoper increment" onclick="alterar_valor('${item.nome}','somar')">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -206,8 +206,7 @@
                 }
             })
             .catch(error => console.error('Erro ao buscar os dados:', error));
-            
-        });
+        }
         // função para alterar a quantidade
         function alterar_valor(item_nome,operacao) {
             var qtd = document.getElementById(`qtd_${item_nome}`)
@@ -221,6 +220,10 @@
                 qtd.value = valorAtual + 1; // Incrementa
             }
         };
+        function passa_pagina() {
+            
+        }
+        load_itens()
     </script>
 </body>
 </html>
