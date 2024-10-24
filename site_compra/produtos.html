@@ -236,7 +236,7 @@
             var valor_total = 0;
             for (let card of cardsContainer.children) {
                 let nome_prod = card.querySelector('.title').textContent
-                let valor_prod = card.querySelector('.subtitle').textContent.replace('R$','')
+                let valor_prod = card.querySelector('.subtitle').textContent.replace('R$','').replace(',','.')
                 let qtd_prod = card.querySelector('.quantity').value
                 if (qtd_prod == 0) {continue;}
                 valor_total += (parseFloat(valor_prod) * parseFloat(qtd_prod))
