@@ -157,6 +157,7 @@
     </section>
     
     <script>
+        const urlServ = 'http://localhost:3000';
         function carrega_dados() {
             //preenche a tabela com o nome e endereço do cliente
             let nome = document.getElementById('nome_cliente')
@@ -204,8 +205,44 @@
         }
         function passa_pagina() {
             localStorage.setItem('pagamento',document.getElementById('form_pagamento').value)
-            console.log(localStorage.getItem('pagamento'))
-            window.location.href = 'final.html'
+            let data_atual = new Date();
+            const hora = String(data_atual.getHours()).padStart(2, '0'); // Hora
+            const minuto = String(data_atual.getMinutes()).padStart(2, '0'); // Minuto
+            const segundo = String(data_atual.getSeconds()).padStart(2, '0'); // Segundo
+            const hora_pedido = `${hora}:${minuto}:${segundo}`
+            const data = {
+                usuario: localStorage.getItem('usuario'),
+                deliveryMode: localStorage.getItem('deliveryMode'),
+                clienteNome: localStorage.getItem('clienteNome'),
+                clienteEndereco: localStorage.getItem('clienteEndereco'),
+                lista_prod: localStorage.getItem('lista_prod'),
+                valor_total: localStorage.getItem('valor_total'),
+                obs: localStorage.getItem('obs'),
+                pagamento: localStorage.getItem('pagamento'),
+                hora_pedido: hora_pedido
+            };
+            fetch(`${urlServ}/api/pedido`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao enviar pedido');
+                    alert('Erro ao enviar pedido')
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                localStorage.setItem('senha_pedido',data.produtoId)
+                window.location.href = 'final.html'
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
         function editar_produtos() {
             window.location.href = 'produtos.html'

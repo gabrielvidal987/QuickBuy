@@ -35,17 +35,25 @@ app.get('/api/produtos/:usuario_nome', (req, res) => {
     });
 });
 
-// Endpoint para inserir um novo produto
-app.post('/api/produtos', (req, res) => {
-    const { nome_cliente, endereco, produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario,delivery,pagamento_aprovado } = req.body;
-    // Validando se todos os campos estão presentes
-    const sql = `INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario,delivery,pagamento_aprovado) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', '{data}', {valor},'{formaPag}',{valor},'${usuarios}',{delivery},{pagamento_efetuado});`
+// Endpoint para inserir um novo pedido
+app.post('/api/pedido', (req, res) => {
+    let { usuario, deliveryMode, clienteNome, clienteEndereco, lista_prod, valor_total, obs, pagamento, hora_pedido } = req.body;
+    if (deliveryMode == "entrega") 
+    {
+        deliveryMode = 1
+    }
+    else 
+    {
+        deliveryMode = 0
+    }
+    const sql = `INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario,delivery,pagamento_aprovado) VALUES('${clienteNome}','${clienteEndereco}', '${lista_prod}', '${obs}', '${hora_pedido}', ${valor_total},'${pagamento}',${valor_total},'${usuario}',${deliveryMode},false);`
+    console.log(`SQL DO PEDIDO: ${sql}`)
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Erro ao inserir produto no banco de dados:', err);
             return res.status(500).json({ error: 'Erro no servidor' });
         }
-        // Responde com uma mensagem de sucesso e o ID do novo produto
+        console.log(`PEDIDO CADASTRADO COM SUCESSO!!\n\n`)
         res.status(201).json({ message: 'Produto inserido com sucesso', produtoId: result.insertId });
     });
 });

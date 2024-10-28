@@ -91,7 +91,7 @@
         function carrega_dados() {
             //preenche a tabela com o nome e endereço do cliente
             let senha = document.getElementById('senha')
-            senha.innerHTML = `SUA SENHA: </br> ${localStorage.getItem('senha')}`
+            senha.innerHTML = `SUA SENHA: </br> ${localStorage.getItem('senha_pedido')}`
             retirada.innerHTML = `${localStorage.getItem('deliveryMode').toUpperCase()}`
             if (localStorage.getItem('deliveryMode') == 'entrega') {
                 let endereco = document.getElementById('endereco_cliente')
