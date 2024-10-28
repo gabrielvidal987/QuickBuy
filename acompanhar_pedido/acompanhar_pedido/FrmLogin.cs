@@ -112,8 +112,13 @@ namespace acompanhar_pedido
             resultConexao.Text = "";
             try
             {
-                string json = File.ReadAllText("last_conn_json.json");
-                var config = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                Dictionary<string, string> config = new Dictionary<string, string>()
+                {
+                    { "server", "localhost" },
+                    { "uid", "root"},
+                    { "pwd", "Vid@l9871"},
+                    { "database", "acompanha_pedidosschema" }
+                };
                 Dictionary<string, string> conn = new Dictionary<string, string>()
                 {
                     { "server", string.IsNullOrEmpty(server.Text) ? config["server"] : server.Text },
@@ -121,6 +126,19 @@ namespace acompanhar_pedido
                     { "pwd", string.IsNullOrEmpty(password.Text) ? config["pwd"] : password.Text },
                     { "database", string.IsNullOrEmpty(database.Text) ? config["database"] : database.Text }
                 };
+                try
+                {
+                    string json = File.ReadAllText("last_conn_json.json");
+                    config = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    conn = new Dictionary<string, string>()
+                    {
+                        { "server", string.IsNullOrEmpty(server.Text) ? config["server"] : server.Text },
+                        { "uid", string.IsNullOrEmpty(uid.Text) ? config["uid"] : uid.Text },
+                        { "pwd", string.IsNullOrEmpty(password.Text) ? config["pwd"] : password.Text },
+                        { "database", string.IsNullOrEmpty(database.Text) ? config["database"] : database.Text }
+                    };
+                }
+                catch {}
                 ConectarSqlClasse.AtualizarDicionario(conn);
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 string res_conn = $"{sql.ConectDataBase()}";
@@ -149,9 +167,9 @@ namespace acompanhar_pedido
                     resultConexao.Text += res_conn;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                resultConexao.Text += "Conexão sem sucesso....";
+                resultConexao.Text += $"Conexão sem sucesso.... {ex}";
             }
 
         }
