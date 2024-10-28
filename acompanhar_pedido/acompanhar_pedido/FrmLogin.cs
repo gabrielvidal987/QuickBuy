@@ -57,7 +57,8 @@ namespace acompanhar_pedido
                     txtSenha.Focus();
                     return;
                 }
-                File.WriteAllText("Usuario.TXT", txtSenha.Text);
+                string caminho_usuario = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "Usuario.TXT");
+                File.WriteAllText(caminho_usuario, txtSenha.Text);
                 VariaveisGlobais.LerNomeArquivo();
                 this.Close();
                 t1 = new Thread(abrirMenu);
@@ -128,7 +129,8 @@ namespace acompanhar_pedido
                 };
                 try
                 {
-                    string json = File.ReadAllText("last_conn_json.json");
+                    string caminho_json = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "last_conn_json.json");
+                    string json = File.ReadAllText(caminho_json);
                     config = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
                     conn = new Dictionary<string, string>()
                     {
@@ -150,7 +152,8 @@ namespace acompanhar_pedido
                         config[key_value_pair.Key] = key_value_pair.Value;
                     }
                     string newJson = JsonConvert.SerializeObject(config, Formatting.Indented);
-                    File.WriteAllText("last_conn_json.json", newJson);
+                    string caminho_json = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "last_conn_json.json");
+                    File.WriteAllText(caminho_json, newJson);
 
                     resultConexao.Text += res_conn;
                     txtSenha.Enabled = true;

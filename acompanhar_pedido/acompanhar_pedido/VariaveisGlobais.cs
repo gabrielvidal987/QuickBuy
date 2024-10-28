@@ -20,14 +20,14 @@ namespace acompanhar_pedido
         {
             try
             {
-                string conteudo = File.ReadAllText("Usuario.TXT");
+                string caminho_usuario = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "Usuario.TXT");
+                string conteudo = File.ReadAllText(caminho_usuario);
                 try { Usuario = conteudo.Split('\n')[0]; } catch { Usuario = conteudo; }
             }
             catch (Exception er)
             {
-                MessageBox.Show("Não encontrado TXT de usuarios. Informe ao desenvolvedor. Programa será fechado!");
+                MessageBox.Show("Não encontrado TXT de usuarios. Informe ao desenvolvedor!");
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.TargetSite.ToString(), er.Message);
-                Application.Exit();
             }
         }
         

@@ -383,7 +383,6 @@ C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\aco
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.csproj.CoreCompileInputs.cache
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.exe.manifest
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.application
-C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.csproj.CopyComplete
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.exe
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.pdb
 C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.FrmLogin.resources
@@ -467,3 +466,4 @@ C:\Users\Gaba_Pam\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug
 C:\Users\Gaba_Pam\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.csproj.CopyComplete
 C:\Users\Gaba_Pam\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.exe
 C:\Users\Gaba_Pam\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanhar_pedido.pdb
+C:\Users\AP26\Desktop\QuickBuy\acompanhar_pedido\acompanhar_pedido\obj\Debug\acompanh.6433FC07.Up2Date

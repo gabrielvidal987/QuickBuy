@@ -39,9 +39,8 @@ namespace acompanhar_pedido
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                string nomeClube = File.ReadAllText("Usuario.TXT");
-                string imagem_clube = sql.FotoClube(nomeClube);
-                if (imagem_clube != "")
+                string imagem_clube = sql.FotoClube(VariaveisGlobais.Usuario);
+                if (!string.IsNullOrEmpty(imagem_clube) )
                 {
                     fotoClube.ImageLocation = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_usuario",imagem_clube);
                 }
