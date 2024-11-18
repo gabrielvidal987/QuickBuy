@@ -545,14 +545,6 @@ namespace acompanhar_pedido.teste
         {
             try { Application.Run(new historico_pedidos()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
-        private void filtraProd_Tick(object sender, EventArgs e)
-        {
-            if(pcholdBuscaProd.Text != texto_filtra)
-            {
-                texto_filtra = pcholdBuscaProd.Text;
-                CarregaBotoes();
-            }
-        }
         private void pcholdEndereco_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)

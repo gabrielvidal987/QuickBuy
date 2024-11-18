@@ -294,8 +294,6 @@ namespace acompanhar_pedido.botoes
                 button1.Width = flowLayoutPanel2.Width - 10;
                 tabelaVendas.Width = flowLayoutPanel2.Width - 10;
                 tabelaVendas.Height = flowLayoutPanel2.Height - 160;
-
-                ConectarSqlClasse sql = new ConectarSqlClasse();
                 entradas.Text = entradaTotal.ToString("F");
                 if (saidas.Text != "")
                 {

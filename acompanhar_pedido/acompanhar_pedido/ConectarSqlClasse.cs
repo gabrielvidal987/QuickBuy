@@ -81,8 +81,7 @@ namespace acompanhar_pedido
             }
             catch
             {
-                MessageBox.Show("Erro ao gerar log e enviar para BD. \n\nContactar Administrador e verificar conexão com internet e BD","ATENÇÃO!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult acesso_retornado = MessageBox.Show("O acesso ao Banco de Dados foi reestabelecido?\nSe for marcado 'NÃO' o programa será fechado","Confirmação",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                DialogResult acesso_retornado = MessageBox.Show("Erro ao gerar log e enviar para BD. \n\nContactar Administrador e verificar conexão com internet e BD\n\nO acesso ao Banco de Dados foi reestabelecido?\nSe for marcado 'NÃO' o programa será fechado", "Confirmação",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
                 if (acesso_retornado == DialogResult.Yes)
                 {
                     return true;

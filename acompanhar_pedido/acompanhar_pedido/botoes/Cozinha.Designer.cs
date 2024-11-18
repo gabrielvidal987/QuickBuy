@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cozinha));
             this.lbpendentes = new System.Windows.Forms.Label();
-            this.tPedPronto = new System.Windows.Forms.Timer(this.components);
             this.lbprontos = new System.Windows.Forms.Label();
             this.setaEntrada = new System.Windows.Forms.PictureBox();
             this.setaSaida = new System.Windows.Forms.PictureBox();
@@ -60,11 +59,6 @@
             this.lbpendentes.TabIndex = 1;
             this.lbpendentes.Text = "PENDENTES:";
             this.lbpendentes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tPedPronto
-            // 
-            this.tPedPronto.Enabled = true;
-            this.tPedPronto.Interval = 10000;
             // 
             // lbprontos
             // 
@@ -207,7 +201,6 @@
 
         private DoubleBufferedFlowLayoutPanel pnlGeral;
         private System.Windows.Forms.Label lbpendentes;
-        private System.Windows.Forms.Timer tPedPronto;
         private DoubleBufferedFlowLayoutPanel pnlAnt;
         private System.Windows.Forms.Label lbprontos;
         private System.Windows.Forms.PictureBox setaEntrada;

@@ -111,6 +111,11 @@ namespace acompanhar_pedido
         private void testConexaobtn_Click(object sender, EventArgs e)
         {
             resultConexao.Text = "";
+            server.Enabled = false;
+            uid.Enabled = false;
+            password.Enabled = false;
+            database.Enabled = false;
+            testConexaobtn.Enabled = false;
             try
             {
                 Dictionary<string, string> config = new Dictionary<string, string>()
@@ -173,6 +178,11 @@ namespace acompanhar_pedido
             catch (Exception ex)
             {
                 resultConexao.Text += $"Conexão sem sucesso.... {ex}";
+                server.Enabled = true;
+                uid.Enabled = true;
+                password.Enabled = true;
+                database.Enabled = true;
+                testConexaobtn.Enabled = true;
             }
 
         }

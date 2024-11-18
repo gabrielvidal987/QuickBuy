@@ -157,8 +157,15 @@ namespace acompanhar_pedido
                 lbProntos.Text = sql.QtdProntos();
                 lbTotal.Text = $"R${sql.ValorTotal()}";
             }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-            
+            catch (Exception er) 
+            {
+                timer2.Stop();
+                bool sucess_log = ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                if (sucess_log)
+                {
+                    timer2.Start();
+                }
+            }
         }
         private void abrirCozinha(object obj)
         {    

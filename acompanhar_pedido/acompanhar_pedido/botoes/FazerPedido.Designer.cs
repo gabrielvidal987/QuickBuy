@@ -30,7 +30,6 @@ namespace acompanhar_pedido.teste
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FazerPedido));
             this.imprimir = new System.Windows.Forms.CheckBox();
             this.btnReset = new System.Windows.Forms.Button();
@@ -50,7 +49,6 @@ namespace acompanhar_pedido.teste
             this.impressora = new System.Drawing.Printing.PrintDocument();
             this.label5 = new System.Windows.Forms.Label();
             this.btnHist = new System.Windows.Forms.Button();
-            this.filtraProd = new System.Windows.Forms.Timer(this.components);
             this.pnlGeral = new acompanhar_pedido.botoes.DoubleBufferedFlowLayoutPanel();
             this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdEndereco = new acompanhar_pedido.PlaceHolderTextBox();
@@ -299,10 +297,6 @@ namespace acompanhar_pedido.teste
             this.btnHist.UseVisualStyleBackColor = false;
             this.btnHist.Click += new System.EventHandler(this.btnHist_Click);
             // 
-            // filtraProd
-            // 
-            this.filtraProd.Tick += new System.EventHandler(this.filtraProd_Tick);
-            // 
             // pnlGeral
             // 
             this.pnlGeral.AutoScroll = true;
@@ -431,7 +425,6 @@ namespace acompanhar_pedido.teste
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnHist;
         private PlaceHolderTextBox pcholdBuscaProd;
-        private System.Windows.Forms.Timer filtraProd;
         private System.Windows.Forms.CheckBox delivery;
         private System.Windows.Forms.CheckBox pagamento_efetuado;
     }
