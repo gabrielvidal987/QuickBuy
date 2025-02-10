@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Produtos));
             this.pnlCadProd = new System.Windows.Forms.Panel();
+            this.categoria_box = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.valorNumerico = new System.Windows.Forms.NumericUpDown();
             this.btnCadProd = new System.Windows.Forms.Button();
             this.lbCadProd = new System.Windows.Forms.Label();
@@ -50,6 +52,8 @@
             // pnlCadProd
             // 
             this.pnlCadProd.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlCadProd.Controls.Add(this.categoria_box);
+            this.pnlCadProd.Controls.Add(this.label3);
             this.pnlCadProd.Controls.Add(this.valorNumerico);
             this.pnlCadProd.Controls.Add(this.btnCadProd);
             this.pnlCadProd.Controls.Add(this.lbCadProd);
@@ -57,10 +61,33 @@
             this.pnlCadProd.Controls.Add(this.label1);
             this.pnlCadProd.Controls.Add(this.pcholdNomeProd);
             this.pnlCadProd.Controls.Add(this.fotoProd);
-            this.pnlCadProd.Location = new System.Drawing.Point(1036, 42);
+            this.pnlCadProd.Location = new System.Drawing.Point(1036, 22);
             this.pnlCadProd.Name = "pnlCadProd";
-            this.pnlCadProd.Size = new System.Drawing.Size(241, 467);
+            this.pnlCadProd.Size = new System.Drawing.Size(241, 479);
             this.pnlCadProd.TabIndex = 20;
+            // 
+            // categoria_box
+            // 
+            this.categoria_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.categoria_box.FormattingEnabled = true;
+            this.categoria_box.Items.AddRange(new object[] {
+            "Hamburgueres",
+            "Pizzas",
+            "Bebidas",
+            "Gelados"});
+            this.categoria_box.Location = new System.Drawing.Point(24, 223);
+            this.categoria_box.Name = "categoria_box";
+            this.categoria_box.Size = new System.Drawing.Size(189, 33);
+            this.categoria_box.TabIndex = 29;
+            // 
+            // label3
+            // 
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label3.Location = new System.Drawing.Point(68, 197);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(115, 23);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "CATEGORIA:";
             // 
             // valorNumerico
             // 
@@ -71,7 +98,7 @@
             0,
             0,
             131072});
-            this.valorNumerico.Location = new System.Drawing.Point(77, 186);
+            this.valorNumerico.Location = new System.Drawing.Point(77, 162);
             this.valorNumerico.Name = "valorNumerico";
             this.valorNumerico.Size = new System.Drawing.Size(85, 30);
             this.valorNumerico.TabIndex = 2;
@@ -83,11 +110,11 @@
             this.btnCadProd.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCadProd.Font = new System.Drawing.Font("Impact", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCadProd.ForeColor = System.Drawing.Color.Snow;
-            this.btnCadProd.Location = new System.Drawing.Point(37, 401);
+            this.btnCadProd.Location = new System.Drawing.Point(24, 441);
             this.btnCadProd.Margin = new System.Windows.Forms.Padding(0);
             this.btnCadProd.Name = "btnCadProd";
             this.btnCadProd.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnCadProd.Size = new System.Drawing.Size(166, 50);
+            this.btnCadProd.Size = new System.Drawing.Size(214, 50);
             this.btnCadProd.TabIndex = 3;
             this.btnCadProd.Text = "CADASTRAR";
             this.btnCadProd.UseVisualStyleBackColor = false;
@@ -107,7 +134,7 @@
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label2.Location = new System.Drawing.Point(88, 160);
+            this.label2.Location = new System.Drawing.Point(88, 136);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 23);
             this.label2.TabIndex = 24;
@@ -116,7 +143,7 @@
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label1.Location = new System.Drawing.Point(57, 101);
+            this.label1.Location = new System.Drawing.Point(57, 77);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(117, 23);
             this.label1.TabIndex = 23;
@@ -126,7 +153,7 @@
             // 
             this.pcholdNomeProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Italic);
             this.pcholdNomeProd.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdNomeProd.Location = new System.Drawing.Point(24, 127);
+            this.pcholdNomeProd.Location = new System.Drawing.Point(24, 103);
             this.pcholdNomeProd.Name = "pcholdNomeProd";
             this.pcholdNomeProd.PlaceHolderText = null;
             this.pcholdNomeProd.Size = new System.Drawing.Size(189, 30);
@@ -135,16 +162,16 @@
             // 
             // fotoProd
             // 
-            this.fotoProd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("fotoProd.BackgroundImage")));
-            this.fotoProd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.fotoProd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.fotoProd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fotoProd.Cursor = System.Windows.Forms.Cursors.Hand;
             this.fotoProd.ErrorImage = ((System.Drawing.Image)(resources.GetObject("fotoProd.ErrorImage")));
+            this.fotoProd.Image = ((System.Drawing.Image)(resources.GetObject("fotoProd.Image")));
             this.fotoProd.InitialImage = ((System.Drawing.Image)(resources.GetObject("fotoProd.InitialImage")));
-            this.fotoProd.Location = new System.Drawing.Point(37, 234);
+            this.fotoProd.Location = new System.Drawing.Point(24, 287);
             this.fotoProd.Name = "fotoProd";
-            this.fotoProd.Size = new System.Drawing.Size(166, 140);
-            this.fotoProd.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.fotoProd.Size = new System.Drawing.Size(214, 150);
+            this.fotoProd.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.fotoProd.TabIndex = 27;
             this.fotoProd.TabStop = false;
             this.fotoProd.Click += new System.EventHandler(this.fotoProd_Click);
@@ -183,7 +210,7 @@
             this.impListProd.Margin = new System.Windows.Forms.Padding(0);
             this.impListProd.Name = "impListProd";
             this.impListProd.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.impListProd.Size = new System.Drawing.Size(166, 50);
+            this.impListProd.Size = new System.Drawing.Size(214, 50);
             this.impListProd.TabIndex = 37;
             this.impListProd.Text = "IMPRIMIR LISTA DE PRODUTOS";
             this.impListProd.UseVisualStyleBackColor = false;
@@ -232,5 +259,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button impListProd;
         private System.Drawing.Printing.PrintDocument impressora;
+        private System.Windows.Forms.ComboBox categoria_box;
+        private System.Windows.Forms.Label label3;
     }
 }

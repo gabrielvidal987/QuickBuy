@@ -176,7 +176,7 @@ namespace acompanhar_pedido.botoes
                         ind_btn++;
                     }
                 }
-                else { MessageBox.Show("Sem pedidos registrados ainda!!"); }
+                else { MessageBox.Show("Sem pedidos com pagamento pendentes!!"); }
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }

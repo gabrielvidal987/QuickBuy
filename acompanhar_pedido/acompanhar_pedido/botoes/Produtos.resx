@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="fotoProd.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="fotoProd.ErrorImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EAAACxABrSO9dQAABupJREFUeF7tnUnoHEUcheOSxBVFIolHjRER1KuCSUQQFZdLENxOehLxKEIERT0p
+        DAAACwwBP0AiyAAABupJREFUeF7tnUnoHEUcheOSxBVFIolHjRER1KuCSUQQFZdLENxOehLxKEIERT0p
         EuKWHPTohnhQb4pK0ATccQMv4ikRt4sKCkHU90gKJzWvl5nurq6afh98l6SX6vq97qru6Zn/GmOMMcYY
         Y4wxxhhjjDHGGGOMMcYYY8xEOR5ugdvgzTZLWRvW6DjYGxfAvfAH+K8twkOQNWMYlmY9fAoehmonNn9Z
         u92QtVyIs+EBqDZqy3M/3ABbsRbug2pDtlx5Qre6EjwJ1QZs+XI4qIUTvqox/0t4K9wITZ5sgrfBr6Cq
@@ -154,10 +154,10 @@
         rkJggg==
 </value>
   </data>
-  <data name="fotoProd.ErrorImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="fotoProd.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DAAACwwBP0AiyAAABupJREFUeF7tnUnoHEUcheOSxBVFIolHjRER1KuCSUQQFZdLENxOehLxKEIERT0p
+        EAAACxABrSO9dQAABupJREFUeF7tnUnoHEUcheOSxBVFIolHjRER1KuCSUQQFZdLENxOehLxKEIERT0p
         EuKWHPTohnhQb4pK0ATccQMv4ikRt4sKCkHU90gKJzWvl5nurq6afh98l6SX6vq97qru6Zn/GmOMMcYY
         Y4wxxhhjjDHGGGOMMcYYY8xEOR5ugdvgzTZLWRvW6DjYGxfAvfAH+K8twkOQNWMYlmY9fAoehmonNn9Z
         u92QtVyIs+EBqDZqy3M/3ABbsRbug2pDtlx5Qre6EjwJ1QZs+XI4qIUTvqox/0t4K9wITZ5sgrfBr6Cq

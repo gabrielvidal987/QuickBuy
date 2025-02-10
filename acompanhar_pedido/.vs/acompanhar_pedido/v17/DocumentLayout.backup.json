@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|c:\\users\\ap26\\desktop\\quickbuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\fazerpedido.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|solutionrelative:acompanhar_pedido\\botoes\\fazerpedido.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|c:\\users\\ap26\\desktop\\quickbuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\fazerpedido.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|solutionrelative:acompanhar_pedido\\botoes\\fazerpedido.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|c:\\users\\ap26\\desktop\\quickbuy\\acompanhar_pedido\\acompanhar_pedido\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|solutionrelative:acompanhar_pedido\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|c:\\users\\ap26\\desktop\\quickbuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\produtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|solutionrelative:acompanhar_pedido\\botoes\\produtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\conectarsqlclasse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -26,17 +22,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "ConectarSqlClasse.cs",
               "DocumentMoniker": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\ConectarSqlClasse.cs",
               "RelativeDocumentMoniker": "acompanhar_pedido\\ConectarSqlClasse.cs",
               "ToolTip": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\ConectarSqlClasse.cs",
               "RelativeToolTip": "acompanhar_pedido\\ConectarSqlClasse.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAwwFMAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAFsCAAAAAAAAAAAAwFMCAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-28T14:30:53.362Z",
               "IsPinned": true,
@@ -44,40 +40,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FazerPedido.cs",
-              "DocumentMoniker": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\FazerPedido.cs",
-              "RelativeDocumentMoniker": "acompanhar_pedido\\botoes\\FazerPedido.cs",
-              "ToolTip": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\FazerPedido.cs",
-              "RelativeToolTip": "acompanhar_pedido\\botoes\\FazerPedido.cs",
-              "ViewState": "AgIAAAkCAAAAAAAAAIA7wBUCAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T18:50:29.248Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "FazerPedido.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\FazerPedido.cs",
-              "RelativeDocumentMoniker": "acompanhar_pedido\\botoes\\FazerPedido.cs",
-              "ToolTip": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\FazerPedido.cs [Design]",
-              "RelativeToolTip": "acompanhar_pedido\\botoes\\FazerPedido.cs [Design]",
+              "Title": "Produtos.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\Produtos.cs",
+              "RelativeDocumentMoniker": "acompanhar_pedido\\botoes\\Produtos.cs",
+              "ToolTip": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\Produtos.cs [Design]",
+              "RelativeToolTip": "acompanhar_pedido\\botoes\\Produtos.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T18:50:26.418Z",
+              "WhenOpened": "2025-02-10T14:15:36.778Z",
               "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Menu.cs",
               "DocumentMoniker": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\Menu.cs",
               "RelativeDocumentMoniker": "acompanhar_pedido\\Menu.cs",
               "ToolTip": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\Menu.cs",
               "RelativeToolTip": "acompanhar_pedido\\Menu.cs",
-              "ViewState": "AgIAAIIAAAAAAAAAAAAjwJYAAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAALcAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T18:45:57.423Z",
+              "WhenOpened": "2025-02-10T13:37:20.601Z",
               "EditorCaption": ""
             }
           ]

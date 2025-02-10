@@ -29,7 +29,6 @@ namespace acompanhar_pedido.teste
         string nf;
         Thread t1;
         string texto_filtra = "";
-        Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"food_ico.png"));
         public FazerPedido()
         {
             InitializeComponent();
@@ -389,24 +388,28 @@ namespace acompanhar_pedido.teste
                     fotoProd.BackColor = Color.FromArgb(255, 255, 255);
                     fotoProd.Size = new Size(186, 105);
                     fotoProd.BorderStyle = BorderStyle.FixedSingle;
-                    fotoProd.SizeMode = PictureBoxSizeMode.StretchImage;
+                    fotoProd.SizeMode = PictureBoxSizeMode.CenterImage;
                     try
                     {
                         if (item["caminho_foto"] != "semFoto.png")
                         {
                             Image myimage = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", item["caminho_foto"]));
-                            fotoProd.BackgroundImage = myimage;
+                            myimage = new Bitmap(myimage, fotoProd.Width - 40, fotoProd.Height - 40);
+                            fotoProd.Image = myimage;
                         }
                         else
                         {
+                            Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{item["categoria"]}.png"));
+                            food_ico = new Bitmap(food_ico, fotoProd.Width - 40, fotoProd.Height - 40);
                             fotoProd.Image = food_ico;
                         }
                     }
                     catch 
                     {
+                        Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{item["categoria"]}.png"));
+                        food_ico = new Bitmap(food_ico, fotoProd.Width - 40, fotoProd.Height - 40);
                         fotoProd.Image = food_ico;
                     }
-                    fotoProd.BackgroundImageLayout = ImageLayout.Stretch;
                     fotoProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     pnlGeral.Controls.Add(btn);
                     btn.Controls.Add(nomeProd);
@@ -416,7 +419,7 @@ namespace acompanhar_pedido.teste
             }
             catch (Exception er)
             {
-                MessageBox.Show("Erro ao carregar janela de pedidos. \n Erro: " + er);
+                MessageBox.Show("Erro ao carregar produtos. \n Erro: " + er);
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
             finally
@@ -533,13 +536,23 @@ namespace acompanhar_pedido.teste
         }
         private void btnHist_Click(object sender, EventArgs e)
         {
-            try
+            ConectarSqlClasse sql = new ConectarSqlClasse();
+            List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed(false));
+            if (filaPedidos.Count > 0)
             {
-                t1 = new Thread(hist_pedidos);
-                t1.SetApartmentState(ApartmentState.STA);
-                t1.Start();
+                int ind_btn = 0;
+                foreach (Dictionary<string, string> i in filaPedidos)
+                {
+                    try
+                    {
+                        t1 = new Thread(hist_pedidos);
+                        t1.SetApartmentState(ApartmentState.STA);
+                        t1.Start();
+                    }
+                    catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+                }
             }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+            else { MessageBox.Show("Sem pedidos registrados ainda!!"); }
         }
         private void hist_pedidos(object obj)
         {

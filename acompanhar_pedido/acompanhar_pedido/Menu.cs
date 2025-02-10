@@ -102,11 +102,21 @@ namespace acompanhar_pedido
         {
             try
             {
-                t1 = new Thread(abrirPagamento);
-                t1.SetApartmentState(ApartmentState.STA);
-                t1.Start();
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed(true));
+                if (filaPedidos.Count > 0)
+                {
+                    try
+                    {
+                        t1 = new Thread(abrirPagamento);
+                        t1.SetApartmentState(ApartmentState.STA);
+                        t1.Start();
+                    }
+                    catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+                }
+                else { MessageBox.Show("Sem pedidos com pagamento pendentes!!"); }
             }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
         private void btnProdutos_Click(object sender, EventArgs e)
         {
@@ -191,8 +201,12 @@ namespace acompanhar_pedido
         }
         private void abrirFila(object obj)
         {
-            try { Application.Run(new Fila()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-            
+            ConectarSqlClasse sql = new ConectarSqlClasse();
+            if (sql.QtdPreparando() != "0")
+            {
+                try { Application.Run(new Fila()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+            }
+            else { MessageBox.Show("Sem pedidos registrados!", "Atenção"); }
         }
         private void tbnMusic_Click(object sender, EventArgs e)
         {

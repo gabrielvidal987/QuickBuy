@@ -94,7 +94,7 @@ namespace acompanhar_pedido
             return true;
         }
         //insere produto na tabela de produtos
-        public string InsertProduto(string nome, string valor, string caminho, string nomeOriginal)
+        public string InsertProduto(string nome, string valor, string caminho, string nomeOriginal, string categoria)
         {
             string retorno = "Ocorreu um erro, nada foi realizado";
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -105,7 +105,7 @@ namespace acompanhar_pedido
                 {
                     if (nomeOriginal != null && nomeOriginal != "") 
                     {
-                        string comando_insere = $"UPDATE produtos SET nome = '{nome}', valor = {valor} where nome = '{nomeOriginal}' AND usuario = '{VariaveisGlobais.Usuario}';";
+                        string comando_insere = $"UPDATE produtos SET nome = '{nome}', valor = {valor}, categoria = {categoria} where nome = '{nomeOriginal}' AND usuario = '{VariaveisGlobais.Usuario}';";
                         MySqlCommand insere = new MySqlCommand(comando_insere, conexao, transaction);
                         insere.ExecuteNonQuery();
                         retorno = $"Produto {nomeOriginal} alterado com sucesso!!";
@@ -115,7 +115,7 @@ namespace acompanhar_pedido
                     {
                         try
                         {
-                            string comando_insere = $"INSERT INTO produtos(nome,valor, caminho_foto,usuario) VALUES('{nome}',{valor},'{caminho}','{VariaveisGlobais.Usuario}');";
+                            string comando_insere = $"INSERT INTO produtos(nome,valor, caminho_foto, usuario, categoria) VALUES('{nome}',{valor},'{caminho}','{VariaveisGlobais.Usuario}','{categoria}');";
                             MySqlCommand insere = new MySqlCommand(comando_insere, conexao, transaction);
                             insere.ExecuteNonQuery();
                             retorno = $"Adicionado {nome} com valor {valor} na tabela de produtos";
@@ -609,7 +609,8 @@ namespace acompanhar_pedido
                             { "nome", reader["nome"].ToString() },
                             { "valor", reader["valor"].ToString() },
                             { "caminho_foto", reader["caminho_foto"].ToString() },
-                            { "id_produto", reader["id_produto"].ToString() }
+                            { "id_produto", reader["id_produto"].ToString() } ,
+                            { "categoria", reader["categoria"].ToString() }
                         };
                         dadosProd.Add(dicProds);
                     }

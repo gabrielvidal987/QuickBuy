@@ -49,10 +49,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D55E9780BA66FFE040E10619CE0C4ADE151A5E46</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>B1DCF2E325355650351FDDB0F52717F32512727C</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>acompanhar_pedido_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>acompanhar_pedido_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -303,6 +303,7 @@
     <EmbeddedResource Include="botoes\FazerPedido.resx">
       <DependentUpon>FazerPedido.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="acompanhar_pedido_1_TemporaryKey.pfx" />
     <None Include="acompanhar_pedido_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

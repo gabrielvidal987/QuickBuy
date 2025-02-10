@@ -31,7 +31,6 @@ namespace acompanhar_pedido.botoes
         string nome_foto_produto;
         string exten = "png";
         List<string> produtos_nome = new List<string>();
-        Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"food_ico.png"));
         Bitmap apaga_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"delete.png"));
         public Produtos()
         {
@@ -63,7 +62,8 @@ namespace acompanhar_pedido.botoes
             try
             {
                 Image imagem = new Bitmap(foto_caminho);
-                fotoProd.BackgroundImage = imagem;
+                imagem = new Bitmap(imagem, fotoProd.Width - 40, fotoProd.Height - 40);
+                fotoProd.Image = imagem;
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
@@ -77,6 +77,7 @@ namespace acompanhar_pedido.botoes
                     string nome = pcholdNomeProd.Text;
                     //é preciso converter em string e tirar a virgula para enviar o comando ao sql
                     string valor = valorNumerico.Value.ToString().Replace(',', '.');
+                    string categoria = categoria_box.Text;
                     try
                     {
                         if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos")))
@@ -90,12 +91,13 @@ namespace acompanhar_pedido.botoes
                     }
                     catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
                     nome_foto_produto = $"{nome}.{exten}";
-                    MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal));
+                    MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal, categoria));
                     pcholdNomeProd.Text = string.Empty;
                     valorNumerico.Value = 0;
                     try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.BackgroundImage = imagemPadrao; } catch { }
                     nomeOriginal = null;
                     foto_caminho = null;
+                    categoria_box.SelectedIndex = 0;
                     pcholdNomeProd.Focus();
                 }
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
@@ -113,13 +115,13 @@ namespace acompanhar_pedido.botoes
             pnlGeral.BackColor = Color.FromArgb(192, 213, 239);
             pnlGeral.Location = new Point(30, 50);
             pnlGeral.Size = new Size(this.Width - 350, this.Height - 150);
-            pnlCadProd.Location = new Point(pnlGeral.Width + 40, 80);
+            pnlCadProd.Location = new Point(pnlGeral.Width + 40, 60);
             pnlCadProd.Size = new Size(240, this.Height - 230);
-            btnCadProd.Location = new Point(37, pnlCadProd.Height - 100);
-            impListProd.Location = new Point(pnlCadProd.Location.X + 37, 600);
+            btnCadProd.Location = new Point(12, pnlCadProd.Height - 65);
+            fotoProd.Location = new Point(12, pnlCadProd.Height - 235);
+            impListProd.Location = new Point(pnlCadProd.Location.X + 12, 590);
             impListProd.BackColor = Color.FromArgb(141, 172, 222);
-            fotoProd.Location = new Point(37, pnlCadProd.Height - 250);
-
+            categoria_box.SelectedIndex = 0;
         }
         private void produtobtn_Click(object sender, EventArgs e)
         {
@@ -211,7 +213,7 @@ namespace acompanhar_pedido.botoes
                     fotoProd.BackColor = Color.FromArgb(255, 255, 255);
                     fotoProd.Size = new Size(186, 105);
                     fotoProd.BorderStyle = BorderStyle.FixedSingle;
-                    fotoProd.SizeMode = PictureBoxSizeMode.StretchImage;
+                    fotoProd.SizeMode = PictureBoxSizeMode.CenterImage;
                     fotoProd.Enabled = false;
                     try
                     {
@@ -220,6 +222,8 @@ namespace acompanhar_pedido.botoes
                     }
                     catch 
                     {
+                        Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{item["categoria"]}.png"));
+                        food_ico = new Bitmap(food_ico, fotoProd.Width - 40, fotoProd.Height - 40);
                         fotoProd.Image = food_ico;
                     }
                     fotoProd.BackgroundImageLayout = ImageLayout.Stretch;
