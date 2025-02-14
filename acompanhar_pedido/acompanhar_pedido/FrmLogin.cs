@@ -35,18 +35,17 @@ namespace acompanhar_pedido
             InitializeComponent();
 
         }
+        //função que realiza o login: verifica se a senha é válida e chama o menu
         private void Login()
         {
+            //verifica se o campo de senha foi preenchido
             if (txtSenha.Text == "")
             {
                 MessageBox.Show("Preencha a senha");
                 txtSenha.Focus();
                 return;
             }
-            if (File.Exists("Usuario.TXT"))
-            {
-                File.Delete("Usuario.TXT");
-            }
+            //é realizado o teste da senha, se estiver certa é criado de novo o documento do usuario
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
@@ -57,9 +56,7 @@ namespace acompanhar_pedido
                     txtSenha.Focus();
                     return;
                 }
-                string caminho_usuario = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "Usuario.TXT");
-                File.WriteAllText(caminho_usuario, txtSenha.Text);
-                VariaveisGlobais.LerNomeArquivo();
+                ConectarSqlClasse.AtualizarUsuario(txtSenha.Text);
                 this.Close();
                 t1 = new Thread(abrirMenu);
                 t1.SetApartmentState(ApartmentState.STA);
@@ -67,11 +64,13 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função que abre o menu inicial do programa
         private void abrirMenu(object obj)
         {
             try { Application.Run(new Menu()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
 
         }
+        //função que altera algumas estéticas ao carregar a pagina e realiza um teste na conexão
         private void FrmLogin_Load(object sender, EventArgs e)
         {
             btnLogin.BackColor = Color.FromArgb(0, 54, 209);
@@ -83,6 +82,7 @@ namespace acompanhar_pedido
             btnLogin.Enabled = false;
             testConexaobtn_Click(sender, e);
         }
+        //realiza login caso seja pressionado o botão de enter
         private void FrmLogin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -90,32 +90,24 @@ namespace acompanhar_pedido
                 Login();
             }
         }
+        //função do botão de login, caso seja clicado chama a função login()
         private void button1_Click(object sender, EventArgs e)
         {
             Login();
         }
-        private void txtSenha_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                Login();
-            }
-        }
-        private void txtEmail_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                Login();
-            }
-        }
+        //realiza o teste da conexão com os campos da conexão do bd
         private void testConexaobtn_Click(object sender, EventArgs e)
         {
+            //zera o campo de resultado da conexão e desabilita os campos para não serem editados enquanto a conexão é tentada
             resultConexao.Text = "";
             server.Enabled = false;
             uid.Enabled = false;
             password.Enabled = false;
             database.Enabled = false;
             testConexaobtn.Enabled = false;
+            // cria o dicionario de conexão config base e o novo com os campos que foram preenchidos.
+            // ele utiliza os campos que ficaram preenchidos e os que não ficaram é utilizado um valor default
+            // sintaxe 'condição' ? 'valor_se_verdadeiro' : 'valor_se_falso'
             try
             {
                 Dictionary<string, string> config = new Dictionary<string, string>()
@@ -132,6 +124,8 @@ namespace acompanhar_pedido
                     { "pwd", string.IsNullOrEmpty(password.Text) ? config["pwd"] : password.Text },
                     { "database", string.IsNullOrEmpty(database.Text) ? config["database"] : database.Text }
                 };
+                //procura o json da ultima conexão, caso exista ele tenta criar a conexão baseada nesse json como default
+                //o json de ultima conexão foi feito a partir da ultima conexão realizada com sucesso
                 try
                 {
                     string caminho_json = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "last_conn_json.json");
@@ -146,12 +140,14 @@ namespace acompanhar_pedido
                     };
                 }
                 catch {}
+                //chama o atualizar dicionario com o dicionario de conexão criado
                 ConectarSqlClasse.AtualizarDicionario(conn);
                 ConectarSqlClasse sql = new ConectarSqlClasse();
+                //realiza o teste de conexão com o bd
                 string res_conn = $"{sql.ConectDataBase()}";
                 if (res_conn == "Conexão com o banco de dados realizada com sucesso!!!")
                 {
-                    // Reescreve o JSON a partir do dicionário
+                    // Reescreve o JSON de ultima conexão se baseando nessa nova conexão que teve sucesso
                     foreach(var key_value_pair in conn)
                     {
                         config[key_value_pair.Key] = key_value_pair.Value;
@@ -160,6 +156,7 @@ namespace acompanhar_pedido
                     string caminho_json = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "last_conn_json.json");
                     File.WriteAllText(caminho_json, newJson);
 
+                    //reativa os campos para realizar o login
                     resultConexao.Text += res_conn;
                     txtSenha.Enabled = true;
                     btnLogin.Enabled = true;
@@ -186,28 +183,8 @@ namespace acompanhar_pedido
             }
 
         }
+        //realiza a tentativa de conexão caso pressione enter em um dos campos da config da conexão
         private void server_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                testConexaobtn_Click(sender, e);
-            }
-        }
-        private void uid_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                testConexaobtn_Click(sender, e);
-            }
-        }
-        private void password_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                testConexaobtn_Click(sender, e);
-            }
-        }
-        private void database_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

@@ -126,7 +126,7 @@
             this.password.TabIndex = 14;
             this.password.Text = "*************";
             this.password.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.password_KeyDown);
+            this.password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.server_KeyDown);
             // 
             // uid
             // 
@@ -141,7 +141,7 @@
             this.uid.TabIndex = 13;
             this.uid.Text = "root";
             this.uid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.uid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.uid_KeyDown);
+            this.uid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.server_KeyDown);
             // 
             // database
             // 
@@ -156,7 +156,7 @@
             this.database.TabIndex = 15;
             this.database.Text = "acompanha_pedidosschema";
             this.database.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.database.KeyDown += new System.Windows.Forms.KeyEventHandler(this.database_KeyDown);
+            this.database.KeyDown += new System.Windows.Forms.KeyEventHandler(this.server_KeyDown);
             // 
             // testConexaobtn
             // 
@@ -232,7 +232,7 @@
             this.txtSenha.Size = new System.Drawing.Size(215, 34);
             this.txtSenha.TabIndex = 4;
             this.txtSenha.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtSenha.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSenha_KeyDown);
+            this.txtSenha.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmLogin_KeyDown);
             // 
             // FrmLogin
             // 

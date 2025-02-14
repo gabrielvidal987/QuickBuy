@@ -15,6 +15,7 @@ namespace acompanhar_pedido
         /// Ponto de entrada principal para o aplicativo.
         /// </summary>
         [STAThread]
+        //classe principal que controla o run inicial e qual a primeira classe
         static void Main()
         {
             Application.EnableVisualStyles();

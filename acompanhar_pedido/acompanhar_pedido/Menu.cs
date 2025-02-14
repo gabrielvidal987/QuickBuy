@@ -25,21 +25,25 @@ namespace acompanhar_pedido
     public partial class Menu : Form
     {
         Thread t1;
+        //variavel que armazena valor total arrecadado (apenas do que já foi entregue)
         double valor = 0.00;
+        //quantidade de produtos em preparo
         int quant_preparando = 0;
+        //quantidade de pedidos já prontos
         int quant_prontos = 0;
-
+        //inicializador da classe
         public Menu()
         {
             InitializeComponent();
         }
+        //itens carregados ao exibir a tela, carrega a função de estética e a logo do usuario
         private void Menu_Load(object sender, EventArgs e)
         {
             Estetica();
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                string imagem_clube = sql.FotoClube(VariaveisGlobais.Usuario);
+                string imagem_clube = sql.FotoClube();
                 if (!string.IsNullOrEmpty(imagem_clube) )
                 {
                     fotoClube.ImageLocation = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_usuario",imagem_clube);
@@ -48,6 +52,7 @@ namespace acompanhar_pedido
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
 
         }
+        //função com as mudanças estéticas, cores, tamanhos, posições...
         public void Estetica()
         {
             this.BackColor = Color.FromArgb(239, 239, 239);
@@ -78,6 +83,7 @@ namespace acompanhar_pedido
             hora.Text = horario.ToString("hh:mm:ss");
             data.Text = horario.ToString("dd-MM-yyyy");
         }
+        //timer para atualizar o horário no canto superior
         private void timer1_Tick(object sender, EventArgs e)
         {
             try
@@ -88,6 +94,7 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função do botão de iniciar novo pedido
         private void btnPedido_Click(object sender, EventArgs e)
         {
             try
@@ -98,6 +105,7 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função do botão de confirmar pagamento
         private void btnPagamento_Click(object sender, EventArgs e)
         {
             try
@@ -118,6 +126,7 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
+        //função do botão de gerenciar os produtos
         private void btnProdutos_Click(object sender, EventArgs e)
         {
             try
@@ -128,6 +137,7 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função para abrir a tela da cozinha
         private void btnCozinha_Click(object sender, EventArgs e)
         {
             try
@@ -138,6 +148,7 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função para abrir a fila de senhas
         private void btnFila_Click(object sender, EventArgs e)
         {
             try
@@ -148,6 +159,7 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função para abrir o relatório final
         private void btnRelatorio_Click(object sender, EventArgs e)
         {
             try
@@ -158,6 +170,7 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //timer que atualiza os valores de total, quantidade de pedidos pendentes e de pedidos entregues
         private void timer2_Tick(object sender, EventArgs e)
         {
             try
@@ -177,28 +190,28 @@ namespace acompanhar_pedido
                 }
             }
         }
-        private void abrirCozinha(object obj)
-        {    
-            try { Application.Run(new Cozinha()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-        }
+        //função que abre a pagina de pedidos
         private void abrirPedido(object obj)
         {
             try { Application.Run(new FazerPedido()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função que abre a pagina de pagamentos pendentes
         private void abrirPagamento(object obj)
         {
             try { Application.Run(new RealizarPagamento()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função que abre a pagina de produtos
         private void abrirProdutos(object obj)
         {
             try { Application.Run(new Produtos()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-            
+
         }
-        private void abrirRelatorio(object obj)
-        {
-            try { Application.Run(new Relatorio()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-            
+        //função que abre a cozinha
+        private void abrirCozinha(object obj)
+        {    
+            try { Application.Run(new Cozinha()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
+        //função que abre a fila desenhas
         private void abrirFila(object obj)
         {
             ConectarSqlClasse sql = new ConectarSqlClasse();
@@ -208,6 +221,13 @@ namespace acompanhar_pedido
             }
             else { MessageBox.Show("Sem pedidos registrados!", "Atenção"); }
         }
+        //função que abre a pagina de relatório
+        private void abrirRelatorio(object obj)
+        {
+            try { Application.Run(new Relatorio()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+            
+        }
+        //botão que abre a seleção de audio que toca ao trocar a senha
         private void tbnMusic_Click(object sender, EventArgs e)
         {
             try
@@ -230,6 +250,7 @@ namespace acompanhar_pedido
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
 
         }
+        //botão que chama uma messagebox com o endereço da pasta raiz do programa
         private void button1_Click(object sender, EventArgs e)
         {
             try { MessageBox.Show(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }   

@@ -263,7 +263,6 @@
     <Compile Include="botoes\FazerPedido.Designer.cs">
       <DependentUpon>FazerPedido.cs</DependentUpon>
     </Compile>
-    <Compile Include="VariaveisGlobais.cs" />
     <EmbeddedResource Include="botoes\Cozinha.resx">
       <DependentUpon>Cozinha.cs</DependentUpon>
     </EmbeddedResource>
