@@ -19,38 +19,32 @@ namespace acompanhar_pedido.botoes
 {
     public partial class Fila : Form
     {
-        int totalSenhas = 0;
-
-        int varSenhaAtual = 0;
-        int varSenhaAnt1 = 0;
-        int varSenhaAnt2 = 0;
-        int varSenhaAnt3 = 0;
+        List<(string, string)> senhas = new List<(string, string)>();
         string mudaSenha = "";
         string curDir = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"somTrocaSenha.mp3");
         public Fila()
         {
             InitializeComponent();
+            Estética();
         }
-
+        //função para carregar a estética da pagina com cores, janelas e demais elementos
         public void Estética()
         {
             this.BackColor = Color.FromArgb(239, 239, 239);
-            lbSenhaAnt1.BackColor = Color.FromArgb(0, 102, 204);
-            lbSenhaAnt1.Text = varSenhaAnt1.ToString();
-            lbSenhaAnt2.BackColor = Color.FromArgb(0, 102, 204);
-            lbSenhaAnt2.Text = varSenhaAnt2.ToString();
-            lbSenhaAnt3.BackColor = Color.FromArgb(0, 102, 204);
-            lbSenhaAnt3.Text = varSenhaAnt3.ToString();
-            lbSenhaAtual.BackColor = Color.FromArgb(0, 102, 204);
-            lbSenhaAtual.Text = varSenhaAtual.ToString();
+            lbSenha2.BackColor = Color.FromArgb(0, 102, 204);
+            lbSenha2.Text = "0";
+            lbSenha3.BackColor = Color.FromArgb(0, 102, 204);
+            lbSenha3.Text = "0";
+            lbSenha4.BackColor = Color.FromArgb(0, 102, 204);
+            lbSenha4.Text = "0";
+            lbSenha1.BackColor = Color.FromArgb(0, 102, 204);
+            lbSenha1.Text = "0";
             senhaAtual.BackColor = Color.FromArgb(240, 240, 240);
             senhasAnteriores.BackColor = Color.FromArgb(240, 240, 240);
             tMedEspera.BackColor = Color.FromArgb(240, 240, 240);
         }
-        private void Fila_Load(object sender, EventArgs e)
-        {
-            Estética();
-        }
+        //caso exista o som é chamado a função para tocar ele caso a senha tenha mudado
+        //ele verifica se a variavel de mudaSenha possui uma senha diferente da ultima da lista, logo seria uma senha nova
         public void TocaSom()
         {
             if (File.Exists(curDir))
@@ -61,7 +55,7 @@ namespace acompanhar_pedido.botoes
                     using(var audioFileReader = new AudioFileReader(curDir))
                     {
                         ConectarSqlClasse sql = new ConectarSqlClasse();
-                        if (mudaSenha != sql.Senhas()[totalSenhas - 1].ToString())
+                        if (mudaSenha != senhas[-1].ToString())
                         {
                             waveOutDevice.Init(audioFileReader);
                             waveOutDevice.Play();
@@ -69,39 +63,53 @@ namespace acompanhar_pedido.botoes
                             {
                                 Thread.Sleep(100); // Aguarda o som terminar
                             }
+                            mudaSenha = senhas[-1].ToString();
                         }
                     }
                 }
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
             }
         }
+        //troca as senhas das labels e também recalcula o tempo medio de espera
         public void TrocaSenha()
         {
-            ConectarSqlClasse sql = new ConectarSqlClasse();
             try
             {
-                var senhas = new List<(string senha, string nome)>();
-                senhas = sql.Senhas();
-                if (totalSenhas > 0)
+                if (senhas.Count > 0)
                 {
+                    //adiciona as ultimas senhas em seus devidos campos, no caso da ultima senha ele adiciona na variavel mudaSenha
+                    for (int c = -1; c > -5; c--)
+                    {
+                        switch (c)
+                        {
+                            case -1:
+                                try { lbSenha1.Text = $"{senhas[c].Item1}\n{senhas[c].Item2}"; } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+                                break;
+                            case -2:
+                                try { lbSenha2.Text = $"{senhas[c].Item1} - {senhas[c].Item2}"; } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+                                break;
+                            case -3:
+                                try { lbSenha3.Text = $"{senhas[c].Item1} - {senhas[c].Item2}"; } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+                                break;
+                            case -4:
+                                try { lbSenha4.Text = $"{senhas[c].Item1} - {senhas[c].Item2}"; } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+                                break;
+                            default:
+                                break;
+                        }   
+                    }
+
+                    //adiciona o tempo de espera se baseando na media
+                    ConectarSqlClasse sql = new ConectarSqlClasse();
                     List<string> horas = new List<string>(sql.ListaHorarios());
                     int media = 0;
-                    try { lbSenhaAtual.Text = $"{senhas[totalSenhas - 1].Item1}\n{senhas[totalSenhas - 1].Item2}"; mudaSenha = sql.Senhas()[totalSenhas - 1].ToString(); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-                    try { lbSenhaAnt1.Text = $"{senhas[totalSenhas - 2].Item1} - {senhas[totalSenhas - 2].Item2}"; } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-                    try { lbSenhaAnt2.Text = $"{senhas[totalSenhas - 3].Item1} - {senhas[totalSenhas - 3].Item2}"; } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-                    try { lbSenhaAnt3.Text = $"{senhas[totalSenhas - 4].Item1} - {senhas[totalSenhas - 4].Item2}"; } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
                     for (int c = 0; c < horas.Count - 1; c += 2)
                     {
                         media += int.Parse(horas[c + 1].Split(':')[1]) - int.Parse(horas[c].Split(':')[1]);
                     }
-                    if (media / (horas.Count / 2) <= 0)
-                    {
-                        tMedEspera.Text = "TEMPO MÉDIO DE ESPERA: 2 MINUTOS";
-                    }
-                    else
-                    {
-                        tMedEspera.Text = $"TEMPO MÉDIO DE ESPERA: {media / (horas.Count / 2)} MINUTOS";
-                    }
+                    tMedEspera.Text = media / (horas.Count / 2) <= 0 ? "TEMPO MÉDIO DE ESPERA: 2 MINUTOS" : $"TEMPO MÉDIO DE ESPERA: {media / (horas.Count / 2)} MINUTOS";
+                
+
                 }
             }
             catch (Exception er)
@@ -109,12 +117,13 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //timer para chamar a atualização e troca de senha
         private void timer1_Tick(object sender, EventArgs e)
         {
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                totalSenhas = sql.Senhas().Count();
+                senhas = sql.Senhas();
                 Thread thread = new Thread(new ThreadStart(TocaSom));
                 thread.Start();
                 TrocaSenha();

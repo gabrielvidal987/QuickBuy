@@ -278,14 +278,10 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string limpaProdutosComand = $"Delete FROM {tabelaProdutos} WHERE usuario = '{usuario_logado}';";
-                MySqlCommand limpaProdutos = new MySqlCommand(limpaProdutosComand, conexao,transaction);
-                string limpaVendasComand = $"Delete FROM {tabelaVendas} WHERE usuario = '{usuario_logado}'; UPDATE produtos SET qtd_vendido = 0 WHERE usuario = '{usuario_logado}'; ";
-                MySqlCommand limpaVendas = new MySqlCommand(limpaVendasComand, conexao,transaction);
-                string limpaPedidosComand = $"Delete FROM {tabelaPedidos} WHERE usuario = '{usuario_logado}';";
-                MySqlCommand limpaPedidos = new MySqlCommand(limpaPedidosComand, conexao,transaction);
                 if (tabelaProdutos != "*")
                 {
+                    string limpaProdutosComand = $"Delete FROM {tabelaProdutos} WHERE usuario = '{usuario_logado}';";
+                    MySqlCommand limpaProdutos = new MySqlCommand(limpaProdutosComand, conexao,transaction);
                     try
                     {
                         limpaProdutos.ExecuteNonQuery();
@@ -299,10 +295,12 @@ namespace acompanhar_pedido
                 }
                 if (tabelaVendas != "*")
                 {
+                    string limpaVendasComand = $"Delete FROM {tabelaPedidos} WHERE usuario = '{usuario_logado}' AND pedido_pronto = true; UPDATE produtos SET qtd_vendido = 0 WHERE usuario = '{usuario_logado}';";
+                    MySqlCommand limpaVendas = new MySqlCommand(limpaVendasComand, conexao, transaction);
                     try
                     {
                         limpaVendas.ExecuteNonQuery();
-                        resultado += "\n\nSucesso ao apagar tabela de vendas";
+                        resultado += "\n\nSucesso ao apagar tabela de vendas\nQuantidade de produtos vendidos foi zerada";
                     }
                     catch (Exception er)
                     {
@@ -312,6 +310,8 @@ namespace acompanhar_pedido
                 }
                 if (tabelaPedidos != "*")
                 {
+                    string limpaPedidosComand = $"Delete FROM {tabelaPedidos} WHERE usuario = '{usuario_logado}' AND pedido_pronto = false;";
+                    MySqlCommand limpaPedidos = new MySqlCommand(limpaPedidosComand, conexao, transaction);
                     try
                     {
                         limpaPedidos.ExecuteNonQuery();
@@ -329,34 +329,32 @@ namespace acompanhar_pedido
             return resultado;
         }
         //tira um relatório baseado nas configs da tela janela de relatório
-        public DataTable Relatorio(bool filtro, string ordem,string nome)
+        public DataTable Relatorio(string ordem,string nome)
         {
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                var pesquisa = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_prontos = true AND pagamento_aprovado = true";
-                if (filtro)
+                var pesquisa = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true AND pagamento_aprovado = true";
+                switch (ordem)
                 {
-                    switch (ordem)
-                    {
-                        case "az":
-                            pesquisa += " ORDER BY nome_cliente ASC;";
-                            break;
-                        case "za":
-                            pesquisa = " ORDER BY nome_cliente DESC;";
-                            break;
-                        case "nome":
-                            pesquisa = " AND nome_cliente LIKE '%{nome}%';";
-                            break;
-                        case "venda":
-                            pesquisa = " ORDER BY valor_total ASC;";
-                            break;
-                        default:
-                            break;
-                    }
+                    case "az":
+                        pesquisa += " ORDER BY nome_cliente ASC;";
+                        break;
+                    case "za":
+                        pesquisa = " ORDER BY nome_cliente DESC;";
+                        break;
+                    case "nome":
+                        pesquisa = " AND nome_cliente LIKE '%{nome}%';";
+                        break;
+                    case "venda":
+                        pesquisa = " ORDER BY valor_total ASC;";
+                        break;
+                    default:
+                        break;
                 }
                 //etapa de verificação, caso tenha um registro sem produto ele será apagado
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                //apaga caso exista qualquer pedido/registro sem produto
                 MySqlCommand pesquisa_verifica_campo_nulo = new MySqlCommand(pesquisa, conexao);
                 List<string> lista_para_apagar = new List<string>();
                 using (var reader = pesquisa_verifica_campo_nulo.ExecuteReader())
@@ -366,9 +364,8 @@ namespace acompanhar_pedido
                         try
                         {
                             string numero_pedido = Convert.ToString(reader["numero_pedido"]);
-                            string nome_cliente = Convert.ToString(reader["nome_cliente"]);
                             string produtos_nome = Convert.ToString(reader["produtos_nome"]);
-                            if (produtos_nome == string.Empty || produtos_nome == null) 
+                            if (produtos_nome == string.Empty || produtos_nome == null ) 
                             {
                                 lista_para_apagar.Add(numero_pedido);
                             }
@@ -387,7 +384,7 @@ namespace acompanhar_pedido
                     {
                         try
                         {
-                            string apaga_valor_nulo_comand = $"DELETE FROM prontos WHERE usuario = '{usuario_logado}' AND numero_pedido = {numero_apagar} AND pedido_pronto = true AND pagamento_aprovado = true;";
+                            string apaga_valor_nulo_comand = $"DELETE FROM prontos WHERE usuario = '{usuario_logado}' AND numero_pedido = {numero_apagar};";
                             MySqlCommand apaga_valor_nulo = new MySqlCommand(apaga_valor_nulo_comand, conexao, transaction);
                             apaga_valor_nulo.ExecuteNonQuery();
                             transaction.Commit();
@@ -496,6 +493,22 @@ namespace acompanhar_pedido
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                 }
             }
+        }
+        //traz a quantidade de pedidos com pagamento pendente
+        public string QtdPagPend()
+        {
+            string qtd = "";
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = false AND pagamento_aprovado = false;";
+                MySqlCommand pegaQtd = new MySqlCommand(pegaQtd_comando, conexao);
+                using (var reader = pegaQtd.ExecuteReader())
+                {
+                    while (reader.Read()) { qtd = reader["COUNT(nome_cliente)"].ToString(); }
+                }
+            }
+            return qtd;
         }
         //traz a quantidade de pedidos preparando
         public string QtdPreparando()
@@ -800,53 +813,14 @@ namespace acompanhar_pedido
             }
             MessageBox.Show(resultado);
         }
-        //imprime o pedido do histórico de pedidos
-        public string ImprimePedidoHistorico(string numero_pedido)
+        //imprime o pedido pronto do historico de pedidos prontos
+        public string imprimePedido(string numero_pedido)
         {
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 string pega_dados_prod_comando = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND numero_pedido = {numero_pedido};";
-                MySqlCommand pega_dados_prod = new MySqlCommand(pega_dados_prod_comando, conexao, transaction);
-                string nf = "";
-                try
-                {
-                    using (var reader = pega_dados_prod.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            //Cliente: nome \n\n ITEM: xxx QTD: x \n\n OBS: xxxxx \n ENDEREÇO:\nxxxxxxxx\n\nPAGAMENTO: debito\n---------------------------------\nVALOR TOTAL: R$0,00\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {a}\n*********************************\n\nHorario do pedido: HH:MM:SS
-                            nf += $"CLIENTE: {reader["nome_cliente"]}\n\n";
-                            string[] produtos_comprados = reader["produtos_nome"].ToString().Split(',');
-                            foreach(string prod in produtos_comprados) { nf += $"{prod}\n"; }
-                            string retirada = "BALCÃO";
-                            if (bool.Parse(reader["delivery"].ToString()) == true) { retirada = "ENTREGA"; }
-                            string endereco_bruto = reader["endereco"].ToString();
-                            string endereco = AddLineBreaksEveryNChars(endereco_bruto, 30);
-                            string obs_bruto = reader["observacoes"].ToString();
-                            string obs = AddLineBreaksEveryNChars(endereco_bruto, 30);
-                            nf += $"\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {reader["forma_pag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valor_total"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\n{retirada}\n";
-                        }
-                    }
-                    transaction.Commit();
-                }
-                catch (Exception er)
-                {
-                    transaction.Rollback();
-                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-                }
-                return nf;
-            }
-        }
-        //imprime o pedido pronto do historico de pedidos prontos
-        public string imprimePedidoPronto(string numero_pedido)
-        {
-            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
-            {
-                conexao.Open();
-                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string pega_dados_prod_comando = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND numero_pedido = {numero_pedido} AND pedido_pronto = true AND pagamento_aprovado = true;";
                 MySqlCommand pega_dados_prod = new MySqlCommand(pega_dados_prod_comando, conexao, transaction);
                 string nf = "";
                 try
@@ -865,7 +839,7 @@ namespace acompanhar_pedido
                             string endereco = AddLineBreaksEveryNChars(endereco_bruto, 30);
                             string obs_bruto = reader["observacoes"].ToString();
                             string obs = AddLineBreaksEveryNChars(endereco_bruto, 30);
-                            nf += $"\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {reader["forma_pag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valor_total"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\nHorario de entrega: {reader["hora_ficou_pronto"]}\n\n{retirada}\n";
+                            nf += $"\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {reader["forma_pag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valor_total"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\n{retirada}\n";
                         }
                     }
                     transaction.Commit();

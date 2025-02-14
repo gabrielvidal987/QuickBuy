@@ -30,12 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Fila));
-            this.lbSenhaAtual = new System.Windows.Forms.Label();
+            this.lbSenha1 = new System.Windows.Forms.Label();
             this.senhaAtual = new System.Windows.Forms.Label();
             this.senhasAnteriores = new System.Windows.Forms.Label();
-            this.lbSenhaAnt3 = new System.Windows.Forms.Label();
-            this.lbSenhaAnt2 = new System.Windows.Forms.Label();
-            this.lbSenhaAnt1 = new System.Windows.Forms.Label();
+            this.lbSenha4 = new System.Windows.Forms.Label();
+            this.lbSenha3 = new System.Windows.Forms.Label();
+            this.lbSenha2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.tMedEspera = new System.Windows.Forms.Label();
@@ -43,22 +43,22 @@
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // lbSenhaAtual
+            // lbSenha1
             // 
-            this.lbSenhaAtual.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbSenhaAtual.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.lbSenhaAtual.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbSenhaAtual.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lbSenhaAtual.Font = new System.Drawing.Font("Microsoft Sans Serif", 90F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSenhaAtual.ForeColor = System.Drawing.Color.White;
-            this.lbSenhaAtual.Location = new System.Drawing.Point(733, 242);
-            this.lbSenhaAtual.Margin = new System.Windows.Forms.Padding(0);
-            this.lbSenhaAtual.Name = "lbSenhaAtual";
-            this.lbSenhaAtual.Padding = new System.Windows.Forms.Padding(10);
-            this.lbSenhaAtual.Size = new System.Drawing.Size(688, 410);
-            this.lbSenhaAtual.TabIndex = 10;
-            this.lbSenhaAtual.Text = "15 \\njoasoosdo";
-            this.lbSenhaAtual.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbSenha1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbSenha1.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.lbSenha1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbSenha1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lbSenha1.Font = new System.Drawing.Font("Microsoft Sans Serif", 90F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSenha1.ForeColor = System.Drawing.Color.White;
+            this.lbSenha1.Location = new System.Drawing.Point(733, 242);
+            this.lbSenha1.Margin = new System.Windows.Forms.Padding(0);
+            this.lbSenha1.Name = "lbSenha1";
+            this.lbSenha1.Padding = new System.Windows.Forms.Padding(10);
+            this.lbSenha1.Size = new System.Drawing.Size(688, 410);
+            this.lbSenha1.TabIndex = 10;
+            this.lbSenha1.Text = "15 \\njoasoosdo";
+            this.lbSenha1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // senhaAtual
             // 
@@ -94,56 +94,56 @@
             this.senhasAnteriores.Text = "SENHAS ANTERIORES";
             this.senhasAnteriores.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbSenhaAnt3
+            // lbSenha4
             // 
-            this.lbSenhaAnt3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbSenhaAnt3.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.lbSenhaAnt3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbSenhaAnt3.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lbSenhaAnt3.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSenhaAnt3.ForeColor = System.Drawing.Color.White;
-            this.lbSenhaAnt3.Location = new System.Drawing.Point(205, 534);
-            this.lbSenhaAnt3.Margin = new System.Windows.Forms.Padding(0);
-            this.lbSenhaAnt3.Name = "lbSenhaAnt3";
-            this.lbSenhaAnt3.Padding = new System.Windows.Forms.Padding(50, 5, 50, 5);
-            this.lbSenhaAnt3.Size = new System.Drawing.Size(500, 118);
-            this.lbSenhaAnt3.TabIndex = 14;
-            this.lbSenhaAnt3.Text = "12";
-            this.lbSenhaAnt3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbSenha4.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbSenha4.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.lbSenha4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbSenha4.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lbSenha4.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSenha4.ForeColor = System.Drawing.Color.White;
+            this.lbSenha4.Location = new System.Drawing.Point(205, 534);
+            this.lbSenha4.Margin = new System.Windows.Forms.Padding(0);
+            this.lbSenha4.Name = "lbSenha4";
+            this.lbSenha4.Padding = new System.Windows.Forms.Padding(50, 5, 50, 5);
+            this.lbSenha4.Size = new System.Drawing.Size(500, 118);
+            this.lbSenha4.TabIndex = 14;
+            this.lbSenha4.Text = "12";
+            this.lbSenha4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbSenhaAnt2
+            // lbSenha3
             // 
-            this.lbSenhaAnt2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbSenhaAnt2.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.lbSenhaAnt2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbSenhaAnt2.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lbSenhaAnt2.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSenhaAnt2.ForeColor = System.Drawing.Color.White;
-            this.lbSenhaAnt2.Location = new System.Drawing.Point(205, 386);
-            this.lbSenhaAnt2.Margin = new System.Windows.Forms.Padding(0);
-            this.lbSenhaAnt2.Name = "lbSenhaAnt2";
-            this.lbSenhaAnt2.Padding = new System.Windows.Forms.Padding(50, 5, 50, 5);
-            this.lbSenhaAnt2.Size = new System.Drawing.Size(500, 118);
-            this.lbSenhaAnt2.TabIndex = 13;
-            this.lbSenhaAnt2.Text = "11";
-            this.lbSenhaAnt2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbSenha3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbSenha3.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.lbSenha3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbSenha3.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lbSenha3.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSenha3.ForeColor = System.Drawing.Color.White;
+            this.lbSenha3.Location = new System.Drawing.Point(205, 386);
+            this.lbSenha3.Margin = new System.Windows.Forms.Padding(0);
+            this.lbSenha3.Name = "lbSenha3";
+            this.lbSenha3.Padding = new System.Windows.Forms.Padding(50, 5, 50, 5);
+            this.lbSenha3.Size = new System.Drawing.Size(500, 118);
+            this.lbSenha3.TabIndex = 13;
+            this.lbSenha3.Text = "11";
+            this.lbSenha3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbSenhaAnt1
+            // lbSenha2
             // 
-            this.lbSenhaAnt1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbSenhaAnt1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.lbSenhaAnt1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbSenhaAnt1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lbSenhaAnt1.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSenhaAnt1.ForeColor = System.Drawing.Color.White;
-            this.lbSenhaAnt1.Location = new System.Drawing.Point(205, 242);
-            this.lbSenhaAnt1.Margin = new System.Windows.Forms.Padding(0);
-            this.lbSenhaAnt1.Name = "lbSenhaAnt1";
-            this.lbSenhaAnt1.Padding = new System.Windows.Forms.Padding(50, 5, 50, 5);
-            this.lbSenhaAnt1.Size = new System.Drawing.Size(500, 118);
-            this.lbSenhaAnt1.TabIndex = 12;
-            this.lbSenhaAnt1.Text = "14 jfasjfoasfuaousfasfuosaou";
-            this.lbSenhaAnt1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbSenha2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbSenha2.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.lbSenha2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbSenha2.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lbSenha2.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSenha2.ForeColor = System.Drawing.Color.White;
+            this.lbSenha2.Location = new System.Drawing.Point(205, 242);
+            this.lbSenha2.Margin = new System.Windows.Forms.Padding(0);
+            this.lbSenha2.Name = "lbSenha2";
+            this.lbSenha2.Padding = new System.Windows.Forms.Padding(50, 5, 50, 5);
+            this.lbSenha2.Size = new System.Drawing.Size(500, 118);
+            this.lbSenha2.TabIndex = 12;
+            this.lbSenha2.Text = "14 jfasjfoasfuaousfasfuosaou";
+            this.lbSenha2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel1
             // 
@@ -151,12 +151,12 @@
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.tMedEspera);
-            this.panel1.Controls.Add(this.lbSenhaAtual);
+            this.panel1.Controls.Add(this.lbSenha1);
             this.panel1.Controls.Add(this.senhaAtual);
             this.panel1.Controls.Add(this.senhasAnteriores);
-            this.panel1.Controls.Add(this.lbSenhaAnt3);
-            this.panel1.Controls.Add(this.lbSenhaAnt2);
-            this.panel1.Controls.Add(this.lbSenhaAnt1);
+            this.panel1.Controls.Add(this.lbSenha4);
+            this.panel1.Controls.Add(this.lbSenha3);
+            this.panel1.Controls.Add(this.lbSenha2);
             this.panel1.Location = new System.Drawing.Point(-122, -40);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1476, 781);
@@ -208,7 +208,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fila";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.Fila_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -217,12 +216,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lbSenhaAtual;
+        private System.Windows.Forms.Label lbSenha1;
         private System.Windows.Forms.Label senhaAtual;
         private System.Windows.Forms.Label senhasAnteriores;
-        private System.Windows.Forms.Label lbSenhaAnt3;
-        private System.Windows.Forms.Label lbSenhaAnt2;
-        private System.Windows.Forms.Label lbSenhaAnt1;
+        private System.Windows.Forms.Label lbSenha4;
+        private System.Windows.Forms.Label lbSenha3;
+        private System.Windows.Forms.Label lbSenha2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label tMedEspera;

@@ -23,12 +23,13 @@ namespace acompanhar_pedido.botoes
         Bitmap print_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"print_ico.png"));
         string dados_nf;
         int ind_btn = 0;
-
         List<string> pedidoJaNaLista = new List<string>();
+        //criador da classe. inicializa o component
         public Cozinha()
         {
             InitializeComponent();
         }
+        //inicia quando a cozinha carrega, carrega um pouco da estética, chama a recarga da fila e em seguida dá play no timer
         private void Cozinha_Load(object sender, EventArgs e)
         {
             try
@@ -49,6 +50,8 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //limpa toda a fila de pedidos pendentes e refaz a partir dos pedidos que existem, os que ja estão na lista
+        //estão na variavel pedidoJaNaLista e estes não são alterados
         public void RecarregaFila()
         {
             try
@@ -162,6 +165,7 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //limpa a fila de pedidos ja prontos e refaz sendo do mais recente para o ultimo
         public void CarregaAnt()
         {
             int ind_btn_ant = 0;
@@ -245,7 +249,7 @@ namespace acompanhar_pedido.botoes
                         btnPrint.Size = new Size(20, 20);
                         btnPrint.SizeMode = PictureBoxSizeMode.StretchImage;
                         btnPrint.Cursor = Cursors.Hand;
-                        btnPrint.Click += new EventHandler(btnPrintAnt_Click);
+                        btnPrint.Click += new EventHandler(btnPrint_Click);
                         btnPrint.Margin = new Padding(175, 5, 0, 0);
                         btnPrint.Image = print_ico;
                         //cria as labels no panel
@@ -267,6 +271,8 @@ namespace acompanhar_pedido.botoes
                 }
             }
         }
+        //função que marca o click na checkbox do produto, caso tenha preenchido todas as checkbox é
+        //questionado se o pedido está pronto, se estiver ele é passado para os pedidos prontos e chamado o recarregaFila
         private void Marca_Click(object sender, EventArgs e)
         {
             try
@@ -308,6 +314,7 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //função do botão de histórico que chama o formulario com o histórico dos pedidos ja prontos
         private void btnHistorico_Click(object sender, EventArgs e)
         {
             try
@@ -321,10 +328,12 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
-        private void abrirHistorico(object obj)
+        //chama o formulario do histórico de pedido
+        private void abrirHistorico()
         {
             try { Application.Run(new Historico_cozinha()); } catch (Exception er){ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);}
         }
+        //relogio que controla a barra de recarga da tela da cozinha, caso chegue no 100% é chamado o metodo recarregaFila()
         private async void reload_Tick(object sender, EventArgs e)
         {
             try
@@ -351,6 +360,7 @@ namespace acompanhar_pedido.botoes
                 }
             }
         }
+        //função do botão para imprimir o pedido pendente
         private void btnPrint_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Certeza que deseja REIMPRIMIR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -365,7 +375,7 @@ namespace acompanhar_pedido.botoes
                         {
                             string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                             ConectarSqlClasse sql = new ConectarSqlClasse();
-                            dados_nf = sql.ImprimePedidoHistorico(numero_pedido);
+                            dados_nf = sql.imprimePedido(numero_pedido);
                             try
                             {
                                 impressora.Print();
@@ -383,43 +393,11 @@ namespace acompanhar_pedido.botoes
                 { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
-        private void btnPrintAnt_Click(object sender, EventArgs e)
-        {
-            var result = MessageBox.Show("Certeza que deseja REIMPRIMIR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                try
-                {
-                    Control control = (Control)sender;
-                    for (int i = 1; i < pnlAnt.Controls.Count; i++)
-                    {
-                        if (pnlAnt.Controls[i].Controls[5].Name == control.Name)
-                        {
-                            string numero_pedido = pnlAnt.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
-                            ConectarSqlClasse sql = new ConectarSqlClasse();
-                            dados_nf = sql.imprimePedidoPronto(numero_pedido);
-                            try
-                            {
-                                impressora.Print();
-                                pnlGeral.Focus();
-                            }
-                            catch
-                            {
-                                MessageBox.Show("Erro ao imprimir pedido");
-                            }
-                            break;
-                        }
-                    }
-                }
-                catch (Exception er)
-                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-            }
-        }
+        //função para formar o texto da impressão
         private void impressora_PrintPage(object sender, PrintPageEventArgs e)
         {
             try
             {
-                ConectarSqlClasse sql = new ConectarSqlClasse();
                 Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
                 SolidBrush cor = new SolidBrush(Color.Black);
                 Point local = new Point(5, 10);

@@ -18,11 +18,13 @@ namespace acompanhar_pedido.botoes
     {
         Bitmap print_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"print_ico.png"));
         string dados_nf;
+        //inicializador da classe, chama o estetica() após iniciar
         public Historico_cozinha()
         {
             InitializeComponent();
             Estetica();
         }
+        //função contendo os detalhes da estética selecionando cor, tamanho e posições
         public void Estetica()
         {
             this.BackColor = Color.FromArgb(198, 213, 239);
@@ -33,6 +35,7 @@ namespace acompanhar_pedido.botoes
             pnlGeral.AutoScroll = true;
             RecarregaFila();
         }
+        //limpa a lista de pedidos e refaz a fila, em ordem decrescente, do mais recente ao mais antigo
         public void RecarregaFila()
         {
             try
@@ -145,6 +148,7 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
+        //timer que recarrega a fila ao final do tempo. ele desativa caso esteja movimentando a tela
         private void reset_timer_Tick(object sender, EventArgs e)
         {
             try
@@ -165,6 +169,7 @@ namespace acompanhar_pedido.botoes
                 }
             }
         }
+        //clique do botão de imprimir, pergunta se tem certeza e chama o printpage
         private void btnPrintAnt_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Certeza que deseja REIMPRIMIR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -179,7 +184,7 @@ namespace acompanhar_pedido.botoes
                         {
                             string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                             ConectarSqlClasse sql = new ConectarSqlClasse();
-                            dados_nf = sql.imprimePedidoPronto(numero_pedido);
+                            dados_nf = sql.imprimePedido(numero_pedido);
                             try
                             {
                                 impressora.Print();
@@ -197,6 +202,7 @@ namespace acompanhar_pedido.botoes
                 { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
+        //função da impressão 
         private void impressora_PrintPage(object sender, PrintPageEventArgs e)
         {
             try

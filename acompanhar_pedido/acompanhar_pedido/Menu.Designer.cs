@@ -53,6 +53,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.lbPag = new System.Windows.Forms.Label();
+            this.lbPagText = new System.Windows.Forms.Label();
             this.pnlTopo.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fotoClube)).BeginInit();
@@ -210,7 +212,7 @@
             this.lbTotalText.Cursor = System.Windows.Forms.Cursors.Default;
             this.lbTotalText.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTotalText.ForeColor = System.Drawing.Color.White;
-            this.lbTotalText.Location = new System.Drawing.Point(22, 30);
+            this.lbTotalText.Location = new System.Drawing.Point(24, 34);
             this.lbTotalText.Margin = new System.Windows.Forms.Padding(0);
             this.lbTotalText.Name = "lbTotalText";
             this.lbTotalText.Padding = new System.Windows.Forms.Padding(5, 5, 70, 5);
@@ -227,7 +229,7 @@
             this.lbPrepText.Cursor = System.Windows.Forms.Cursors.Default;
             this.lbPrepText.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPrepText.ForeColor = System.Drawing.Color.White;
-            this.lbPrepText.Location = new System.Drawing.Point(22, 133);
+            this.lbPrepText.Location = new System.Drawing.Point(24, 243);
             this.lbPrepText.Margin = new System.Windows.Forms.Padding(0);
             this.lbPrepText.Name = "lbPrepText";
             this.lbPrepText.Padding = new System.Windows.Forms.Padding(5, 5, 4, 5);
@@ -244,7 +246,7 @@
             this.lbProntosText.Cursor = System.Windows.Forms.Cursors.Default;
             this.lbProntosText.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbProntosText.ForeColor = System.Drawing.Color.White;
-            this.lbProntosText.Location = new System.Drawing.Point(22, 242);
+            this.lbProntosText.Location = new System.Drawing.Point(24, 352);
             this.lbProntosText.Margin = new System.Windows.Forms.Padding(0);
             this.lbProntosText.Name = "lbProntosText";
             this.lbProntosText.Padding = new System.Windows.Forms.Padding(5, 5, 43, 5);
@@ -261,7 +263,7 @@
             this.lbTotal.Cursor = System.Windows.Forms.Cursors.Default;
             this.lbTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTotal.ForeColor = System.Drawing.Color.White;
-            this.lbTotal.Location = new System.Drawing.Point(269, 30);
+            this.lbTotal.Location = new System.Drawing.Point(271, 34);
             this.lbTotal.Margin = new System.Windows.Forms.Padding(0);
             this.lbTotal.Name = "lbTotal";
             this.lbTotal.Padding = new System.Windows.Forms.Padding(5);
@@ -278,7 +280,7 @@
             this.lbPreparando.Cursor = System.Windows.Forms.Cursors.Default;
             this.lbPreparando.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPreparando.ForeColor = System.Drawing.Color.White;
-            this.lbPreparando.Location = new System.Drawing.Point(269, 133);
+            this.lbPreparando.Location = new System.Drawing.Point(271, 243);
             this.lbPreparando.Margin = new System.Windows.Forms.Padding(0);
             this.lbPreparando.Name = "lbPreparando";
             this.lbPreparando.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
@@ -295,7 +297,7 @@
             this.lbProntos.Cursor = System.Windows.Forms.Cursors.Default;
             this.lbProntos.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbProntos.ForeColor = System.Drawing.Color.White;
-            this.lbProntos.Location = new System.Drawing.Point(269, 242);
+            this.lbProntos.Location = new System.Drawing.Point(271, 352);
             this.lbProntos.Margin = new System.Windows.Forms.Padding(0);
             this.lbProntos.Name = "lbProntos";
             this.lbProntos.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
@@ -319,7 +321,9 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel1.Controls.Add(this.lbPag);
             this.panel1.Controls.Add(this.lbPreparando);
+            this.panel1.Controls.Add(this.lbPagText);
             this.panel1.Controls.Add(this.lbProntos);
             this.panel1.Controls.Add(this.lbProntosText);
             this.panel1.Controls.Add(this.lbTotalText);
@@ -327,7 +331,7 @@
             this.panel1.Controls.Add(this.lbPrepText);
             this.panel1.Location = new System.Drawing.Point(50, 122);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(523, 356);
+            this.panel1.Size = new System.Drawing.Size(523, 470);
             this.panel1.TabIndex = 7;
             // 
             // fotoClube
@@ -369,6 +373,40 @@
             this.label5.Size = new System.Drawing.Size(307, 13);
             this.label5.TabIndex = 13;
             this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
+            // 
+            // lbPag
+            // 
+            this.lbPag.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbPag.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.lbPag.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbPag.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lbPag.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPag.ForeColor = System.Drawing.Color.White;
+            this.lbPag.Location = new System.Drawing.Point(271, 141);
+            this.lbPag.Margin = new System.Windows.Forms.Padding(0);
+            this.lbPag.Name = "lbPag";
+            this.lbPag.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
+            this.lbPag.Size = new System.Drawing.Size(228, 80);
+            this.lbPag.TabIndex = 8;
+            this.lbPag.Text = "3";
+            this.lbPag.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbPagText
+            // 
+            this.lbPagText.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbPagText.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.lbPagText.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbPagText.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lbPagText.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPagText.ForeColor = System.Drawing.Color.White;
+            this.lbPagText.Location = new System.Drawing.Point(24, 141);
+            this.lbPagText.Margin = new System.Windows.Forms.Padding(0);
+            this.lbPagText.Name = "lbPagText";
+            this.lbPagText.Padding = new System.Windows.Forms.Padding(5, 5, 4, 5);
+            this.lbPagText.Size = new System.Drawing.Size(211, 80);
+            this.lbPagText.TabIndex = 7;
+            this.lbPagText.Text = "PAGAMENTO PENDENTE";
+            this.lbPagText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Menu
             // 
@@ -422,5 +460,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnPagamento;
+        private System.Windows.Forms.Label lbPag;
+        private System.Windows.Forms.Label lbPagText;
     }
 }

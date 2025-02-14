@@ -36,76 +36,14 @@ namespace acompanhar_pedido.botoes
         {
             InitializeComponent();
         }
+        //função chamada ao carregar a pagina, chama a função de estética() e depois a criaBtns()
         private void Produtos_Load(object sender, EventArgs e)
         {
-            EsteticaFundo();
+            Estetica();
             CriaBtns();
         }
-        private void fotoProd_Click(object sender, EventArgs e)
-        {
-            if (btnAddpic.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    foto_caminho = null;
-                    string caminho_foto = btnAddpic.FileName.Replace(@"\", @"\\");
-                    foto_caminho = caminho_foto;
-                    List<string> list = new List<string>(caminho_foto.Split('.'));
-                    exten = list[list.Count - 1];
-                }
-                catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-            }
-            else
-            {
-                foto_caminho = fotopadrao;
-            }
-            try
-            {
-                Image imagem = new Bitmap(foto_caminho);
-                imagem = new Bitmap(imagem, fotoProd.Width - 40, fotoProd.Height - 40);
-                fotoProd.Image = imagem;
-            }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-        }
-        private void btnCadProd_Click(object sender, EventArgs e)
-        {
-            if (pcholdNomeProd.Text != null && pcholdNomeProd.Text != "" && valorNumerico.Value != 0 && !produtos_nome.Contains(pcholdNomeProd.Text) )
-            {
-                try
-                {
-                    ConectarSqlClasse sql = new ConectarSqlClasse();
-                    string nome = pcholdNomeProd.Text;
-                    //é preciso converter em string e tirar a virgula para enviar o comando ao sql
-                    string valor = valorNumerico.Value.ToString().Replace(',', '.');
-                    string categoria = categoria_box.Text;
-                    try
-                    {
-                        if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos")))
-                        {
-                            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos"));
-                        }
-                        if (foto_caminho != null && foto_caminho != "")
-                        {
-                            File.Copy(foto_caminho, Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{nome}.{exten}"), overwrite: true);
-                        }
-                    }
-                    catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-                    nome_foto_produto = $"{nome}.{exten}";
-                    MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal, categoria));
-                    pcholdNomeProd.Text = string.Empty;
-                    valorNumerico.Value = 0;
-                    try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.BackgroundImage = imagemPadrao; } catch { }
-                    nomeOriginal = null;
-                    foto_caminho = null;
-                    categoria_box.SelectedIndex = 0;
-                    pcholdNomeProd.Focus();
-                }
-                catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-                CriaBtns();
-            }
-            else { MessageBox.Show("Não são aceitos produtos sem nome, nomes iguais ou valor zerado"); }
-        }
-        public void EsteticaFundo()
+        //função contendo detalhes de estética de cor, elementos, formatos e posições
+        public void Estetica()
         {
             pnlCadProd.BackColor = Color.FromArgb(198, 213, 239);
             lbCadProd.BackColor = Color.FromArgb(141, 172, 222);
@@ -123,46 +61,7 @@ namespace acompanhar_pedido.botoes
             impListProd.BackColor = Color.FromArgb(141, 172, 222);
             categoria_box.SelectedIndex = 0;
         }
-        private void produtobtn_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                nomeOriginal = null;
-                foto_caminho = null;
-                Control control = (Control)sender;
-                pcholdNomeProd.Focus();
-                pcholdNomeProd.Text = control.Controls[0].Text.ToString();
-                nomeOriginal = control.Controls[0].Text.ToString();
-                valorNumerico.Focus();
-                valorNumerico.Value = decimal.Parse(control.Controls[1].Text.Replace("R$", "").Replace('.',','));
-                fotoProd.BackgroundImage = control.Controls[2].BackgroundImage;
-            }
-            catch (Exception er) 
-            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-        }
-        private void RemProd_Click(object sender, EventArgs e)
-        {
-            var result = MessageBox.Show("Certeza que deseja REMOVER o produto?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
-            {
-                try
-                {
-                    Control control = (Control)sender;
-                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
-                    {
-                        if (pnlGeral.Controls[i].Controls[3].Name == control.Name)
-                        {
-                            string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString();
-                            ConectarSqlClasse sql = new ConectarSqlClasse();
-                            sql.RemoveProd(nome_produto);
-                            CriaBtns();
-                        }
-                    }
-                }
-                catch (Exception er)
-                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-            }
-        }
+        //cria os botões para cada produto cadastrado
         public void CriaBtns()
         {
             try
@@ -217,10 +116,10 @@ namespace acompanhar_pedido.botoes
                     fotoProd.Enabled = false;
                     try
                     {
-                        Image myimage = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"fotos_produtos",item["caminho_foto"]));
+                        Image myimage = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", item["caminho_foto"]));
                         fotoProd.BackgroundImage = myimage;
                     }
-                    catch 
+                    catch
                     {
                         Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{item["categoria"]}.png"));
                         food_ico = new Bitmap(food_ico, fotoProd.Width - 40, fotoProd.Height - 40);
@@ -244,25 +143,134 @@ namespace acompanhar_pedido.botoes
                 }
             }
             catch (Exception er) { MessageBox.Show("Erro ao gerar icone dos produtos"); ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-
-            
         }
+        //função chamada ao clicar na foto do produto a ser cadastrado, assim seleciona uma nova foto e ela é copiada para o codigo caso seja salvo o produto
+        private void fotoProd_Click(object sender, EventArgs e)
+        {
+            if (btnAddpic.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    foto_caminho = null;
+                    string caminho_foto = btnAddpic.FileName.Replace(@"\", @"\\");
+                    foto_caminho = caminho_foto;
+                    List<string> list = new List<string>(caminho_foto.Split('.'));
+                    exten = list[list.Count - 1];
+                }
+                catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+            }
+            else
+            {
+                foto_caminho = fotopadrao;
+            }
+            try
+            {
+                Image imagem = new Bitmap(foto_caminho);
+                imagem = new Bitmap(imagem, fotoProd.Width - 40, fotoProd.Height - 40);
+                fotoProd.Image = imagem;
+            }
+            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        //função para cadastrar um produto novo com as informações escritas
+        private void btnCadProd_Click(object sender, EventArgs e)
+        {
+            if (pcholdNomeProd.Text != null && pcholdNomeProd.Text != "" && valorNumerico.Value != 0 && !produtos_nome.Contains(pcholdNomeProd.Text) )
+            {
+                try
+                {
+                    ConectarSqlClasse sql = new ConectarSqlClasse();
+                    string nome = pcholdNomeProd.Text;
+                    //é preciso converter em string e tirar a virgula para enviar o comando ao sql
+                    string valor = valorNumerico.Value.ToString().Replace(',', '.');
+                    string categoria = categoria_box.Text;
+                    try
+                    {
+                        if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos")))
+                        {
+                            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos"));
+                        }
+                        if (foto_caminho != null && foto_caminho != "")
+                        {
+                            File.Copy(foto_caminho, Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{nome}.{exten}"), overwrite: true);
+                        }
+                    }
+                    catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+                    nome_foto_produto = $"{nome}.{exten}";
+                    MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal, categoria));
+                    pcholdNomeProd.Text = string.Empty;
+                    valorNumerico.Value = 0;
+                    try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.BackgroundImage = imagemPadrao; } catch { }
+                    nomeOriginal = null;
+                    foto_caminho = null;
+                    categoria_box.SelectedIndex = 0;
+                    pcholdNomeProd.Focus();
+                }
+                catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+                CriaBtns();
+            }
+            else { MessageBox.Show("Não são aceitos produtos sem nome, nomes iguais ou valor zerado"); }
+        }
+        //função chamada ao clicar em um produto, os dados dele são puxados para edição
+        private void produtobtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                nomeOriginal = null;
+                foto_caminho = null;
+                Control control = (Control)sender;
+                pcholdNomeProd.Focus();
+                pcholdNomeProd.Text = control.Controls[0].Text.ToString();
+                nomeOriginal = control.Controls[0].Text.ToString();
+                valorNumerico.Focus();
+                valorNumerico.Value = decimal.Parse(control.Controls[1].Text.Replace("R$", "").Replace('.',','));
+                fotoProd.BackgroundImage = control.Controls[2].BackgroundImage;
+            }
+            catch (Exception er) 
+            { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+        }
+        //função chamada para remover produto
+        private void RemProd_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Certeza que deseja REMOVER o produto?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    Control control = (Control)sender;
+                    for (int i = 0; i < pnlGeral.Controls.Count; i++)
+                    {
+                        if (pnlGeral.Controls[i].Controls[3].Name == control.Name)
+                        {
+                            string nome_produto = pnlGeral.Controls[i].Controls[0].Text.ToString();
+                            ConectarSqlClasse sql = new ConectarSqlClasse();
+                            sql.RemoveProd(nome_produto);
+                            CriaBtns();
+                        }
+                    }
+                }
+                catch (Exception er)
+                { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
+            }
+        }
+        //função para mudar a cor ao apertar o botão do mouse
         private void mouseDown(object sender, EventArgs e)
         {
             Control control = (Control)sender;
-            control.BackColor = Color.FromArgb(232, 224, 199);
+            control.BackColor = Color.FromArgb(249, 249, 249);
             control.Controls[0].BackColor = Color.FromArgb(234, 234, 234);
             control.Controls[1].BackColor = Color.FromArgb(234, 234, 234);
             control.Controls[2].BackColor = Color.FromArgb(234, 234, 234);
         }
+        //função para mudar a cor ao soltar o botão do mouse
         private void mouseUp(object sender, EventArgs e)
         {
             Control control = (Control)sender;
-            control.BackColor = Color.FromArgb(255, 246, 215);
+            control.BackColor = Color.FromArgb(240, 240, 240);
             control.Controls[0].BackColor = Color.FromArgb(255, 255, 255);
             control.Controls[1].BackColor = Color.FromArgb(255, 255, 255);
             control.Controls[2].BackColor = Color.FromArgb(255, 255, 255);
         }
+        //função chamada quando aperta o botão de imprimir lista de produtos
         private void impListProd_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Certeza que deseja IMPRIMIR a lista de produtos?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -287,6 +295,7 @@ namespace acompanhar_pedido.botoes
                 { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
+        //função chamada para imprimir a lista de produtos
         private void impressora_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             try

@@ -20,6 +20,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using MySqlX.XDevAPI.Common;
 using System.IO;
+using Aspose.Cells;
 
 namespace acompanhar_pedido.teste
 {
@@ -29,13 +30,14 @@ namespace acompanhar_pedido.teste
         string nf;
         Thread t1;
         string texto_filtra = "";
+        //inicializador da classe, chama o inicializador de componente, função de estética e função para carregar botoes
         public FazerPedido()
         {
             InitializeComponent();
             Estetica();
             CarregaBotoes();
         }
-        //função para estética
+        //função para realizar a atualização da estética da pagina
         public void Estetica()
         {
             pcholdCliente.AutoSize = false;
@@ -54,47 +56,7 @@ namespace acompanhar_pedido.teste
             pcholdObs.BackColor = Color.FromArgb(198, 213, 239);
             pnlGeral.BackColor = Color.FromArgb(192, 213, 239);
         }
-        public void AdicionarProdutoExtrato(string nome, string valor)
-        {
-            try
-            {
-                //verifica se existe o nome
-                if (nome != "" || valor != "")
-                {
-                    //limpa o extrato
-                    //Verifica se o produto ja existe e então só incrementa na quantidade
-                    bool add = false;
-                    foreach (Dictionary<string, string> res in extratoLista)
-                    {
-                        if (res["nome"] == nome)
-                        {
-                            int quant = int.Parse(res["quantidade"]);
-                            quant++;
-                            res["quantidade"] = quant.ToString();
-                            res["total"] = Convert.ToString(double.Parse(res["valor"]) * int.Parse(res["quantidade"]));
-                            add = true;
-                        }
-                    }
-                    if (add == false)
-                    {
-                        Dictionary<string, string> dicionarioProduto = new Dictionary<string, string>
-                        {
-                        { "nome", nome },
-                        { "valor", valor },
-                        { "quantidade", "1" },
-                        { "total", valor }
-                        };
-                        extratoLista.Add(dicionarioProduto);
-                    }
-                    CriarLabel();
-                    ValorTotal();
-                }
-            }
-            catch (Exception er)
-            {
-                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-            }
-        }
+        //função de remover uma unidade do produto ao clicar no nome dele, caso tenha só uma unidade o produto é removido
         private void nomeProduto_Click(object sender, EventArgs e)
         {
             try
@@ -112,7 +74,7 @@ namespace acompanhar_pedido.teste
                             total--;
                             res["quantidade"] = total.ToString();
                             res["total"] = Convert.ToString(double.Parse(res["valor"]) * int.Parse(res["quantidade"]));
-                            CriarLabel();
+                            CriarLabelExtrato();
                             ValorTotal();
                             break;
                         }
@@ -120,7 +82,7 @@ namespace acompanhar_pedido.teste
                         {
                             extratoLista.Remove(res);
                             nQuantProd.Text = "0";
-                            CriarLabel();
+                            CriarLabelExtrato();
                             ValorTotal();
                             break;
                         }
@@ -132,7 +94,8 @@ namespace acompanhar_pedido.teste
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             } 
         }
-        public void CriarLabel()
+        //cria as labels do extrato, no primeiro bloco cria a label "nome, valor qtd" e no segundo cria as labels de cada produto
+        public void CriarLabelExtrato()
         {
             try
             {
@@ -144,21 +107,21 @@ namespace acompanhar_pedido.teste
                     Label dvalorProduto = new Label();
                     Label dqtd = new Label();
                     dproduto.Anchor = AnchorStyles.None;
-                    dproduto.Font = new Font(DefaultFont.FontFamily, 10);
+                    dproduto.Font = new System.Drawing.Font(DefaultFont.FontFamily, 10);
                     dproduto.AutoSize = false;
                     dproduto.Width = 188;
                     dproduto.Height = 23;
                     dproduto.Text = "PRODUTO";
                     dproduto.TextAlign = ContentAlignment.MiddleLeft;
                     dvalorProduto.Anchor = AnchorStyles.None;
-                    dvalorProduto.Font = new Font(DefaultFont.FontFamily, 10);
+                    dvalorProduto.Font = new System.Drawing.Font(DefaultFont.FontFamily, 10);
                     dvalorProduto.AutoSize = false;
                     dvalorProduto.Width = 85;
                     dvalorProduto.Height = 23;
                     dvalorProduto.Text = "VALOR";
                     dvalorProduto.TextAlign = ContentAlignment.MiddleCenter;
                     dqtd.Anchor = AnchorStyles.None;
-                    dqtd.Font = new Font(DefaultFont.FontFamily, 10);
+                    dqtd.Font = new System.Drawing.Font(DefaultFont.FontFamily, 10);
                     dqtd.AutoSize = false;
                     dqtd.Width = 46;
                     dqtd.Height = 23;
@@ -177,7 +140,7 @@ namespace acompanhar_pedido.teste
                     Label qtd = new Label();
                     produto.Anchor = AnchorStyles.None;
                     produto.BorderStyle = BorderStyle.FixedSingle;
-                    produto.Font = new Font(DefaultFont.FontFamily, 12);
+                    produto.Font = new System.Drawing.Font(DefaultFont.FontFamily, 12);
                     produto.AutoSize = false;
                     produto.Width = 188;
                     produto.Height = 23;
@@ -186,14 +149,14 @@ namespace acompanhar_pedido.teste
                     produto.Name = res["nome"];
                     valorProduto.Anchor = AnchorStyles.None;
                     valorProduto.BorderStyle = BorderStyle.FixedSingle;
-                    valorProduto.Font = new Font(DefaultFont.FontFamily, 12);
+                    valorProduto.Font = new System.Drawing.Font(DefaultFont.FontFamily, 12);
                     valorProduto.AutoSize = false;
                     valorProduto.Width = 85;
                     valorProduto.Height = 23;
                     valorProduto.Text = $"R${res["valor"]}";
                     qtd.Anchor = AnchorStyles.None;
                     qtd.BorderStyle = BorderStyle.FixedSingle;
-                    qtd.Font = new Font(DefaultFont.FontFamily, 12);
+                    qtd.Font = new System.Drawing.Font(DefaultFont.FontFamily, 12);
                     qtd.AutoSize = false;
                     qtd.Width = 46;
                     qtd.Height = 23;
@@ -211,6 +174,7 @@ namespace acompanhar_pedido.teste
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //atualiza o campo do valor total no extrato
         public void ValorTotal()
         {
             try
@@ -227,6 +191,7 @@ namespace acompanhar_pedido.teste
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //função do botão de resetar a tela, ele limpa todos os campos e reseta o pedido
         private void btnReset_Click(object sender, EventArgs e)
         {
             try
@@ -256,6 +221,7 @@ namespace acompanhar_pedido.teste
             }
 
         }
+        //função do botão de cadastrar o pedido, ele cadastra o pedido se todos os campos estiverem preenchidos
         private void btnCad_Click(object sender, EventArgs e)
         {
             string nome_cliente = clienteExtrato.Text.Replace("Cliente: ", "");
@@ -339,6 +305,7 @@ namespace acompanhar_pedido.teste
 
 
         }
+        //carrega os botões dos produtos, sendo um para cada produto
         public void CarregaBotoes()
         {
             try
@@ -368,22 +335,26 @@ namespace acompanhar_pedido.teste
                     btn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
                     btn.Click += new System.EventHandler(this.produtobtn_Click);
                     nomeProd.BackColor = Color.FromArgb(255, 255, 255);
-                    nomeProd.Font = new Font("Arial", 10);
+                    nomeProd.Font = new System.Drawing.Font("Arial", 10);
                     nomeProd.ForeColor = Color.Black;
                     nomeProd.AutoSize = false;
                     nomeProd.Size = new Size(186, Convert.ToInt32(altura));
                     nomeProd.BorderStyle = BorderStyle.FixedSingle;
                     nomeProd.TextAlign = ContentAlignment.MiddleCenter;
                     nomeProd.Text = item["nome"];
+                    nomeProd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
+                    nomeProd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
                     nomeProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     valorProd.BackColor = Color.FromArgb(255, 255, 255);
-                    valorProd.Font = new Font("Arial", 10);
+                    valorProd.Font = new System.Drawing.Font("Arial", 10);
                     valorProd.ForeColor = Color.Black;
                     valorProd.AutoSize = false;
                     valorProd.Size = new Size(186, 30);
                     valorProd.BorderStyle = BorderStyle.FixedSingle;
                     valorProd.TextAlign = ContentAlignment.MiddleCenter;
                     valorProd.Text = $"R${item["valor"].Replace('.',',')}";
+                    valorProd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
+                    valorProd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
                     valorProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     fotoProd.BackColor = Color.FromArgb(255, 255, 255);
                     fotoProd.Size = new Size(186, 105);
@@ -410,6 +381,8 @@ namespace acompanhar_pedido.teste
                         food_ico = new Bitmap(food_ico, fotoProd.Width - 40, fotoProd.Height - 40);
                         fotoProd.Image = food_ico;
                     }
+                    fotoProd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
+                    fotoProd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
                     fotoProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     pnlGeral.Controls.Add(btn);
                     btn.Controls.Add(nomeProd);
@@ -427,20 +400,60 @@ namespace acompanhar_pedido.teste
                 pnlGeral.ResumeLayout();
             }
         }
+        //função de quando clica em um produto (sem ser no campo do nome, valor ou foto) , adiciona ele ao extrato
         private void produtobtn_Click(object sender, EventArgs e)
         {
             try
             {
                 Control control = (Control)sender;
                 control.BackColor = Color.FromArgb(240, 240, 240);
-                string res = control.Controls[1].Text.Replace("R$", "");
-                AdicionarProdutoExtrato(control.Controls[0].Text, res);
+                string valor = control.Controls[1].Text.Replace("R$", "");
+                string nome = control.Controls[0].Text;
+                try
+                {
+                    //verifica se existe o nome
+                    if (nome != "" || valor != "")
+                    {
+                        //limpa o extrato
+                        //Verifica se o produto ja existe e então só incrementa na quantidade
+                        bool add = false;
+                        foreach (Dictionary<string, string> res in extratoLista)
+                        {
+                            if (res["nome"] == nome)
+                            {
+                                int quant = int.Parse(res["quantidade"]);
+                                quant++;
+                                res["quantidade"] = quant.ToString();
+                                res["total"] = Convert.ToString(double.Parse(res["valor"]) * int.Parse(res["quantidade"]));
+                                add = true;
+                            }
+                        }
+                        if (add == false)
+                        {
+                            Dictionary<string, string> dicionarioProduto = new Dictionary<string, string>
+                            {
+                        { "nome", nome },
+                        { "valor", valor },
+                        { "quantidade", "1" },
+                        { "total", valor }
+                        };
+                            extratoLista.Add(dicionarioProduto);
+                        }
+                        CriarLabelExtrato();
+                        ValorTotal();
+                    }
+                }
+                catch (Exception er)
+                {
+                    ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
             }
             catch (Exception er)
             {
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //função para chamar o produtobtn_click caso seja clicado na foto, nome ou valor do produto
         private void produto_lb_pb_Click(object sender, EventArgs e)
         {
             try
@@ -464,22 +477,29 @@ namespace acompanhar_pedido.teste
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //função chamada quando clica no produto, ele escurece as cores do produto
         private void mouseDown(object sender, EventArgs e)
         {
             Control control = (Control)sender;
+            System.Type tipo = sender.GetType();
+            if (tipo.Name != "FlowLayoutPanel") { control = control.Parent; }
             control.BackColor = Color.FromArgb(249, 249, 249);
             control.Controls[0].BackColor = Color.FromArgb(234, 234, 234);
             control.Controls[1].BackColor = Color.FromArgb(234, 234, 234);
             control.Controls[2].BackColor = Color.FromArgb(234, 234, 234);
         }
+        //função chamada quando solta o clique no produto, ele clareia as cores do produto
         private void mouseUp(object sender, EventArgs e)
         {
             Control control = (Control)sender;
+            System.Type tipo = sender.GetType();
+            if (tipo.Name != "FlowLayoutPanel") { control = control.Parent; }
             control.BackColor = Color.FromArgb(240, 240, 240);
             control.Controls[0].BackColor = Color.FromArgb(255, 255, 255);
             control.Controls[1].BackColor = Color.FromArgb(255, 255, 255);
             control.Controls[2].BackColor = Color.FromArgb(255, 255, 255);
         }
+        //chama o btnCad ao apertar enter no campo de cliente ou de endereco
         private void pcholdCliente_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -487,6 +507,7 @@ namespace acompanhar_pedido.teste
                 btnCad_Click(sender, e);
             }
         }
+        //função que corta a frase a partir do intervalo desejado para limitar na visualização
         static string AddLineBreaksEveryNChars(string input, int interval)
         {
             if (string.IsNullOrEmpty(input) || interval <= 0)
@@ -507,12 +528,13 @@ namespace acompanhar_pedido.teste
 
             return sb.ToString();
         }
+        //imprime a nf do pedido
         private void impressora_PrintPage(object sender, PrintPageEventArgs e)
         {
             try
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
-                Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
+                System.Drawing.Font font = new System.Drawing.Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
                 SolidBrush cor = new SolidBrush(Color.Black);
                 Point local = new Point(5, 10);
                 e.Graphics.DrawString(nf, font, cor, local);
@@ -522,11 +544,13 @@ namespace acompanhar_pedido.teste
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //ao carregar a pagina seleciona o dinheiro como forma de pagamento e dá um focus no nome do cliente
         private void FazerPedido_Load_1(object sender, EventArgs e)
         {
             boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
             pcholdCliente.Focus();
         }
+        //ao apertar enter na forma de pagamento selecionado ela chamao  btnCad_click
         private void boxPgto_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -534,36 +558,29 @@ namespace acompanhar_pedido.teste
                 btnCad_Click(sender, e);
             }
         }
+        //clique no botão para ver histórico de pedidos, verifica antes se existe pedido, caso não exista chama o messagebox
         private void btnHist_Click(object sender, EventArgs e)
         {
             ConectarSqlClasse sql = new ConectarSqlClasse();
             List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed(false));
             if (filaPedidos.Count > 0)
             {
-                foreach (Dictionary<string, string> i in filaPedidos)
+                try
                 {
-                    try
-                    {
-                        t1 = new Thread(hist_pedidos);
-                        t1.SetApartmentState(ApartmentState.STA);
-                        t1.Start();
-                    }
-                    catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+                    t1 = new Thread(hist_pedidos);
+                    t1.SetApartmentState(ApartmentState.STA);
+                    t1.Start();
                 }
+                catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
             }
             else { MessageBox.Show("Sem pedidos registrados ainda!!"); }
         }
+        //função para iniciar o formulario de histórico de pedidos
         private void hist_pedidos(object obj)
         {
             try { Application.Run(new historico_pedidos()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
-        private void pcholdEndereco_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnCad_Click(sender, e);
-            }
-        }
+        //chamada ao escrever algo no campo de filtro de produtos, ele chama o carregaBotoes com a palavra ou letra filtrando
         private void pcholdBuscaProd_KeyPress(object sender, KeyEventArgs e)
         {
             if (pcholdBuscaProd.Text != texto_filtra)
@@ -572,6 +589,7 @@ namespace acompanhar_pedido.teste
                 CarregaBotoes();
             }
         }
+        //função para quando alterar alguma letra no nome do cliente já adiciona no extrato
         private void pcholdCliente_KeyUp(object sender, KeyEventArgs e)
         {
             clienteExtrato.Text = $"Cliente: {pcholdCliente.Text}";

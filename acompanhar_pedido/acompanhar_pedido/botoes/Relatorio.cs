@@ -20,14 +20,18 @@ namespace acompanhar_pedido.botoes
         string foto_caminho = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"semFoto.png");
         string exten = "png";
         double entradaTotal = 0;
+        //datatable que será exibida. foi usada uma datatable pois ela é facil de modificar, então a consulta
+        //do bd retorna os dados e nela é adicionado mais alguns sendo manipulados
         DataTable dt = new DataTable();
         List<Dictionary<string, string>> listaBruta = new List<Dictionary<string, string>>();
+        //inicializador da classe, ele chama a função de estetica() após iniciar o componente e habilita o botão de nova pasta nos dialogs que apresentam as pastas
         public Relatorio()
         {
             InitializeComponent();
             Estetica();
             this.escolherLocal.ShowNewFolderButton = true;
         }
+        //função com os detalhes de estética de cor, localização e formas
         public void Estetica()
         {
             pcholdPesquisa.PlaceHolderText = "Digite o nome";
@@ -37,6 +41,7 @@ namespace acompanhar_pedido.botoes
             tabelaVendas.Width = flowLayoutPanel2.Width - 10;
             tabelaVendas.Height = flowLayoutPanel2.Height - 150;
         }
+        //apaga as tabelas selecionadas nas checkbox
         private void apagaBD_Click(object sender, EventArgs e)
         {
             var resposta = MessageBox.Show("TEM CERTEZA DE QUE DESEJA APAGAR OS ITENS SELECIONADOS?", "ATENÇÃO", MessageBoxButtons.YesNo);
@@ -56,13 +61,13 @@ namespace acompanhar_pedido.botoes
                         }
                         if (delVendas.Checked)
                         {
-                            vendas = "pedidos_prontos";
+                            vendas = "pedidos";
                         }
                         if (delPendentes.Checked)
                         {
                             pendentes = "pedidos";
                         }
-                        MessageBox.Show(sql.LimparBD(produto, vendas,pendentes));
+                        MessageBox.Show(sql.LimparBD(produto, vendas, pendentes));
                         delProduto.Checked = false;
                         delVendas.Checked = false;
                         delPendentes.Checked = false;
@@ -75,6 +80,7 @@ namespace acompanhar_pedido.botoes
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
+        //função chamada a partir do botão de gerar relatório
         private void GeraRelatorio_Click(object sender, EventArgs e)
         {
             //ele cria tudo em um datatable chamado 'dt'. após alterar todo esse dt ele atribui os dados dele ao TabelaVendas
@@ -86,48 +92,43 @@ namespace acompanhar_pedido.botoes
             try
             {
                 tabelaVendas.Columns.Clear();
-                bool filtro = false;
                 string ordem = "";
                 string nome = "";
                 if (btnNomeAZ.Checked)
                 {
-                    filtro = true;
                     ordem = "az";
-                    dt = sql.Relatorio(filtro, ordem, nome);
+                    dt = sql.Relatorio(ordem, nome);
                 }
                 else if (btnNomeZA.Checked)
                 {
-                    filtro = true;
                     ordem = "za";
-                    dt = sql.Relatorio(filtro, ordem, nome);
+                    dt = sql.Relatorio(ordem, nome);
                 }
                 else if (btnUmNome.Checked)
                 {
                     if (pcholdPesquisa.Text != "")
                     {
-                        filtro = true;
                         ordem = "nome";
                         nome = pcholdPesquisa.Text;
-                        dt = sql.Relatorio(filtro, ordem, nome);
+                        dt = sql.Relatorio(ordem, nome);
                     }
                     else
                     {
                         MessageBox.Show("Preencha como o nome a ser pesquisado");
                     }
                 }
-                if (btnValor.Checked)
+                else if (btnValor.Checked)
                 {
-                    filtro = true;
                     ordem = "venda";
-                    dt = sql.Relatorio(filtro, ordem, nome);
+                    dt = sql.Relatorio(ordem, nome);
                 }
                 else
                 {
-                    dt = sql.Relatorio(filtro, ordem, nome);
+                    dt = sql.Relatorio(ordem, nome);
                 }
-                dt.Columns.RemoveAt(0);
-                dt.Columns.RemoveAt(12);
-                //deixar a coluna de entrega em readonly
+                //remove a coluna 11 (usuario)
+                dt.Columns.RemoveAt(11);
+                //deixar a coluna de entrega em readonly (por ter removido uma coluna, a coluna 12(antes delivery) foi para a posição 11)
                 dt.Columns[11].ReadOnly = true;
                 //tabela que pega a lista dos produtos vendidos
                 listaBruta = sql.ListaProdVendidos();
@@ -143,6 +144,7 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
+
         public void FiltraDeliveryBalcao()
         {
             ConectarSqlClasse sql = new ConectarSqlClasse();

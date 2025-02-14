@@ -25,12 +25,6 @@ namespace acompanhar_pedido
     public partial class Menu : Form
     {
         Thread t1;
-        //variavel que armazena valor total arrecadado (apenas do que já foi entregue)
-        double valor = 0.00;
-        //quantidade de produtos em preparo
-        int quant_preparando = 0;
-        //quantidade de pedidos já prontos
-        int quant_prontos = 0;
         //inicializador da classe
         public Menu()
         {
@@ -68,16 +62,19 @@ namespace acompanhar_pedido
             data.BackColor = Color.FromArgb(198, 213, 239);
             hora.BackColor = Color.FromArgb(198, 213, 239);
             //botões layout e cores
+            lbPag.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
+            lbPag.BackColor = Color.FromArgb(27, 133, 254);
             lbPreparando.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
-            lbProntos.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
             lbPreparando.BackColor = Color.FromArgb(27, 133, 254);
-            lbPrepText.BackColor = Color.FromArgb(27, 133, 254);
-            lbPreparando.Text = quant_preparando.ToString();
+            lbPreparando.Text = "0";
+            lbProntos.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
             lbProntos.BackColor = Color.FromArgb(27, 133, 254);
-            lbProntos.Text = quant_prontos.ToString();
+            lbProntos.Text = "0";
+            lbPagText.BackColor = Color.FromArgb(27, 133, 254);
             lbProntosText.BackColor = Color.FromArgb(27, 133, 254);
+            lbPrepText.BackColor = Color.FromArgb(27, 133, 254);
             lbTotal.BackColor = Color.FromArgb(27, 133, 254);
-            lbTotal.Text = "R$" + valor;
+            lbTotal.Text = "R$00,00";
             lbTotalText.BackColor = Color.FromArgb(27, 133, 254);
             var horario = DateTime.Now;
             hora.Text = horario.ToString("hh:mm:ss");
@@ -93,6 +90,27 @@ namespace acompanhar_pedido
                 data.Text = horario.ToString("dd-MM-yyyy");
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+        }
+        //timer que atualiza os valores de total, quantidade de pedidos pendentes e de pedidos entregues
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                lbPag.Text = sql.QtdPagPend();
+                lbPreparando.Text = sql.QtdPreparando();
+                lbProntos.Text = sql.QtdProntos();
+                lbTotal.Text = $"R${sql.ValorTotal()}";
+            }
+            catch (Exception er)
+            {
+                timer2.Stop();
+                bool sucess_log = ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                if (sucess_log)
+                {
+                    timer2.Start();
+                }
+            }
         }
         //função do botão de iniciar novo pedido
         private void btnPedido_Click(object sender, EventArgs e)
@@ -169,26 +187,6 @@ namespace acompanhar_pedido
                 t1.Start();
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-        }
-        //timer que atualiza os valores de total, quantidade de pedidos pendentes e de pedidos entregues
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                ConectarSqlClasse sql = new ConectarSqlClasse();
-                lbPreparando.Text = sql.QtdPreparando();
-                lbProntos.Text = sql.QtdProntos();
-                lbTotal.Text = $"R${sql.ValorTotal()}";
-            }
-            catch (Exception er) 
-            {
-                timer2.Stop();
-                bool sucess_log = ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-                if (sucess_log)
-                {
-                    timer2.Start();
-                }
-            }
         }
         //função que abre a pagina de pedidos
         private void abrirPedido(object obj)

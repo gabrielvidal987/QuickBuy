@@ -16,14 +16,14 @@ namespace acompanhar_pedido.botoes
     {
         Bitmap apaga_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()),"delete.png"));
         Bitmap print_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "print_ico.png"));
-        
-
         string dados_nf;
+        //inicializador da classe, chama o estetica()
         public historico_pedidos()
         {
             InitializeComponent();
             Estetica();
         }
+        //função contendo detalhes de estética, troca cor, posição e demais elementos
         public void Estetica()
         {
             this.BackColor = Color.FromArgb(198, 213, 239);
@@ -33,6 +33,7 @@ namespace acompanhar_pedido.botoes
             pnlGeral.Location = new Point(Top = lbTitulo.Width);
             RecarregaFila();
         }
+        //função para a remoção de um pedido
         private void RemPedido_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Certeza que deseja DELETAR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -57,6 +58,7 @@ namespace acompanhar_pedido.botoes
                 { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
+        //função para o botão de imprimir um pedido
         private void btnPrint_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Certeza que deseja REIMPRIMIR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -71,7 +73,7 @@ namespace acompanhar_pedido.botoes
                         {
                             string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                             ConectarSqlClasse sql = new ConectarSqlClasse();
-                            dados_nf = sql.ImprimePedidoHistorico(numero_pedido);
+                            dados_nf = sql.imprimePedido(numero_pedido);
                             try
                             {
                                 impressora.Print();
@@ -89,6 +91,7 @@ namespace acompanhar_pedido.botoes
                 { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
+        //função para imprimir o pedido
         private void impressora_PrintPage(object sender, PrintPageEventArgs e)
         {
             try
@@ -104,6 +107,7 @@ namespace acompanhar_pedido.botoes
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //recarrega a fila de pedidos pendentes
         public void RecarregaFila()
         {
             try
@@ -240,6 +244,7 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
+        //timer que dá reset na fila de pedidos
         private void reset_tela_Tick(object sender, EventArgs e)
         {
             try

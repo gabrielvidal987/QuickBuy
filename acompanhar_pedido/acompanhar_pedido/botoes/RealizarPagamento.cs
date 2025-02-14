@@ -17,11 +17,13 @@ namespace acompanhar_pedido.botoes
         Bitmap apaga_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "delete.png"));
         Bitmap print_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "print_ico.png"));
         string dados_nf;
+        //inicializador da classe, chama o Estetica() ao finalizar
         public RealizarPagamento()
         {
             InitializeComponent();
             Estetica();
         }
+        //função para alterar detalhes estéticos como cor, localização e posições dos elementos
         public void Estetica()
         {
             this.BackColor = Color.FromArgb(198, 213, 239);
@@ -32,6 +34,7 @@ namespace acompanhar_pedido.botoes
             pnlGeral.AutoScroll = true;
             RecarregaFila();
         }
+        //apaga os pedidos que estão pendentes na fila e refaz a lista, caso não tenha nenhum é chamado um messagebox
         public void RecarregaFila()
         {
             try
@@ -55,12 +58,12 @@ namespace acompanhar_pedido.botoes
                         Label valorTotal_formPagamento = new Label();
                         Label formRetirada = new Label();
                         Label pagamento = new Label();
-                        CheckBox btnPagamentoRealizado = new CheckBox();
+                        Button btnPagamentoRealizado = new Button();
                         PictureBox btnPrint = new PictureBox();
                         PictureBox remProd = new PictureBox();
                         //cria o flowpanel com o cliente
                         pnl.Width = 240;
-                        pnl.Height = 340 + Convert.ToInt32(altura);
+                        pnl.Height = 370 + Convert.ToInt32(altura);
                         pnl.BackColor = Color.FromArgb(247, 247, 247);
                         pnl.Margin = new Padding(40, 10, 0, 10);
                         pnl.Padding = new Padding(5, 5, 5, 5);
@@ -122,26 +125,27 @@ namespace acompanhar_pedido.botoes
                         formRetirada.Height = 40;
                         formRetirada.Font = new Font("Arial", 10);
                         //label pagamento_status
-                        string pagamento_status = "PAGAMENTO PENDENTE";
-                        string cor_fonte = "#ff2626";
-                        if (bool.Parse(i["pagamento_aprovado"]) == true) { retirada = "PAGAMENTO APROVADO"; cor_fonte = "#006400"; }
                         pagamento.AutoSize = false;
-                        pagamento.Text = pagamento_status;
+                        pagamento.Text = "PAGAMENTO PENDENTE";
                         pagamento.BorderStyle = BorderStyle.FixedSingle;
                         pagamento.TextAlign = ContentAlignment.MiddleCenter;
                         pagamento.Width = 225;
                         pagamento.Height = 40;
                         pagamento.Font = new Font("Arial", 10, FontStyle.Bold);
-                        pagamento.ForeColor = ColorTranslator.FromHtml(cor_fonte);
+                        pagamento.ForeColor = ColorTranslator.FromHtml("#ff2626");
                         //cria botão de realizar pagamento  
-                        btnPagamentoRealizado.Margin = new Padding(10, 5, 0, 5);
                         btnPagamentoRealizado.Text = "PAGAMENTO REALIZADO";
                         btnPagamentoRealizado.TextAlign = ContentAlignment.MiddleCenter;
-                        btnPagamentoRealizado.Font = new Font("Arial", 10, FontStyle.Bold);
+                        btnPagamentoRealizado.Font = new Font("Arial", 11, FontStyle.Bold);
+                        btnPagamentoRealizado.BackColor = Color.FromArgb(61, 228, 68);
+                        btnPagamentoRealizado.FlatStyle = FlatStyle.Popup;
                         btnPagamentoRealizado.Click += new System.EventHandler(aprovarPagamento_Click);
                         btnPagamentoRealizado.AutoSize = false;
-                        btnPagamentoRealizado.Height = 30;
-                        btnPagamentoRealizado.Width = 212;
+                        btnPagamentoRealizado.Width = 225;
+                        btnPagamentoRealizado.Height = 60;
+                        btnPagamentoRealizado.Margin = new Padding(3, 10, 0, 10);
+                        btnPagamentoRealizado.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
+                        btnPagamentoRealizado.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
                         //cria botão de imprimir o pedido
                         btnPrint.BackColor = Color.Transparent;
                         btnPrint.Name = ind_btn.ToString();
@@ -180,6 +184,19 @@ namespace acompanhar_pedido.botoes
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
         }
+        //função chamada quando clica no produto, ele escurece as cores do produto
+        private void mouseDown(object sender, EventArgs e)
+        {
+            Control control = (Control)sender;
+            control.BackColor = Color.FromArgb(52, 200, 58);
+        }
+        //função chamada quando solta o clique no produto, ele clareia as cores do produto
+        private void mouseUp(object sender, EventArgs e)
+        {
+            Control control = (Control)sender;
+            control.BackColor = Color.FromArgb(64, 187, 69);
+        }
+        //função chamada para remover o pedido selecionado
         private void RemPedido_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Certeza que deseja DELETAR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -204,6 +221,7 @@ namespace acompanhar_pedido.botoes
                 { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
+        //função chamada para aprovar o pagamento do pedido selecionado
         private void aprovarPagamento_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Pagamento realizado com sucesso?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
@@ -228,6 +246,7 @@ namespace acompanhar_pedido.botoes
                 { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
+        //função chamada pelo botão de imprimir
         private void btnPrint_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Certeza que deseja REIMPRIMIR o pedido?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -242,7 +261,7 @@ namespace acompanhar_pedido.botoes
                         {
                             string numero_pedido = pnlGeral.Controls[i].Controls[0].Text.ToString().Split('-')[0].Trim();
                             ConectarSqlClasse sql = new ConectarSqlClasse();
-                            dados_nf = sql.ImprimePedidoHistorico(numero_pedido);
+                            dados_nf = sql.imprimePedido(numero_pedido);
                             try
                             {
                                 impressora.Print();
@@ -260,10 +279,12 @@ namespace acompanhar_pedido.botoes
                 { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
+        //função para imprimir o pedido
         private void impressora_PrintPage(object sender, PrintPageEventArgs e)
         {
 
         }
+        //timer que controla o reset para recarregar os pedidos de pagamento pendente
         private void reset_tela_Tick(object sender, EventArgs e)
         {
             try

@@ -333,7 +333,7 @@ namespace acompanhar_pedido.teste
             this.pcholdEndereco.PlaceHolderText = null;
             this.pcholdEndereco.Size = new System.Drawing.Size(221, 30);
             this.pcholdEndereco.TabIndex = 1;
-            this.pcholdEndereco.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdEndereco_KeyDown);
+            this.pcholdEndereco.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyDown);
             // 
             // pcholdCliente
             // 
