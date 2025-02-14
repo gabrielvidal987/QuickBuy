@@ -16,27 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `usuarios`
+-- Table structure for table `produtos`
 --
 
-DROP TABLE IF EXISTS `usuarios`;
+DROP TABLE IF EXISTS `produtos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `usuarios` (
-  `senha` varchar(100) NOT NULL,
-  `foto_clube` varchar(500) DEFAULT NULL,
-  PRIMARY KEY (`senha`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `produtos` (
+  `id_produto` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(500) DEFAULT NULL,
+  `valor` varchar(50) DEFAULT NULL,
+  `caminho_foto` varchar(2000) DEFAULT NULL,
+  `usuario` varchar(200) DEFAULT NULL,
+  `qtd_vendido` int DEFAULT '0',
+  `categoria` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_produto`)
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `usuarios`
+-- Dumping data for table `produtos`
 --
 
-LOCK TABLES `usuarios` WRITE;
-/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES ('campestre','campestre.png'),('campestrejunior','campestrejunior.jpg'),('desbravadores','desbravadores.jpg'),('marpaulista','marpaulista.png');
-/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+LOCK TABLES `produtos` WRITE;
+/*!40000 ALTER TABLE `produtos` DISABLE KEYS */;
+INSERT INTO `produtos` VALUES (26,'açai','2.50','açai.png','desbravadores',1,'Gelados'),(28,'suci','1.00','suci.png','desbravadores',2,'Bebidas'),(42,'pitiça','1.50','pitiça.png','desbravadores',0,'Pizzas'),(43,'hamburguer','1.00','lanche.png','desbravadores',2,'Hamburgueres');
+/*!40000 ALTER TABLE `produtos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-10 11:59:18
+-- Dump completed on 2025-02-13 16:22:34

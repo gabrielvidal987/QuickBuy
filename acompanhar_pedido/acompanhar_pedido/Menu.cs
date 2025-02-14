@@ -138,21 +138,21 @@ namespace acompanhar_pedido
             }
             catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
-        private void btnRelatorio_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                t1 = new Thread(abrirRelatorio);
-                t1.SetApartmentState(ApartmentState.STA);
-                t1.Start();
-            }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
-        }
         private void btnFila_Click(object sender, EventArgs e)
         {
             try
             {
                 t1 = new Thread(abrirFila);
+                t1.SetApartmentState(ApartmentState.STA);
+                t1.Start();
+            }
+            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+        }
+        private void btnRelatorio_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                t1 = new Thread(abrirRelatorio);
                 t1.SetApartmentState(ApartmentState.STA);
                 t1.Start();
             }
@@ -202,7 +202,7 @@ namespace acompanhar_pedido
         private void abrirFila(object obj)
         {
             ConectarSqlClasse sql = new ConectarSqlClasse();
-            if (sql.QtdPreparando() != "0")
+            if (sql.QtdProntos() != "0")
             {
                 try { Application.Run(new Fila()); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
             }

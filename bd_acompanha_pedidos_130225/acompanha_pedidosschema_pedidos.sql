@@ -16,38 +16,38 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `pedidos_prontos`
+-- Table structure for table `pedidos`
 --
 
-DROP TABLE IF EXISTS `pedidos_prontos`;
+DROP TABLE IF EXISTS `pedidos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pedidos_prontos` (
-  `insert_sys` int NOT NULL AUTO_INCREMENT,
-  `numero_pedido` int DEFAULT NULL,
-  `nome_cliente` varchar(2000) DEFAULT NULL,
+CREATE TABLE `pedidos` (
+  `numero_pedido` int NOT NULL AUTO_INCREMENT,
+  `nome_cliente` varchar(2000) NOT NULL,
   `endereco` varchar(2000) DEFAULT NULL,
-  `produtos_nome` varchar(2000) DEFAULT NULL,
+  `produtos_nome` varchar(2000) NOT NULL,
   `observacoes` varchar(500) DEFAULT NULL,
-  `hora_pedido` char(50) DEFAULT NULL,
-  `hora_ficou_pronto` char(50) DEFAULT NULL,
-  `valorTotal` double DEFAULT NULL,
-  `formaPag` char(30) DEFAULT NULL,
-  `valorLiq` double DEFAULT NULL,
-  `usuario` varchar(200) DEFAULT NULL,
-  `delivery` tinyint(1) DEFAULT NULL,
+  `hora_pedido` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `hora_ficou_pronto` datetime DEFAULT NULL,
+  `valor_total` double NOT NULL DEFAULT '0',
+  `forma_pag` char(30) NOT NULL DEFAULT 'dinheiro',
   `pagamento_aprovado` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`insert_sys`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `pedido_pronto` tinyint(1) NOT NULL DEFAULT '0',
+  `usuario` varchar(200) DEFAULT NULL,
+  `delivery` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`numero_pedido`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pedidos_prontos`
+-- Dumping data for table `pedidos`
 --
 
-LOCK TABLES `pedidos_prontos` WRITE;
-/*!40000 ALTER TABLE `pedidos_prontos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pedidos_prontos` ENABLE KEYS */;
+LOCK TABLES `pedidos` WRITE;
+/*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
+INSERT INTO `pedidos` VALUES (1,'teste','endereço não cadastrado','2X açai,1X suci,','sem observações','2025-02-13 13:48:06','2025-02-13 15:56:49',6,'dinheiro',1,1,'desbravadores',1),(3,'tewrw','endereço não cadastrado','1X suci,1X hamburguer,','sem observações','2025-02-13 15:57:35','2025-02-13 16:03:54',2,'dinheiro',1,1,'desbravadores',0),(4,'teste','endereço não cadastrado','1X açai,','sem observações','2025-02-13 16:19:27',NULL,2.5,'dinheiro',1,0,'desbravadores',0);
+/*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -59,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-10 11:59:18
+-- Dump completed on 2025-02-13 16:22:34

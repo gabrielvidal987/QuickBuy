@@ -33,6 +33,7 @@ namespace acompanhar_pedido
 
         //STATIC dictionary, ele é atualizado pelo atualzirdicionario() que coloca as info do BD
         private static Dictionary<string, string> res = new Dictionary<string, string>();
+        //atualiza o dicionario principal para receber os dados de conexão com o bd
         public static void AtualizarDicionario(Dictionary<string,string> dadosConn)
         {
             res = dadosConn;
@@ -145,7 +146,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string comando_sql = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pagamento_aprovado = true ;";
+                string comando_sql = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pagamento_aprovado = true AND pedido_pronto = false;";
                 MySqlCommand comando = new MySqlCommand(comando_sql, conexao); 
                 try
                 {
@@ -191,7 +192,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string str_comando = $"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' ORDER BY hora_ficou_pronto {ordem} ;";
+                string str_comando = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pedido_pronto = true ORDER BY hora_ficou_pronto {ordem} ;";
                 MySqlCommand comando = new MySqlCommand(str_comando,conexao,transaction);
                 try
                 {
@@ -234,7 +235,7 @@ namespace acompanhar_pedido
 
         }
         //realiza o cadastro de um pedido novo
-        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string data, string valor,string formaPag,bool delivery,bool pagamento_efetuado)
+        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string valor,string formaPag,bool delivery,bool pagamento_efetuado)
         {
             string resultado = "Erro, nada foi realizado";
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -242,7 +243,7 @@ namespace acompanhar_pedido
                 long novonumero_gerado = 0;
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string str_cadPedido_sql = $"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,valorTotal,formaPag,valorLiq,usuario,delivery,pagamento_aprovado) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', '{data}', {valor},'{formaPag}',{valor},'{VariaveisGlobais.Usuario}',{delivery},{pagamento_efetuado});";
+                string str_cadPedido_sql = $"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,valor_total,forma_pag,pagamento_aprovado,usuario,delivery) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', {valor},'{formaPag}',{pagamento_efetuado},'{VariaveisGlobais.Usuario}',{delivery});";
                 MySqlCommand cadPedido = new MySqlCommand(str_cadPedido_sql, conexao,transaction);
                 try
                 {
@@ -325,22 +326,22 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                var pesquisa = $"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}';";
+                var pesquisa = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pedido_prontos = true AND pagamento_aprovado = true";
                 if (filtro)
                 {
                     switch (ordem)
                     {
                         case "az":
-                            pesquisa = $"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' ORDER BY nome_cliente ASC;";
+                            pesquisa += " ORDER BY nome_cliente ASC;";
                             break;
                         case "za":
-                            pesquisa = $"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' ORDER BY nome_cliente DESC;";
+                            pesquisa = " ORDER BY nome_cliente DESC;";
                             break;
                         case "nome":
-                            pesquisa = $"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' AND nome_cliente LIKE '%{nome}%';";
+                            pesquisa = " AND nome_cliente LIKE '%{nome}%';";
                             break;
                         case "venda":
-                            pesquisa = $"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' ORDER BY valorTotal ASC;";
+                            pesquisa = " ORDER BY valorTotal ASC;";
                             break;
                         default:
                             break;
@@ -378,7 +379,7 @@ namespace acompanhar_pedido
                     {
                         try
                         {
-                            string apaga_valor_nulo_comand = $"DELETE FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' AND numero_pedido = {numero_apagar};";
+                            string apaga_valor_nulo_comand = $"DELETE FROM prontos WHERE usuario = '{VariaveisGlobais.Usuario}' AND numero_pedido = {numero_apagar} AND pedido_pronto = true AND pagamento_aprovado = true;";
                             MySqlCommand apaga_valor_nulo = new MySqlCommand(apaga_valor_nulo_comand, conexao, transaction);
                             apaga_valor_nulo.ExecuteNonQuery();
                             transaction.Commit();
@@ -447,59 +448,24 @@ namespace acompanhar_pedido
             return listaProdutos;
         }
         //apaga o pedido da fila e joga na fila dos prontos
-        public void ApagaPedidoFila(int id, string hora)
+        public void MarcaPedidoPronto(int id)
         {
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string nome_cliente = "";
-                string endereco = "";
-                string produtos_nome = "";
-                string observacoes = "";
-                string hora_pedido = "";
-                string hora_ficou_pronto = hora;
-                string valorTotal = "0";
-                string formaPag = "";
-                string delivery = "";
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string pegaDados_comand = $"SELECT * FROM pedidos WHERE numero_pedido = {id} AND usuario = '{VariaveisGlobais.Usuario}';";
-                MySqlCommand pegaDados = new MySqlCommand(pegaDados_comand, conexao,transaction);
-                string apagaPedido_comand = $"DELETE FROM pedidos WHERE numero_pedido = {id} AND usuario = '{VariaveisGlobais.Usuario}';";
-                MySqlCommand apagaPedido = new MySqlCommand(apagaPedido_comand, conexao,transaction);
+                string marca_pedido_pronto = $"UPDATE pedidos SET pedido_pronto = true, hora_ficou_pronto = CURRENT_TIMESTAMP WHERE numero_pedido = {id} AND usuario = '{VariaveisGlobais.Usuario}';";
+                MySqlCommand marca_pedido = new MySqlCommand(marca_pedido_pronto, conexao,transaction);
                 try
                 {
-                    using (var reader = pegaDados.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            nome_cliente = reader["nome_cliente"].ToString();
-                            endereco = reader["endereco"].ToString();
-                            produtos_nome = reader["produtos_nome"].ToString();
-                            observacoes = reader["observacoes"].ToString();
-                            hora_pedido = reader["hora_pedido"].ToString();
-                            valorTotal = reader["valorTotal"].ToString().Replace(',', '.');
-                            formaPag = reader["formaPag"].ToString();
-                            delivery = reader["delivery"].ToString();
-                        }
-                    }
-                    string filaPronto_comand = $"INSERT INTO pedidos_prontos(numero_pedido,nome_cliente,endereco,produtos_nome,observacoes,hora_pedido,hora_ficou_pronto,valorTotal,formaPag,valorLiq,usuario,delivery,pagamento_aprovado) VALUES({id},'{nome_cliente}','{endereco}','{produtos_nome}','{observacoes}','{hora_pedido}','{hora_ficou_pronto}',{valorTotal},'{formaPag}',{valorTotal},'{VariaveisGlobais.Usuario}',{delivery},true)";
-                    MySqlCommand filaPronto = new MySqlCommand(filaPronto_comand, conexao, transaction);
-                    try
-                    {
-                        filaPronto.ExecuteNonQuery();
-                        apagaPedido.ExecuteNonQuery();
-                        transaction.Commit();
-                    }
-                    catch (Exception er)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show("Erro ao apagar pedido da lista ");
-                        EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-                    }
+                    marca_pedido.ExecuteNonQuery();
+                    transaction.Commit();
                 }
                 catch (Exception er)
                 {
+                    transaction.Rollback();
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                    MessageBox.Show("ERRO AO TENTAR MARCAR PEDIDO COMO PRONTO", "ATENÇÃO");
                 }
             }
         }
@@ -530,7 +496,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}';";
+                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pedido_pronto = false AND pagamento_aprovado = true;";
                 MySqlCommand pegaQtd = new MySqlCommand(pegaQtd_comando, conexao);
                 using (var reader = pegaQtd.ExecuteReader())
                 {
@@ -547,7 +513,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}';";
+                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pedido_pronto = true AND pagamento_aprovado = true;";
                 MySqlCommand pegaQtd = new MySqlCommand(pegaQtd_comando, conexao);
                 using (var reader = pegaQtd.ExecuteReader())
                 {
@@ -566,7 +532,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaValor_comando = $"SELECT SUM(valorTotal) FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}';";
+                string pegaValor_comando = $"SELECT SUM(valor_total) FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pedido_pronto = true AND pagamento_aprovado = true;";
                 MySqlCommand pegaValor = new MySqlCommand(pegaValor_comando, conexao);
                 using (var reader = pegaValor.ExecuteReader())
                 {
@@ -582,7 +548,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaSenha_comando = $"SELECT numero_pedido,nome_cliente FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' ORDER BY hora_ficou_pronto ASC;";
+                string pegaSenha_comando = $"SELECT numero_pedido,nome_cliente FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pedido_pronto = true AND pagamento_aprovado = true ORDER BY hora_ficou_pronto ASC;";
                 MySqlCommand pegaSenha = new MySqlCommand(pegaSenha_comando, conexao);
                 using (var reader = pegaSenha.ExecuteReader())
                 {
@@ -627,7 +593,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string pegaHorarios_comando = $"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}';";
+                string pegaHorarios_comando = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pedido_pronto = true AND pagamento_aprovado = true;";
                 MySqlCommand pegaHorarios = new MySqlCommand(pegaHorarios_comando, conexao,transaction);
                 try
                 {
@@ -670,8 +636,8 @@ namespace acompanhar_pedido
                                     { "produtos_nome", reader["produtos_nome"].ToString() },
                                     { "observacoes", reader["observacoes"].ToString() },
                                     { "hora_pedido", reader["hora_pedido"].ToString() },
-                                    { "valorTotal", reader["valorTotal"].ToString() },
-                                    { "formaPag", reader["formaPag"].ToString() },
+                                    { "valor_total", reader["valor_total"].ToString() },
+                                    { "forma_pag", reader["forma_pag"].ToString() },
                                     { "delivery", reader["delivery"].ToString() },
                                     { "pagamento_aprovado", reader["pagamento_aprovado"].ToString() }
                                 };
@@ -695,7 +661,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string criaUsuario_comando = $"INSERT INTO usuarios(senha, foto_clube) VALUES ('{nome}','{caminho_foto}');";
+                string criaUsuario_comando = $"INSERT INTO usuarios(nome, senha, foto) VALUES ('{nome}','{nome}','{caminho_foto}');";
                 MySqlCommand criaUsuario = new MySqlCommand(criaUsuario_comando, conexao,transaction);
                 try
                 {
@@ -711,7 +677,7 @@ namespace acompanhar_pedido
             }
         }       
         //verifica se o usuario ja existe
-        public bool Usuario(string nome)
+        public bool Usuario(string senha)
         {
             bool result = false;
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -723,7 +689,7 @@ namespace acompanhar_pedido
                 {
                     using (var reader = verificaUsuario.ExecuteReader())
                     {
-                        while (reader.Read()) { if (nome == reader["senha"].ToString()) { result = true; } }
+                        while (reader.Read()) { if (senha == reader["senha"].ToString()) { result = true; } }
 
                     }
                 }
@@ -735,13 +701,13 @@ namespace acompanhar_pedido
             return result;
         }
         //traz a foto do clube para a janela de relatorios
-        public string FotoClube(string nome)
+        public string FotoClube(string senha)
         {
             string caminho = "";
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string fotoClube_comando = $"SELECT foto_clube FROM usuarios WHERE senha = '{nome}' ;";
+                string fotoClube_comando = $"SELECT foto FROM usuarios WHERE senha = '{senha}' ;";
                 MySqlCommand fotoClube = new MySqlCommand(fotoClube_comando, conexao);
                 try
                 {
@@ -786,7 +752,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string apagaProduto_comando = $"DELETE FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' and numero_pedido = {numero_pedido};";
+                string apagaProduto_comando = $"DELETE FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND numero_pedido = {numero_pedido};";
                 MySqlCommand apagaProduto = new MySqlCommand(apagaProduto_comando, conexao, transaction);
                 try
                 {
@@ -810,7 +776,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string aprova_pagamento_comando = $"UPDATE pedidos SET pagamento_aprovado = True WHERE usuario = '{VariaveisGlobais.Usuario}' and numero_pedido = {numero_pedido};";
+                string aprova_pagamento_comando = $"UPDATE pedidos SET pagamento_aprovado = True WHERE usuario = '{VariaveisGlobais.Usuario}' AND numero_pedido = {numero_pedido};";
                 MySqlCommand aprova_pagamento = new MySqlCommand(aprova_pagamento_comando, conexao, transaction);
                 try
                 {
@@ -833,7 +799,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string pega_dados_prod_comando = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' and numero_pedido = {numero_pedido};";
+                string pega_dados_prod_comando = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND numero_pedido = {numero_pedido};";
                 MySqlCommand pega_dados_prod = new MySqlCommand(pega_dados_prod_comando, conexao, transaction);
                 string nf = "";
                 try
@@ -872,7 +838,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string pega_dados_prod_comando = $"SELECT * FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}' and numero_pedido = {numero_pedido};";
+                string pega_dados_prod_comando = $"SELECT * FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND numero_pedido = {numero_pedido} AND pedido_pronto = true AND pagamento_aprovado = true;";
                 MySqlCommand pega_dados_prod = new MySqlCommand(pega_dados_prod_comando, conexao, transaction);
                 string nf = "";
                 try
@@ -954,13 +920,14 @@ namespace acompanhar_pedido
 
             return sb.ToString();
         }
+        //retorna uma lista de booleano sobre os deliverys sendo true para entrega e false para balcão
         public List<bool> pegaListaDelivery()
         {
             List<bool> lista_tipo_delivery = new List<bool>();
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pega_dados_delivery_comando = $"SELECT delivery FROM pedidos_prontos WHERE usuario = '{VariaveisGlobais.Usuario}';";
+                string pega_dados_delivery_comando = $"SELECT delivery FROM pedidos WHERE usuario = '{VariaveisGlobais.Usuario}' AND pedido_pronto = true AND pagamento_aprovado = true;";
                 MySqlCommand pega_dados_delivery = new MySqlCommand(pega_dados_delivery_comando, conexao);
                 try
                 {

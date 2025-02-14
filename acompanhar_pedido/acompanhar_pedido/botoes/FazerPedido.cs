@@ -295,9 +295,9 @@ namespace acompanhar_pedido.teste
                     string hora_pedido = horario.ToString("HH:mm:ss");
                     string formaPag = boxPgto.Text.ToLower().Replace('é', 'e');
                     nf += $"\n\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {formaPag}\n---------------------------------\nVALOR TOTAL: R${totalValorExtrato.Text.Replace("R$", "")}\n---------------------------------";
-                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, hora_pedido, valorTotal, formaPag,entrega, pagamento_ja_efetuado);
+                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, valorTotal, formaPag,entrega, pagamento_ja_efetuado);
                     nf += $"\n\nHorario do pedido: {hora_pedido}";
-                    nf += $"\n\n{retirada}\n";
+                    nf += $"\n\nRETIRADA: {retirada}\n\n";
 
                     if (imprimir.Checked == true)
                     {
@@ -540,7 +540,6 @@ namespace acompanhar_pedido.teste
             List<Dictionary<string, string>> filaPedidos = new List<Dictionary<string, string>>(sql.FilaCadPed(false));
             if (filaPedidos.Count > 0)
             {
-                int ind_btn = 0;
                 foreach (Dictionary<string, string> i in filaPedidos)
                 {
                     try
