@@ -154,7 +154,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string comando_sql = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pagamento_aprovado = true AND pedido_pronto = false;";
+                string comando_sql = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = false;";
                 MySqlCommand comando = new MySqlCommand(comando_sql, conexao); 
                 try
                 {
@@ -334,7 +334,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                var pesquisa = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true AND pagamento_aprovado = true";
+                var pesquisa = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true";
                 switch (ordem)
                 {
                     case "az":
@@ -517,7 +517,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = false AND pagamento_aprovado = true;";
+                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = false;";
                 MySqlCommand pegaQtd = new MySqlCommand(pegaQtd_comando, conexao);
                 using (var reader = pegaQtd.ExecuteReader())
                 {
@@ -534,7 +534,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true AND pagamento_aprovado = true;";
+                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true;";
                 MySqlCommand pegaQtd = new MySqlCommand(pegaQtd_comando, conexao);
                 using (var reader = pegaQtd.ExecuteReader())
                 {
@@ -553,7 +553,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaValor_comando = $"SELECT SUM(valor_total) FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true AND pagamento_aprovado = true;";
+                string pegaValor_comando = $"SELECT SUM(valor_total) FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true;";
                 MySqlCommand pegaValor = new MySqlCommand(pegaValor_comando, conexao);
                 using (var reader = pegaValor.ExecuteReader())
                 {
@@ -569,7 +569,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaSenha_comando = $"SELECT numero_pedido,nome_cliente FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true AND pagamento_aprovado = true ORDER BY hora_ficou_pronto ASC;";
+                string pegaSenha_comando = $"SELECT numero_pedido,nome_cliente FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true ORDER BY hora_ficou_pronto ASC;";
                 MySqlCommand pegaSenha = new MySqlCommand(pegaSenha_comando, conexao);
                 using (var reader = pegaSenha.ExecuteReader())
                 {
@@ -614,7 +614,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string pegaHorarios_comando = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true AND pagamento_aprovado = true;";
+                string pegaHorarios_comando = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true;";
                 MySqlCommand pegaHorarios = new MySqlCommand(pegaHorarios_comando, conexao,transaction);
                 try
                 {
@@ -829,17 +829,29 @@ namespace acompanhar_pedido
                     {
                         while (reader.Read())
                         {
-                            //Cliente: nome \n\n ITEM: xxx QTD: x \n\n OBS: xxxxx \n ENDEREÇO:\nxxxxxxxx\n\nPAGAMENTO: debito\n---------------------------------\nVALOR TOTAL: R$0,00\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {a}\n*********************************\n\nHorario do pedido: HH:MM:SS
-                            nf += $"CLIENTE: {reader["nome_cliente"]}\n\n";
-                            string[] produtos_comprados = reader["produtos_nome"].ToString().Split(',');
-                            foreach (string prod in produtos_comprados) { nf += $"{prod}\n"; }
-                            string retirada = "BALCÃO";
-                            if (bool.Parse(reader["delivery"].ToString()) == true) { retirada = "ENTREGA"; }
+                            nf += $"CLIENTE: {reader["nome_cliente"]}";
                             string endereco_bruto = reader["endereco"].ToString();
                             string endereco = AddLineBreaksEveryNChars(endereco_bruto, 30);
+                            nf += $"\nENDEREÇO:\n{endereco}\n";
+                            string[] produtos_comprados = reader["produtos_nome"].ToString().Split(',');
+                            foreach (string prod in produtos_comprados) 
+                            { 
+                                if (prod == "") { break; }
+                                string nome_produto = prod.Split('X')[1];
+                                string quantidade = prod.Split('X')[0];
+                                string texto_item = $"\nITEM: {nome_produto} QTD: {quantidade}";
+                                string texto_item_formatado = AddLineBreaksEveryNChars(texto_item, 30);
+                                nf += texto_item_formatado;
+                            }
                             string obs_bruto = reader["observacoes"].ToString();
-                            string obs = AddLineBreaksEveryNChars(endereco_bruto, 30);
-                            nf += $"\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {reader["forma_pag"]}\n---------------------------------\nVALOR TOTAL: R${reader["valor_total"]}\n---------------------------------\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************\n\nHorario do pedido: {reader["hora_pedido"]}\n\n{retirada}\n";
+                            nf += $"\nOBS: {AddLineBreaksEveryNChars(obs_bruto, 30)}";
+                            nf += $"\n\n ----- {reader["forma_pag"]} ----- ";
+                            if (Convert.ToBoolean(reader["pagamento_aprovado"])) { nf += "\nPEDIDO PAGO"; } else { nf += "\nPAGAMENTO PENDENTE"; }
+                            nf += $"\n---------------------------------\nVALOR TOTAL: R${reader["valor_total"].ToString()}\n---------------------------------";
+                            if (Convert.ToBoolean(reader["delivery"])) { nf += "\n\nSAÍDA: ENTREGA"; } else { nf += "\n\nSAÍDA: BALCÃO"; }
+                            nf += $"\n\n*********************************\nNumero do pedido/Senha: {reader["numero_pedido"]}\n*********************************";
+                            nf += $"\nHorario do pedido\n{reader["hora_pedido"]}";
+
                         }
                     }
                     transaction.Commit();
@@ -909,7 +921,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pega_dados_delivery_comando = $"SELECT delivery FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true AND pagamento_aprovado = true;";
+                string pega_dados_delivery_comando = $"SELECT delivery FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true;";
                 MySqlCommand pega_dados_delivery = new MySqlCommand(pega_dados_delivery_comando, conexao);
                 try
                 {

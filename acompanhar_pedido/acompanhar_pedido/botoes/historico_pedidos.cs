@@ -179,7 +179,7 @@ namespace acompanhar_pedido.botoes
                         hora.Font = new Font("Arial", 10);
                         //label hora que ficou pronta
                         valorTotal_formPagamento.AutoSize = false;
-                        valorTotal_formPagamento.Text = $"Valor: R${i["valorTotal"]} -- {i["formaPag"]} ";
+                        valorTotal_formPagamento.Text = $"Valor: R${i["valor_total"]} -- {i["forma_pag"]} ";
                         valorTotal_formPagamento.BorderStyle = BorderStyle.FixedSingle;
                         valorTotal_formPagamento.TextAlign = ContentAlignment.MiddleCenter;
                         valorTotal_formPagamento.Width = 225;

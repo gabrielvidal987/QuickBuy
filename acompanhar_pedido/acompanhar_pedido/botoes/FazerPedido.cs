@@ -237,33 +237,37 @@ namespace acompanhar_pedido.teste
             if (delivery.Checked) { entrega = true; retirada = "ENTREGA"; }
             if (pcholdEndereco.Text.Length < 5) { endereco = "endereço não cadastrado"; }
             if (pagamento_efetuado.Checked) { pagamento_ja_efetuado = true; }
-            nf = $"Cliente: {nome_cliente}\n";
-            foreach (var item in extratoLista)
+            try
             {
-                nome_produto = item["nome"];
-                string quantidade = $"{item["quantidade"]}X";
-                produto_quantidade += $"{quantidade} {nome_produto},";
-                string texto_item = $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
-                string texto_item_formatado = AddLineBreaksEveryNChars(texto_item, 30);
-                nf += texto_item_formatado;
-            }
-            try 
-            { 
-                if (obs == "")
+                if (nome_cliente != "" && extratoLista.Count > 0)
                 {
-                    obs = "sem observações";
-                }
-                var horario = DateTime.Now;
-                string valorTotal = totalValorExtrato.Text.Replace("R$", "").Replace(',', '.');
-                if (nome_cliente != "" && nome_produto != "sem produto")
-                {
+                    nf = $"CLIENTE: {nome_cliente}";
+                    nf += $"\nENDEREÇO:\n{endereco}\n";
+                    foreach (var item in extratoLista)
+                    {
+                        nome_produto = item["nome"];
+                        string quantidade = $"{item["quantidade"]}X";
+                        produto_quantidade += $"{quantidade} {nome_produto},";
+                        string texto_item = $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
+                        string texto_item_formatado = AddLineBreaksEveryNChars(texto_item, 30);
+                        nf += texto_item_formatado;
+                    }
+                    if (obs == "")
+                    {
+                        obs = "sem observações";
+                    }
+                    var horario = DateTime.Now;
+                    string valorTotal = totalValorExtrato.Text.Replace("R$", "").Replace(',', '.');
                     ConectarSqlClasse sql = new ConectarSqlClasse();
                     string hora_pedido = horario.ToString("HH:mm:ss");
-                    string formaPag = boxPgto.Text.ToLower().Replace('é', 'e');
-                    nf += $"\n\nOBS: {obs}\nENDEREÇO:\n{endereco}\n\nPAGAMENTO: {formaPag}\n---------------------------------\nVALOR TOTAL: R${totalValorExtrato.Text.Replace("R$", "")}\n---------------------------------";
+                    string formaPag = boxPgto.Text.Replace('é', 'e');
+                    nf += $"\nOBS: {obs}";
+                    nf += $"\n\n ----- {formaPag} ----- ";
+                    if (Convert.ToBoolean(pagamento_ja_efetuado)) { nf += "\nPEDIDO PAGO"; } else { nf += "\nPAGAMENTO PENDENTE"; }
+                    nf += $"\n---------------------------------\nVALOR TOTAL: {totalValorExtrato.Text}\n---------------------------------";
+                    nf += $"\n\nSAÍDA: {retirada}";
                     nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, valorTotal, formaPag,entrega, pagamento_ja_efetuado);
-                    nf += $"\n\nHorario do pedido: {hora_pedido}";
-                    nf += $"\n\nRETIRADA: {retirada}\n\n";
+                    nf += $"\nHorario do pedido\n{hora_pedido}";
 
                     if (imprimir.Checked == true)
                     {
@@ -278,6 +282,7 @@ namespace acompanhar_pedido.teste
                         }
                     }
                     MessageBox.Show($"{nf}","PEDIDO CADASTRADO COM SUCESSO!!");
+
                     boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
                     tbExtrato.Controls.Clear();
                     extratoLista.Clear();
@@ -290,13 +295,13 @@ namespace acompanhar_pedido.teste
                     pcholdCliente.Text = "";
                     pcholdEndereco.Text = "";
                     pcholdCliente.Focus();
-            }
-            else
-            {
-                MessageBox.Show("Preencha o nome do cliente e adicione os produtos");
-                pcholdCliente.Focus();
-            }
-            CarregaBotoes();
+                }
+                else
+                {
+                    MessageBox.Show("Preencha o nome do cliente e adicione os produtos");
+                    pcholdCliente.Focus();
+                }
+                CarregaBotoes();
             }
             catch (Exception er) 
             {

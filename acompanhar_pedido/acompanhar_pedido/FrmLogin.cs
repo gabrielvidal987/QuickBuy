@@ -169,7 +169,14 @@ namespace acompanhar_pedido
                 }
                 else
                 {
+                    //reativa os campos para realizar o login
                     resultConexao.Text += res_conn;
+                    testConexaobtn.Enabled = true;
+                    server.Enabled = true;
+                    uid.Enabled = true;
+                    password.Enabled = true;
+                    database.Enabled = true;
+                    server.Focus();
                 }
             }
             catch (Exception ex)
