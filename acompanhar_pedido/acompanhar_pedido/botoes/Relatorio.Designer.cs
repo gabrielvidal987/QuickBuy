@@ -41,8 +41,6 @@
             this.btnNomeAZ = new System.Windows.Forms.RadioButton();
             this.btnNomeZA = new System.Windows.Forms.RadioButton();
             this.btnValor = new System.Windows.Forms.RadioButton();
-            this.btnApenasDelivery = new System.Windows.Forms.RadioButton();
-            this.btnApenasBalcao = new System.Windows.Forms.RadioButton();
             this.btnUmNome = new System.Windows.Forms.RadioButton();
             this.pcholdPesquisa = new acompanhar_pedido.PlaceHolderTextBox();
             this.exportExc = new System.Windows.Forms.Button();
@@ -138,8 +136,6 @@
             this.flowLayoutPanel2.Controls.Add(this.btnNomeAZ);
             this.flowLayoutPanel2.Controls.Add(this.btnNomeZA);
             this.flowLayoutPanel2.Controls.Add(this.btnValor);
-            this.flowLayoutPanel2.Controls.Add(this.btnApenasDelivery);
-            this.flowLayoutPanel2.Controls.Add(this.btnApenasBalcao);
             this.flowLayoutPanel2.Controls.Add(this.btnUmNome);
             this.flowLayoutPanel2.Controls.Add(this.pcholdPesquisa);
             this.flowLayoutPanel2.Controls.Add(this.exportExc);
@@ -222,37 +218,13 @@
             this.btnValor.Text = "ORDEM DE VALOR (A-Z)";
             this.btnValor.UseVisualStyleBackColor = true;
             // 
-            // btnApenasDelivery
-            // 
-            this.btnApenasDelivery.AutoSize = true;
-            this.btnApenasDelivery.Location = new System.Drawing.Point(527, 79);
-            this.btnApenasDelivery.Margin = new System.Windows.Forms.Padding(10);
-            this.btnApenasDelivery.Name = "btnApenasDelivery";
-            this.btnApenasDelivery.Size = new System.Drawing.Size(124, 17);
-            this.btnApenasDelivery.TabIndex = 16;
-            this.btnApenasDelivery.TabStop = true;
-            this.btnApenasDelivery.Text = "APENAS DELIVERY";
-            this.btnApenasDelivery.UseVisualStyleBackColor = true;
-            // 
-            // btnApenasBalcao
-            // 
-            this.btnApenasBalcao.AutoSize = true;
-            this.btnApenasBalcao.Location = new System.Drawing.Point(671, 79);
-            this.btnApenasBalcao.Margin = new System.Windows.Forms.Padding(10);
-            this.btnApenasBalcao.Name = "btnApenasBalcao";
-            this.btnApenasBalcao.Size = new System.Drawing.Size(113, 17);
-            this.btnApenasBalcao.TabIndex = 17;
-            this.btnApenasBalcao.TabStop = true;
-            this.btnApenasBalcao.Text = "APENAS BALCÃO";
-            this.btnApenasBalcao.UseVisualStyleBackColor = true;
-            // 
             // btnUmNome
             // 
             this.btnUmNome.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUmNome.AutoSize = true;
-            this.btnUmNome.Location = new System.Drawing.Point(804, 79);
+            this.btnUmNome.Location = new System.Drawing.Point(527, 79);
             this.btnUmNome.Margin = new System.Windows.Forms.Padding(10);
             this.btnUmNome.Name = "btnUmNome";
             this.btnUmNome.Size = new System.Drawing.Size(123, 17);
@@ -267,7 +239,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pcholdPesquisa.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
             this.pcholdPesquisa.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdPesquisa.Location = new System.Drawing.Point(947, 79);
+            this.pcholdPesquisa.Location = new System.Drawing.Point(670, 79);
             this.pcholdPesquisa.Margin = new System.Windows.Forms.Padding(10);
             this.pcholdPesquisa.Multiline = true;
             this.pcholdPesquisa.Name = "pcholdPesquisa";
@@ -282,7 +254,7 @@
             this.exportExc.Cursor = System.Windows.Forms.Cursors.Hand;
             this.exportExc.Enabled = false;
             this.exportExc.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.exportExc.Location = new System.Drawing.Point(10, 109);
+            this.exportExc.Location = new System.Drawing.Point(834, 72);
             this.exportExc.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
             this.exportExc.Name = "exportExc";
             this.exportExc.Size = new System.Drawing.Size(146, 31);
@@ -296,7 +268,7 @@
             this.flowLayoutPanel3.Controls.Add(this.txDeb);
             this.flowLayoutPanel3.Controls.Add(this.txCred);
             this.flowLayoutPanel3.Controls.Add(this.label1);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 146);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 109);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
             this.flowLayoutPanel3.Size = new System.Drawing.Size(948, 28);
             this.flowLayoutPanel3.TabIndex = 14;
@@ -342,7 +314,7 @@
             this.tabelaVendas.AllowUserToDeleteRows = false;
             this.tabelaVendas.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tabelaVendas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tabelaVendas.Location = new System.Drawing.Point(3, 180);
+            this.tabelaVendas.Location = new System.Drawing.Point(3, 143);
             this.tabelaVendas.Name = "tabelaVendas";
             this.tabelaVendas.Size = new System.Drawing.Size(1070, 213);
             this.tabelaVendas.TabIndex = 15;
@@ -370,7 +342,6 @@
             this.saidas.Size = new System.Drawing.Size(168, 30);
             this.saidas.TabIndex = 3;
             this.saidas.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.saidas.KeyDown += new System.Windows.Forms.KeyEventHandler(this.saidas_KeyDown);
             // 
             // label8
             // 
@@ -583,7 +554,5 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DataGridView tabelaVendas;
         private System.Windows.Forms.CheckBox delPendentes;
-        private System.Windows.Forms.RadioButton btnApenasDelivery;
-        private System.Windows.Forms.RadioButton btnApenasBalcao;
     }
 }

@@ -334,20 +334,20 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                var pesquisa = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true";
+                var pesquisa = $"SELECT * FROM pedidos WHERE usuario = '{usuario_logado}';";
                 switch (ordem)
                 {
                     case "az":
                         pesquisa += " ORDER BY nome_cliente ASC;";
                         break;
                     case "za":
-                        pesquisa = " ORDER BY nome_cliente DESC;";
+                        pesquisa += " ORDER BY nome_cliente DESC;";
                         break;
                     case "nome":
-                        pesquisa = " AND nome_cliente LIKE '%{nome}%';";
+                        pesquisa += " AND nome_cliente LIKE '%{nome}%';";
                         break;
                     case "venda":
-                        pesquisa = " ORDER BY valor_total ASC;";
+                        pesquisa += " ORDER BY valor_total ASC;";
                         break;
                     default:
                         break;
@@ -921,7 +921,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pega_dados_delivery_comando = $"SELECT delivery FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true;";
+                string pega_dados_delivery_comando = $"SELECT delivery FROM pedidos WHERE usuario = '{usuario_logado}';";
                 MySqlCommand pega_dados_delivery = new MySqlCommand(pega_dados_delivery_comando, conexao);
                 try
                 {
