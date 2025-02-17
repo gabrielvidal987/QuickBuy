@@ -323,14 +323,14 @@ namespace acompanhar_pedido.botoes
                         ws.Cells[0, 4].PutValue("observações");
                         ws.Cells[0, 5].PutValue("Hora do pedido");
                         ws.Cells[0, 6].PutValue("Hora de conclusão");
-                        ws.Cells[0, 7].PutValue("Valor Bruto");
+                        ws.Cells[0, 7].PutValue("Valor Líquido");
                         ws.Cells[0, 8].PutValue("Forma de pagamento");
-                        ws.Cells[0, 9].PutValue("Valor líquido");
-                        ws.Cells[0, 10].PutValue("Operador");
-                        ws.Cells[0, 11].PutValue("Saida");
+                        ws.Cells[0, 9].PutValue("Pagamento Realizado");
+                        ws.Cells[0, 10].PutValue("Pedido Pronto");
+                        ws.Cells[0, 11].PutValue("Delivery");
                         ws.Cells[0, 12].PutValue("Tempo de espera");
-                        ws.Cells[0, 13].PutValue("ITEM");
-                        ws.Cells[0, 14].PutValue("Total Vendido");
+                        ws.Cells[0, 13].PutValue("Produto");
+                        ws.Cells[0, 14].PutValue("QTD");
                         for (int c = 0; c < tabelaVendas.RowCount; c++)
                         {
                             for(int i = 0; i < tabelaVendas.Columns.Count; i++)

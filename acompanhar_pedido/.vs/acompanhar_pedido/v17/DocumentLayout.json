@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|solutionrelative:acompanhar_pedido\\botoes\\relatorio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|c:\\users\\ap26\\desktop\\quickbuy\\acompanhar_pedido\\acompanhar_pedido\\conectarsqlclasse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\conectarsqlclasse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{17DFCC02-6F54-4AAC-91C5-F78C0CB616C3}|acompanhar_pedido\\acompanhar_pedido.csproj|solutionrelative:acompanhar_pedido\\conectarsqlclasse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -31,8 +31,7 @@
               "ViewState": "AgIAAIADAAAAAAAAAAA9wJsDAAB2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-14T11:06:38.01Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -42,7 +41,7 @@
               "RelativeDocumentMoniker": "acompanhar_pedido\\botoes\\Relatorio.cs",
               "ToolTip": "C:\\Users\\AP26\\Desktop\\QuickBuy\\acompanhar_pedido\\acompanhar_pedido\\botoes\\Relatorio.cs",
               "RelativeToolTip": "acompanhar_pedido\\botoes\\Relatorio.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAIA2wHsBAABEAAAAAAAAAA==",
+              "ViewState": "AgIAADsBAAAAAAAAAAAcwEgBAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-17T12:42:29.353Z",
               "EditorCaption": ""
