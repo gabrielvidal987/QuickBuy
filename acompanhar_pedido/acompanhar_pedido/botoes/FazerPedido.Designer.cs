@@ -360,6 +360,8 @@ namespace acompanhar_pedido.teste
             // 
             // pagamento_efetuado
             // 
+            this.pagamento_efetuado.Checked = true;
+            this.pagamento_efetuado.CheckState = System.Windows.Forms.CheckState.Checked;
             this.pagamento_efetuado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pagamento_efetuado.Location = new System.Drawing.Point(464, 110);
             this.pagamento_efetuado.Name = "pagamento_efetuado";

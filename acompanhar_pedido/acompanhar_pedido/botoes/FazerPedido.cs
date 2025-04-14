@@ -291,7 +291,7 @@ namespace acompanhar_pedido.teste
                     totalValorExtrato.Text = "R$0,00";
                     clienteExtrato.Text = "Cliente: ";
                     delivery.Checked = false;
-                    pagamento_efetuado.Checked = false;
+                    //pagamento_efetuado.Checked = false;
                     pcholdCliente.Text = "";
                     pcholdEndereco.Text = "";
                     pcholdCliente.Focus();
