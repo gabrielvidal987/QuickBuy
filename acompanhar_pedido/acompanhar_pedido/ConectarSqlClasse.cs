@@ -114,20 +114,20 @@ namespace acompanhar_pedido
                 {
                     if (nomeOriginal != null && nomeOriginal != "") 
                     {
-                        string comando_insere = $"UPDATE produtos SET nome = '{nome}', valor = {valor}, categoria = {categoria} where nome = '{nomeOriginal}' AND usuario = '{usuario_logado}';";
+                        string comando_insere = $"UPDATE produtos SET nome = '{nome.Trim()}', valor = {valor}, categoria = '{categoria}' where nome = '{nomeOriginal}' AND usuario = '{usuario_logado}';";
                         MySqlCommand insere = new MySqlCommand(comando_insere, conexao, transaction);
                         insere.ExecuteNonQuery();
-                        retorno = $"Produto {nomeOriginal} alterado com sucesso!!";
+                        retorno = $"Produto '{nomeOriginal}' alterado com sucesso!!";
                         transaction.Commit();
                     }
                     else
                     {
                         try
                         {
-                            string comando_insere = $"INSERT INTO produtos(nome,valor, caminho_foto, usuario, categoria) VALUES('{nome}',{valor},'{caminho}','{usuario_logado}','{categoria}');";
+                            string comando_insere = $"INSERT INTO produtos(nome,valor, caminho_foto, usuario, categoria) VALUES('{nome.Trim()}',{valor},'{caminho}','{usuario_logado}','{categoria}');";
                             MySqlCommand insere = new MySqlCommand(comando_insere, conexao, transaction);
                             insere.ExecuteNonQuery();
-                            retorno = $"Adicionado {nome} com valor {valor} na tabela de produtos";
+                            retorno = $"Adicionado {nome.Trim()} com valor {valor} na tabela de produtos";
                             transaction.Commit();
                         }
                         catch (Exception er)
@@ -365,7 +365,7 @@ namespace acompanhar_pedido
                         {
                             string numero_pedido = Convert.ToString(reader["numero_pedido"]);
                             string produtos_nome = Convert.ToString(reader["produtos_nome"]);
-                            if (produtos_nome == string.Empty || produtos_nome == null ) 
+                            if (string.IsNullOrEmpty(produtos_nome)) 
                             {
                                 lista_para_apagar.Add(numero_pedido);
                             }
@@ -501,7 +501,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = false AND pagamento_aprovado = false;";
+                string pegaQtd_comando = $"SELECT COUNT(nome_cliente) FROM pedidos WHERE usuario = '{usuario_logado}' AND pagamento_aprovado = false;";
                 MySqlCommand pegaQtd = new MySqlCommand(pegaQtd_comando, conexao);
                 using (var reader = pegaQtd.ExecuteReader())
                 {

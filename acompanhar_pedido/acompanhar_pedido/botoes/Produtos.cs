@@ -174,7 +174,7 @@ namespace acompanhar_pedido.botoes
         //função para cadastrar um produto novo com as informações escritas
         private void btnCadProd_Click(object sender, EventArgs e)
         {
-            if (pcholdNomeProd.Text != null && pcholdNomeProd.Text != "" && valorNumerico.Value != 0 && !produtos_nome.Contains(pcholdNomeProd.Text) )
+            if (!string.IsNullOrEmpty(pcholdNomeProd.Text))
             {
                 try
                 {
@@ -199,7 +199,7 @@ namespace acompanhar_pedido.botoes
                     MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal, categoria));
                     pcholdNomeProd.Text = string.Empty;
                     valorNumerico.Value = 0;
-                    try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.BackgroundImage = imagemPadrao; } catch { }
+                    try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.Image = imagemPadrao; } catch { }
                     nomeOriginal = null;
                     foto_caminho = null;
                     categoria_box.SelectedIndex = 0;
@@ -208,7 +208,7 @@ namespace acompanhar_pedido.botoes
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
                 CriaBtns();
             }
-            else { MessageBox.Show("Não são aceitos produtos sem nome, nomes iguais ou valor zerado"); }
+            else { MessageBox.Show("Não são aceitos produtos sem nome"); }
         }
         //função chamada ao clicar em um produto, os dados dele são puxados para edição
         private void produtobtn_Click(object sender, EventArgs e)

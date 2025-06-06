@@ -64,6 +64,7 @@ namespace acompanhar_pedido
             //botões layout e cores
             lbPag.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
             lbPag.BackColor = Color.FromArgb(27, 133, 254);
+            lbPag.Text = "0";
             lbPreparando.Padding = new System.Windows.Forms.Padding(5, 5, 7, 5);
             lbPreparando.BackColor = Color.FromArgb(27, 133, 254);
             lbPreparando.Text = "0";
