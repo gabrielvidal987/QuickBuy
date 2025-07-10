@@ -53,11 +53,11 @@ namespace acompanhar_pedido.botoes
             pnlGeral.BackColor = Color.FromArgb(192, 213, 239);
             pnlGeral.Location = new Point(30, 50);
             pnlGeral.Size = new Size(this.Width - 350, this.Height - 150);
-            pnlCadProd.Location = new Point(pnlGeral.Width + 40, 60);
-            pnlCadProd.Size = new Size(240, this.Height - 230);
+            pnlCadProd.Location = new Point(pnlGeral.Width + 40, 50);
+            pnlCadProd.Size = new Size(240, this.Height - 150);
             btnCadProd.Location = new Point(12, pnlCadProd.Height - 65);
             fotoProd.Location = new Point(12, pnlCadProd.Height - 235);
-            impListProd.Location = new Point(pnlCadProd.Location.X + 12, 590);
+            impListProd.Location = new Point(pnlCadProd.Location.X + 12, 610);
             impListProd.BackColor = Color.FromArgb(141, 172, 222);
             categoria_box.SelectedIndex = 0;
         }
@@ -310,6 +310,12 @@ namespace acompanhar_pedido.botoes
             {
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
+        }
+
+        private void qtd_inicial_numerico_ValueChanged(object sender, EventArgs e)
+        {
+            decimal qtd_disponivel = qtd_inicial_numerico.Value - qtd_vendido_numerico.Value)
+            qtd_disponivel_numerico.Value = qtd_disponivel;
         }
     }
 }

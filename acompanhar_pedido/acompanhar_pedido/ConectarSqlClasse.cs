@@ -243,7 +243,7 @@ namespace acompanhar_pedido
 
         }
         //realiza o cadastro de um pedido novo
-        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string valor,string formaPag,bool delivery,bool pagamento_efetuado)
+        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string valor,string formaPag,bool delivery,bool pagamento_efetuado, bool produto_entregue)
         {
             string resultado = "Erro, nada foi realizado";
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -251,7 +251,7 @@ namespace acompanhar_pedido
                 long novonumero_gerado = 0;
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string str_cadPedido_sql = $"INSERT INTO pedidos(nome_cliente,endereco,produtos_nome,observacoes,valor_total,forma_pag,pagamento_aprovado,usuario,delivery) VALUES('{nome_cliente}','{endereco}', '{produtos}', '{obs}', {valor},'{formaPag}',{pagamento_efetuado},'{usuario_logado}',{delivery});";
+                string str_cadPedido_sql = $"INSERT INTO pedidos(nome_cliente, endereco, produtos_nome, observacoes, valor_total, forma_pag, pagamento_aprovado, usuario, delivery, pedido_pronto) VALUES('{nome_cliente}', '{endereco}', '{produtos}', '{obs}', {valor},'{formaPag}',{pagamento_efetuado}, '{usuario_logado}', {delivery}, {produto_entregue});";
                 MySqlCommand cadPedido = new MySqlCommand(str_cadPedido_sql, conexao,transaction);
                 try
                 {
@@ -419,7 +419,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string comando_sql = $"SELECT * FROM produtos WHERE usuario = '{usuario_logado}' ;";
+                string comando_sql = $"SELECT * FROM produtos WHERE ativo = true AND usuario = '{usuario_logado}' ;";
                 MySqlCommand comando = new MySqlCommand(comando_sql, conexao);
                 try
                 {
@@ -481,6 +481,26 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 string atualizaQtd_comando = $"UPDATE produtos SET qtd_vendido = qtd_vendido + {qtd_produto} WHERE usuario = '{usuario_logado}' AND nome = '{nome_produto}';";
+                MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
+                MySqlCommand atualizaQtd = new MySqlCommand(atualizaQtd_comando, conexao, transaction);
+                try
+                {
+                    atualizaQtd.ExecuteNonQuery();
+                    transaction.Commit();
+                }
+                catch (Exception er)
+                {
+                    EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                }
+            }
+        }
+        //Desativa o produto caso a quantidade utilizada do produto seja igual a quantidade disponivel no estoque (significa que tudo que tem disponivel já foi consumido)
+        public void AtivaDesativaProdDisponivel(string nome_produto)
+        {
+            using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
+            {
+                conexao.Open();
+                string atualizaQtd_comando = $"UPDATE produtos SET ativo = IF(qtd_vendido = qtd_estoque, false, true) WHERE usuario = '{usuario_logado}' AND nome = '{nome_produto}';";
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 MySqlCommand atualizaQtd = new MySqlCommand(atualizaQtd_comando, conexao, transaction);
                 try
@@ -585,7 +605,7 @@ namespace acompanhar_pedido
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
                 conexao.Open();
-                string pegaDados_comando = $"SELECT * FROM produtos WHERE usuario = '{usuario_logado}' AND nome LIKE '%{filtro}%';";
+                string pegaDados_comando = $"SELECT * FROM produtos WHERE ativo = true AND usuario = '{usuario_logado}' AND nome LIKE '%{filtro}%';";
                 MySqlCommand pegaDados = new MySqlCommand(pegaDados_comando, conexao);
                 using (var reader = pegaDados.ExecuteReader())
                 {
@@ -749,7 +769,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string apagaProduto_comando = $"DELETE FROM produtos WHERE usuario = '{usuario_logado}' and nome = '{nome}';";
+                string apagaProduto_comando = $"DELETE FROM produtos WHERE ativo = true AND usuario = '{usuario_logado}' and nome = '{nome}';";
                 MySqlCommand apagaProduto = new MySqlCommand(apagaProduto_comando, conexao, transaction);
                 try
                 {
@@ -871,7 +891,7 @@ namespace acompanhar_pedido
             {
                 conexao.Open();
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
-                string pega_dados_prod_comando = $"SELECT * FROM produtos WHERE usuario = '{usuario_logado}';";
+                string pega_dados_prod_comando = $"SELECT * FROM produtos WHERE ativo = true AND usuario = '{usuario_logado}';";
                 MySqlCommand pega_dados_prod = new MySqlCommand(pega_dados_prod_comando, conexao, transaction);
                 string lista_pedidos = $"{usuario_logado}\n\n\n";
                 try

@@ -36,7 +36,6 @@ namespace acompanhar_pedido.teste
             this.pnlTotal = new System.Windows.Forms.Panel();
             this.boxPgto = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.pcholdObs = new acompanhar_pedido.PlaceHolderTextBox();
             this.resumo = new System.Windows.Forms.Label();
             this.btnCad = new System.Windows.Forms.Button();
             this.tbExtrato = new System.Windows.Forms.FlowLayoutPanel();
@@ -49,12 +48,14 @@ namespace acompanhar_pedido.teste
             this.impressora = new System.Drawing.Printing.PrintDocument();
             this.label5 = new System.Windows.Forms.Label();
             this.btnHist = new System.Windows.Forms.Button();
+            this.delivery = new System.Windows.Forms.CheckBox();
+            this.pagamento_efetuado = new System.Windows.Forms.CheckBox();
+            this.prod_entregue = new System.Windows.Forms.CheckBox();
             this.pnlGeral = new acompanhar_pedido.botoes.DoubleBufferedFlowLayoutPanel();
             this.pcholdBuscaProd = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdEndereco = new acompanhar_pedido.PlaceHolderTextBox();
             this.pcholdCliente = new acompanhar_pedido.PlaceHolderTextBox();
-            this.delivery = new System.Windows.Forms.CheckBox();
-            this.pagamento_efetuado = new System.Windows.Forms.CheckBox();
+            this.pcholdObs = new acompanhar_pedido.PlaceHolderTextBox();
             this.pnlTotal.SuspendLayout();
             this.pnlFimExtrato.SuspendLayout();
             this.pnlGeral.SuspendLayout();
@@ -62,11 +63,10 @@ namespace acompanhar_pedido.teste
             // 
             // imprimir
             // 
-            this.imprimir.AutoSize = true;
             this.imprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.imprimir.Location = new System.Drawing.Point(162, 117);
+            this.imprimir.Location = new System.Drawing.Point(162, 120);
             this.imprimir.Name = "imprimir";
-            this.imprimir.Size = new System.Drawing.Size(132, 24);
+            this.imprimir.Size = new System.Drawing.Size(132, 30);
             this.imprimir.TabIndex = 2;
             this.imprimir.Text = "Imprimir senha";
             this.imprimir.UseVisualStyleBackColor = true;
@@ -127,18 +127,6 @@ namespace acompanhar_pedido.teste
             this.label1.Size = new System.Drawing.Size(332, 15);
             this.label1.TabIndex = 28;
             this.label1.Text = "*para remover/subtrair um item basta clicar em seu nome no extrato*";
-            // 
-            // pcholdObs
-            // 
-            this.pcholdObs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pcholdObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
-            this.pcholdObs.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdObs.Location = new System.Drawing.Point(28, 354);
-            this.pcholdObs.Multiline = true;
-            this.pcholdObs.Name = "pcholdObs";
-            this.pcholdObs.PlaceHolderText = null;
-            this.pcholdObs.Size = new System.Drawing.Size(380, 56);
-            this.pcholdObs.TabIndex = 4;
             // 
             // resumo
             // 
@@ -297,12 +285,44 @@ namespace acompanhar_pedido.teste
             this.btnHist.UseVisualStyleBackColor = false;
             this.btnHist.Click += new System.EventHandler(this.btnHist_Click);
             // 
+            // delivery
+            // 
+            this.delivery.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.delivery.Location = new System.Drawing.Point(162, 90);
+            this.delivery.Name = "delivery";
+            this.delivery.Size = new System.Drawing.Size(182, 30);
+            this.delivery.TabIndex = 35;
+            this.delivery.Text = "Delivery/Entrega";
+            this.delivery.UseVisualStyleBackColor = true;
+            // 
+            // pagamento_efetuado
+            // 
+            this.pagamento_efetuado.Checked = true;
+            this.pagamento_efetuado.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.pagamento_efetuado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pagamento_efetuado.Location = new System.Drawing.Point(404, 120);
+            this.pagamento_efetuado.Name = "pagamento_efetuado";
+            this.pagamento_efetuado.Size = new System.Drawing.Size(182, 30);
+            this.pagamento_efetuado.TabIndex = 36;
+            this.pagamento_efetuado.Text = "Pagamento efetuado";
+            this.pagamento_efetuado.UseVisualStyleBackColor = true;
+            // 
+            // prod_entregue
+            // 
+            this.prod_entregue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.prod_entregue.Location = new System.Drawing.Point(404, 90);
+            this.prod_entregue.Name = "prod_entregue";
+            this.prod_entregue.Size = new System.Drawing.Size(182, 24);
+            this.prod_entregue.TabIndex = 37;
+            this.prod_entregue.Text = "Produto já entregue";
+            this.prod_entregue.UseVisualStyleBackColor = true;
+            // 
             // pnlGeral
             // 
             this.pnlGeral.AutoScroll = true;
             this.pnlGeral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlGeral.Controls.Add(this.pcholdBuscaProd);
-            this.pnlGeral.Location = new System.Drawing.Point(126, 151);
+            this.pnlGeral.Location = new System.Drawing.Point(126, 160);
             this.pnlGeral.Name = "pnlGeral";
             this.pnlGeral.Padding = new System.Windows.Forms.Padding(20, 10, 10, 10);
             this.pnlGeral.Size = new System.Drawing.Size(520, 507);
@@ -327,7 +347,7 @@ namespace acompanhar_pedido.teste
             // 
             this.pcholdEndereco.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Italic);
             this.pcholdEndereco.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdEndereco.Location = new System.Drawing.Point(162, 84);
+            this.pcholdEndereco.Location = new System.Drawing.Point(404, 46);
             this.pcholdEndereco.Multiline = true;
             this.pcholdEndereco.Name = "pcholdEndereco";
             this.pcholdEndereco.PlaceHolderText = null;
@@ -348,33 +368,24 @@ namespace acompanhar_pedido.teste
             this.pcholdCliente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyDown);
             this.pcholdCliente.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pcholdCliente_KeyUp);
             // 
-            // delivery
+            // pcholdObs
             // 
-            this.delivery.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.delivery.Location = new System.Drawing.Point(300, 117);
-            this.delivery.Name = "delivery";
-            this.delivery.Size = new System.Drawing.Size(158, 24);
-            this.delivery.TabIndex = 35;
-            this.delivery.Text = "Delivery/Entrega";
-            this.delivery.UseVisualStyleBackColor = true;
-            // 
-            // pagamento_efetuado
-            // 
-            this.pagamento_efetuado.Checked = true;
-            this.pagamento_efetuado.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.pagamento_efetuado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pagamento_efetuado.Location = new System.Drawing.Point(464, 110);
-            this.pagamento_efetuado.Name = "pagamento_efetuado";
-            this.pagamento_efetuado.Size = new System.Drawing.Size(182, 38);
-            this.pagamento_efetuado.TabIndex = 36;
-            this.pagamento_efetuado.Text = "Pagamento efetuado";
-            this.pagamento_efetuado.UseVisualStyleBackColor = true;
+            this.pcholdObs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pcholdObs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
+            this.pcholdObs.ForeColor = System.Drawing.Color.Gray;
+            this.pcholdObs.Location = new System.Drawing.Point(28, 354);
+            this.pcholdObs.Multiline = true;
+            this.pcholdObs.Name = "pcholdObs";
+            this.pcholdObs.PlaceHolderText = null;
+            this.pcholdObs.Size = new System.Drawing.Size(380, 56);
+            this.pcholdObs.TabIndex = 4;
             // 
             // FazerPedido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1350, 729);
+            this.Controls.Add(this.prod_entregue);
             this.Controls.Add(this.pagamento_efetuado);
             this.Controls.Add(this.delivery);
             this.Controls.Add(this.btnHist);
@@ -429,5 +440,6 @@ namespace acompanhar_pedido.teste
         private PlaceHolderTextBox pcholdBuscaProd;
         private System.Windows.Forms.CheckBox delivery;
         private System.Windows.Forms.CheckBox pagamento_efetuado;
+        private System.Windows.Forms.CheckBox prod_entregue;
     }
 }

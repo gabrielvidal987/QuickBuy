@@ -41,9 +41,9 @@ namespace acompanhar_pedido.teste
         public void Estetica()
         {
             pcholdCliente.AutoSize = false;
-            pcholdCliente.Size = new System.Drawing.Size(221, 27);
+            pcholdCliente.Size = new System.Drawing.Size(221, 30);
             pcholdEndereco.AutoSize = false;
-            pcholdEndereco.Size = new System.Drawing.Size(221, 27);
+            pcholdEndereco.Size = new System.Drawing.Size(221, 30);
             pnlTotal.BackColor = Color.FromArgb(141, 172, 222);
             tbExtrato.BackColor = Color.FromArgb(198, 213, 239);
             pnlFimExtrato.BackColor = Color.FromArgb(198, 213, 239);
@@ -191,6 +191,25 @@ namespace acompanhar_pedido.teste
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
+        //Reset conteudo visual
+        public void ResetTela()
+        {
+            tbExtrato.Controls.Clear();
+            extratoLista.Clear();
+            nQuantProd.Text = "0";
+            totalValorExtrato.Text = "R$0,00";
+            pcholdCliente.Text = "";
+            pcholdObs.Text = "";
+            clienteExtrato.Text = "Cliente: ";
+            pcholdEndereco.Text = "";
+            boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
+            delivery.Checked = false;
+            prod_entregue.Checked = false;
+            pcholdBuscaProd.Text = "";
+            pcholdObs.Focus();
+            pcholdCliente.Focus();
+            CarregaBotoes();
+        }
         //função do botão de resetar a tela, ele limpa todos os campos e reseta o pedido
         private void btnReset_Click(object sender, EventArgs e)
         {
@@ -199,20 +218,7 @@ namespace acompanhar_pedido.teste
                 var reset = MessageBox.Show("Certeza de que deseja limpar o extrato?", "ATENÇÃO", MessageBoxButtons.YesNo);
                 if (reset == DialogResult.Yes)
                 {
-                    tbExtrato.Controls.Clear();
-                    extratoLista.Clear();
-                    nQuantProd.Text = "0";
-                    totalValorExtrato.Text = "R$0,00";
-                    pcholdCliente.Text = "";
-                    pcholdObs.Text = "";
-                    clienteExtrato.Text = "Cliente: ";
-                    pcholdEndereco.Text = "";
-                    boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
-                    delivery.Checked = false;
-                    pcholdBuscaProd.Text = "";
-                    pcholdObs.Focus();
-                    pcholdCliente.Focus();
-                    CarregaBotoes();
+                    ResetTela();
                 }
             }
             catch (Exception er) 
@@ -225,7 +231,6 @@ namespace acompanhar_pedido.teste
         private void btnCad_Click(object sender, EventArgs e)
         {
             string nome_cliente = clienteExtrato.Text.Replace("Cliente: ", "");
-            string nome_produto = "sem produto";
             string produto_quantidade = "";
             string obs_bruto = pcholdObs.Text;
             string obs = AddLineBreaksEveryNChars(obs_bruto, 30);
@@ -234,7 +239,9 @@ namespace acompanhar_pedido.teste
             string retirada = "BALCÃO";
             bool pagamento_ja_efetuado = false;
             bool entrega = false;
+            bool produto_entregue = false;
             if (delivery.Checked) { entrega = true; retirada = "ENTREGA"; }
+            if (prod_entregue.Checked) { produto_entregue = true; }
             if (pcholdEndereco.Text.Length < 5) { endereco = "endereço não cadastrado"; }
             if (pagamento_efetuado.Checked) { pagamento_ja_efetuado = true; }
             try
@@ -245,7 +252,7 @@ namespace acompanhar_pedido.teste
                     nf += $"\nENDEREÇO:\n{endereco}\n";
                     foreach (var item in extratoLista)
                     {
-                        nome_produto = item["nome"];
+                        string nome_produto = item["nome"];
                         string quantidade = $"{item["quantidade"]}X";
                         produto_quantidade += $"{quantidade} {nome_produto},";
                         string texto_item = $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
@@ -266,7 +273,7 @@ namespace acompanhar_pedido.teste
                     if (Convert.ToBoolean(pagamento_ja_efetuado)) { nf += "\nPEDIDO PAGO"; } else { nf += "\nPAGAMENTO PENDENTE"; }
                     nf += $"\n---------------------------------\nVALOR TOTAL: {totalValorExtrato.Text}\n---------------------------------";
                     nf += $"\n\nSAÍDA: {retirada}";
-                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, valorTotal, formaPag,entrega, pagamento_ja_efetuado);
+                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, valorTotal, formaPag,entrega, pagamento_ja_efetuado, produto_entregue);
                     nf += $"\nHorario do pedido\n{hora_pedido}";
 
                     if (imprimir.Checked == true)
@@ -282,18 +289,7 @@ namespace acompanhar_pedido.teste
                         }
                     }
                     MessageBox.Show($"{nf}","PEDIDO CADASTRADO COM SUCESSO!!");
-
-                    boxPgto.SelectedIndex = boxPgto.FindStringExact("Dinheiro");
-                    tbExtrato.Controls.Clear();
-                    extratoLista.Clear();
-                    nQuantProd.Text = "0";
-                    pcholdObs.Text = "";
-                    totalValorExtrato.Text = "R$0,00";
-                    clienteExtrato.Text = "Cliente: ";
-                    delivery.Checked = false;
-                    pcholdCliente.Text = "";
-                    pcholdEndereco.Text = "";
-                    pcholdCliente.Focus();
+                    ResetTela();
                 }
                 else
                 {
@@ -381,9 +377,13 @@ namespace acompanhar_pedido.teste
                     }
                     catch 
                     {
-                        Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{item["categoria"]}.png"));
-                        food_ico = new Bitmap(food_ico, fotoProd.Width - 40, fotoProd.Height - 40);
-                        fotoProd.Image = food_ico;
+                        try
+                        {
+                            Bitmap food_ico = new Bitmap(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos", $"{item["categoria"]}.png"));
+                            food_ico = new Bitmap(food_ico, fotoProd.Width - 40, fotoProd.Height - 40);
+                            fotoProd.Image = food_ico;
+                        }
+                        catch { }
                     }
                     fotoProd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
                     fotoProd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
