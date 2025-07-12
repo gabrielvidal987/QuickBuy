@@ -300,7 +300,6 @@ namespace acompanhar_pedido.botoes
                                 string[] texto_prod = h.Text.Split('X');
                                 int qtd_prod = int.Parse(texto_prod[0]);
                                 string nome_prod = texto_prod[1].Trim();
-                                sql.AumentaQtdUtilizadaProduto(nome_prod, qtd_prod);
                             }
                             pnlGeral.Controls.Remove(pnlGeral.Controls[j]);
                             sql.MarcaPedidoPronto(numero_pedido);

@@ -232,6 +232,7 @@ namespace acompanhar_pedido.teste
         {
             string nome_cliente = clienteExtrato.Text.Replace("Cliente: ", "");
             string produto_quantidade = "";
+            Dictionary<string, string> produtos_consumo = new Dictionary<string, string>();
             string obs_bruto = pcholdObs.Text;
             string obs = AddLineBreaksEveryNChars(obs_bruto, 30);
             string endereco_bruto = pcholdEndereco.Text;
@@ -255,6 +256,7 @@ namespace acompanhar_pedido.teste
                         string nome_produto = item["nome"];
                         string quantidade = $"{item["quantidade"]}X";
                         produto_quantidade += $"{quantidade} {nome_produto},";
+                        produtos_consumo.Add(item["nome"], item["quantidade"]);
                         string texto_item = $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
                         string texto_item_formatado = AddLineBreaksEveryNChars(texto_item, 30);
                         nf += texto_item_formatado;
@@ -273,7 +275,7 @@ namespace acompanhar_pedido.teste
                     if (Convert.ToBoolean(pagamento_ja_efetuado)) { nf += "\nPEDIDO PAGO"; } else { nf += "\nPAGAMENTO PENDENTE"; }
                     nf += $"\n---------------------------------\nVALOR TOTAL: {totalValorExtrato.Text}\n---------------------------------";
                     nf += $"\n\nSAÍDA: {retirada}";
-                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, valorTotal, formaPag,entrega, pagamento_ja_efetuado, produto_entregue);
+                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, valorTotal, formaPag,entrega, pagamento_ja_efetuado, produto_entregue, produtos_consumo);
                     nf += $"\nHorario do pedido\n{hora_pedido}";
 
                     if (imprimir.Checked == true)
@@ -324,8 +326,9 @@ namespace acompanhar_pedido.teste
                     FlowLayoutPanel btn = new FlowLayoutPanel();
                     Label nomeProd = new Label();
                     Label valorProd = new Label();
+                    Label qtdProd = new Label();
                     PictureBox fotoProd = new PictureBox();
-                    btn.Size = new Size(210, 152 + Convert.ToInt32(altura));
+                    btn.Size = new Size(210, 182 + Convert.ToInt32(altura));
                     btn.BorderStyle = BorderStyle.Fixed3D;
                     btn.Padding = new Padding(8, 5, 0, 0);
                     btn.Margin = new Padding(10, 10, 10, 10);
@@ -356,6 +359,17 @@ namespace acompanhar_pedido.teste
                     valorProd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
                     valorProd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
                     valorProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
+                    qtdProd.BackColor = Color.FromArgb(255, 255, 255);
+                    qtdProd.Font = new System.Drawing.Font("Arial", 10);
+                    qtdProd.ForeColor = Color.Black;
+                    qtdProd.AutoSize = false;
+                    qtdProd.Size = new Size(186, 30);
+                    qtdProd.BorderStyle = BorderStyle.FixedSingle;
+                    qtdProd.TextAlign = ContentAlignment.MiddleCenter;
+                    qtdProd.Text = $"QTD Dips. {item["disponivel"]}";
+                    qtdProd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
+                    qtdProd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
+                    qtdProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
                     fotoProd.BackColor = Color.FromArgb(255, 255, 255);
                     fotoProd.Size = new Size(186, 105);
                     fotoProd.BorderStyle = BorderStyle.FixedSingle;
@@ -391,6 +405,7 @@ namespace acompanhar_pedido.teste
                     pnlGeral.Controls.Add(btn);
                     btn.Controls.Add(nomeProd);
                     btn.Controls.Add(valorProd);
+                    btn.Controls.Add(qtdProd);
                     btn.Controls.Add(fotoProd);
                 }
             }

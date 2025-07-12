@@ -31,6 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.pnlTopo = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnPagamento = new System.Windows.Forms.Button();
             this.tbnMusic = new System.Windows.Forms.Button();
             this.btnFila = new System.Windows.Forms.Button();
@@ -49,12 +55,12 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbPag = new System.Windows.Forms.Label();
+            this.lbPagText = new System.Windows.Forms.Label();
             this.fotoClube = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.lbPag = new System.Windows.Forms.Label();
-            this.lbPagText = new System.Windows.Forms.Label();
+            this.lbl_copy = new System.Windows.Forms.Label();
             this.pnlTopo.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fotoClube)).BeginInit();
@@ -62,6 +68,12 @@
             // 
             // pnlTopo
             // 
+            this.pnlTopo.Controls.Add(this.label6);
+            this.pnlTopo.Controls.Add(this.label5);
+            this.pnlTopo.Controls.Add(this.label4);
+            this.pnlTopo.Controls.Add(this.label3);
+            this.pnlTopo.Controls.Add(this.label1);
+            this.pnlTopo.Controls.Add(this.label2);
             this.pnlTopo.Controls.Add(this.btnPagamento);
             this.pnlTopo.Controls.Add(this.tbnMusic);
             this.pnlTopo.Controls.Add(this.btnFila);
@@ -74,8 +86,98 @@
             this.pnlTopo.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTopo.Location = new System.Drawing.Point(50, 10);
             this.pnlTopo.Name = "pnlTopo";
-            this.pnlTopo.Size = new System.Drawing.Size(1234, 92);
+            this.pnlTopo.Size = new System.Drawing.Size(1234, 162);
             this.pnlTopo.TabIndex = 0;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.Black;
+            this.label6.Location = new System.Drawing.Point(923, 86);
+            this.label6.Margin = new System.Windows.Forms.Padding(0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(111, 70);
+            this.label6.TabIndex = 24;
+            this.label6.Text = "Relatórios";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Black;
+            this.label5.Location = new System.Drawing.Point(788, 86);
+            this.label5.Margin = new System.Windows.Forms.Padding(0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(111, 70);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "Painel de Senhas";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Black;
+            this.label4.Location = new System.Drawing.Point(654, 86);
+            this.label4.Margin = new System.Windows.Forms.Padding(0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(111, 70);
+            this.label4.TabIndex = 22;
+            this.label4.Text = "Cozinha";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Black;
+            this.label3.Location = new System.Drawing.Point(518, 86);
+            this.label3.Margin = new System.Windows.Forms.Padding(0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(111, 70);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Cadastrar produtos";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Black;
+            this.label1.Location = new System.Drawing.Point(250, 86);
+            this.label1.Margin = new System.Windows.Forms.Padding(0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(111, 70);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "Cadastrar Pedidos";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(385, 86);
+            this.label2.Margin = new System.Windows.Forms.Padding(0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(111, 70);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Pagamentos Pendentes";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnPagamento
             // 
@@ -95,7 +197,7 @@
             // tbnMusic
             // 
             this.tbnMusic.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.tbnMusic.Location = new System.Drawing.Point(1072, 28);
+            this.tbnMusic.Location = new System.Drawing.Point(1072, 50);
             this.tbnMusic.Name = "tbnMusic";
             this.tbnMusic.Size = new System.Drawing.Size(96, 36);
             this.tbnMusic.TabIndex = 6;
@@ -153,7 +255,7 @@
             this.data.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.data.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.data.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.data.Location = new System.Drawing.Point(27, 45);
+            this.data.Location = new System.Drawing.Point(27, 65);
             this.data.Multiline = true;
             this.data.Name = "data";
             this.data.ReadOnly = true;
@@ -166,7 +268,7 @@
             this.hora.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.hora.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.hora.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.hora.Location = new System.Drawing.Point(27, 19);
+            this.hora.Location = new System.Drawing.Point(27, 41);
             this.hora.Multiline = true;
             this.hora.Name = "hora";
             this.hora.ReadOnly = true;
@@ -329,50 +431,10 @@
             this.panel1.Controls.Add(this.lbTotalText);
             this.panel1.Controls.Add(this.lbTotal);
             this.panel1.Controls.Add(this.lbPrepText);
-            this.panel1.Location = new System.Drawing.Point(50, 122);
+            this.panel1.Location = new System.Drawing.Point(50, 190);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(523, 470);
             this.panel1.TabIndex = 7;
-            // 
-            // fotoClube
-            // 
-            this.fotoClube.Enabled = false;
-            this.fotoClube.ErrorImage = ((System.Drawing.Image)(resources.GetObject("fotoClube.ErrorImage")));
-            this.fotoClube.Image = ((System.Drawing.Image)(resources.GetObject("fotoClube.Image")));
-            this.fotoClube.InitialImage = ((System.Drawing.Image)(resources.GetObject("fotoClube.InitialImage")));
-            this.fotoClube.Location = new System.Drawing.Point(611, 122);
-            this.fotoClube.Name = "fotoClube";
-            this.fotoClube.Size = new System.Drawing.Size(413, 356);
-            this.fotoClube.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.fotoClube.TabIndex = 8;
-            this.fotoClube.TabStop = false;
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.Filter = "MP3(*.mp3)|*.mp3";
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.Transparent;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(1219, 630);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(65, 36);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "local_app (devOnly)";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Location = new System.Drawing.Point(7, 673);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(307, 13);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
             // 
             // lbPag
             // 
@@ -408,13 +470,53 @@
             this.lbPagText.Text = "PAGAMENTO PENDENTE";
             this.lbPagText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // fotoClube
+            // 
+            this.fotoClube.Enabled = false;
+            this.fotoClube.ErrorImage = ((System.Drawing.Image)(resources.GetObject("fotoClube.ErrorImage")));
+            this.fotoClube.Image = ((System.Drawing.Image)(resources.GetObject("fotoClube.Image")));
+            this.fotoClube.InitialImage = ((System.Drawing.Image)(resources.GetObject("fotoClube.InitialImage")));
+            this.fotoClube.Location = new System.Drawing.Point(611, 190);
+            this.fotoClube.Name = "fotoClube";
+            this.fotoClube.Size = new System.Drawing.Size(413, 356);
+            this.fotoClube.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.fotoClube.TabIndex = 8;
+            this.fotoClube.TabStop = false;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.Filter = "MP3(*.mp3)|*.mp3";
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(1219, 630);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(65, 36);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "local_app (devOnly)";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // lbl_copy
+            // 
+            this.lbl_copy.AutoSize = true;
+            this.lbl_copy.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_copy.Location = new System.Drawing.Point(7, 673);
+            this.lbl_copy.Name = "lbl_copy";
+            this.lbl_copy.Size = new System.Drawing.Size(307, 13);
+            this.lbl_copy.TabIndex = 13;
+            this.lbl_copy.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1334, 696);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lbl_copy);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.fotoClube);
             this.Controls.Add(this.pnlTopo);
@@ -458,9 +560,15 @@
         private System.Windows.Forms.Button tbnMusic;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lbl_copy;
         private System.Windows.Forms.Button btnPagamento;
         private System.Windows.Forms.Label lbPag;
         private System.Windows.Forms.Label lbPagText;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label1;
     }
 }

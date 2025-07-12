@@ -103,7 +103,7 @@ namespace acompanhar_pedido
             return true;
         }
         //insere produto na tabela de produtos
-        public string InsertProduto(string nome, string valor, string caminho, string nomeOriginal, string categoria)
+        public string InsertProduto(string nome, string valor, string caminho, string nomeOriginal, string qtd_inicial, string qtd_vendida, string categoria)
         {
             string retorno = "Ocorreu um erro, nada foi realizado";
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -114,7 +114,7 @@ namespace acompanhar_pedido
                 {
                     if (nomeOriginal != null && nomeOriginal != "") 
                     {
-                        string comando_insere = $"UPDATE produtos SET nome = '{nome.Trim()}', valor = {valor}, categoria = '{categoria}' where nome = '{nomeOriginal}' AND usuario = '{usuario_logado}';";
+                        string comando_insere = $"UPDATE produtos SET nome = '{nome.Trim()}', valor = {valor}, qtd_vendido = {qtd_vendida}, qtd_estoque = {qtd_inicial}, categoria = '{categoria}' where nome = '{nomeOriginal}' AND usuario = '{usuario_logado}';";
                         MySqlCommand insere = new MySqlCommand(comando_insere, conexao, transaction);
                         insere.ExecuteNonQuery();
                         retorno = $"Produto '{nomeOriginal}' alterado com sucesso!!";
@@ -124,7 +124,7 @@ namespace acompanhar_pedido
                     {
                         try
                         {
-                            string comando_insere = $"INSERT INTO produtos(nome,valor, caminho_foto, usuario, categoria) VALUES('{nome.Trim()}',{valor},'{caminho}','{usuario_logado}','{categoria}');";
+                            string comando_insere = $"INSERT INTO produtos(nome, valor, qtd_vendido, qtd_estoque, caminho_foto, usuario, categoria) VALUES('{nome.Trim()}',{valor}, {qtd_vendida}, {qtd_inicial},'{caminho}','{usuario_logado}','{categoria}');";
                             MySqlCommand insere = new MySqlCommand(comando_insere, conexao, transaction);
                             insere.ExecuteNonQuery();
                             retorno = $"Adicionado {nome.Trim()} com valor {valor} na tabela de produtos";
@@ -243,7 +243,7 @@ namespace acompanhar_pedido
 
         }
         //realiza o cadastro de um pedido novo
-        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string valor,string formaPag,bool delivery,bool pagamento_efetuado, bool produto_entregue)
+        public string CadPedido(string nome_cliente,string endereco, string produtos, string obs, string valor,string formaPag,bool delivery,bool pagamento_efetuado, bool produto_entregue, Dictionary<string, string> produtos_consumo)
         {
             string resultado = "Erro, nada foi realizado";
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
@@ -266,7 +266,18 @@ namespace acompanhar_pedido
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                     resultado = $"Erro ao cadastrar pedido";
                 }
-                if (resultado == "Pedido cadastrado com sucesso!") { resultado = $"*********************************\nNumero do pedido/Senha: {novonumero_gerado}\n*********************************"; }
+                if (resultado == "Pedido cadastrado com sucesso!") {
+                    resultado = $"*********************************\nNumero do pedido/Senha: {novonumero_gerado}\n*********************************"; 
+                    
+                    if (produtos_consumo.Count > 0 )
+                    {
+                        foreach (var pair in produtos_consumo)
+                        {
+                            AumentaQtdUtilizadaProduto(pair.Key, pair.Value);
+                        }
+                    }
+
+                }
             }
             return resultado;
         }
@@ -475,7 +486,7 @@ namespace acompanhar_pedido
             }
         }
         //atualiza a quantidade de tal produto utilizado
-        public void AumentaQtdUtilizadaProduto(string nome_produto, int qtd_produto)
+        public void AumentaQtdUtilizadaProduto(string nome_produto, string qtd_produto)
         {
             using (MySqlConnection conexao = new MySqlConnection($"server={res["server"]};uid={res["uid"]};pwd={res["pwd"]};database={res["database"]}"))
             {
@@ -493,6 +504,7 @@ namespace acompanhar_pedido
                     EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
                 }
             }
+            AtivaDesativaProdDisponivel(nome_produto);
         }
         //Desativa o produto caso a quantidade utilizada do produto seja igual a quantidade disponivel no estoque (significa que tudo que tem disponivel já foi consumido)
         public void AtivaDesativaProdDisponivel(string nome_produto)
@@ -580,6 +592,7 @@ namespace acompanhar_pedido
                     while (reader.Read()) { valorTotal = reader["SUM(valor_total)"].ToString(); }
                 }
             }
+            if (valorTotal == "") { valorTotal = "0,00";  }
             return valorTotal;
         }
         //traz uma lista de senhas por ordem da mais antiga para a mais nova
@@ -615,6 +628,7 @@ namespace acompanhar_pedido
                         {
                             { "nome", reader["nome"].ToString() },
                             { "valor", reader["valor"].ToString() },
+                            { "disponivel", (Convert.ToInt64(reader["qtd_estoque"]) - Convert.ToInt64(reader["qtd_vendido"])).ToString()},
                             { "caminho_foto", reader["caminho_foto"].ToString() },
                             { "id_produto", reader["id_produto"].ToString() } ,
                             { "categoria", reader["categoria"].ToString() }

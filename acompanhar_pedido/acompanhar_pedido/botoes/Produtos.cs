@@ -57,7 +57,7 @@ namespace acompanhar_pedido.botoes
             pnlCadProd.Size = new Size(240, this.Height - 150);
             btnCadProd.Location = new Point(12, pnlCadProd.Height - 65);
             fotoProd.Location = new Point(12, pnlCadProd.Height - 235);
-            impListProd.Location = new Point(pnlCadProd.Location.X + 12, 610);
+            impListProd.Location = new Point(pnlCadProd.Location.X + 12, this.Height - 95);
             impListProd.BackColor = Color.FromArgb(141, 172, 222);
             categoria_box.SelectedIndex = 0;
         }
@@ -80,9 +80,10 @@ namespace acompanhar_pedido.botoes
                     FlowLayoutPanel btn = new FlowLayoutPanel();
                     Label nomeProd = new Label();
                     Label valorProd = new Label();
+                    Label qtd_disponivel = new Label();
                     PictureBox fotoProd = new PictureBox();
                     PictureBox remProd = new PictureBox();
-                    btn.Size = new Size(210, 174 + Convert.ToInt32(altura));
+                    btn.Size = new Size(210, 200 + Convert.ToInt32(altura));
                     btn.BorderStyle = BorderStyle.Fixed3D;
                     btn.Padding = new Padding(8, 5, 0, 0);
                     btn.Margin = new Padding(10, 10, 10, 10);
@@ -109,6 +110,15 @@ namespace acompanhar_pedido.botoes
                     valorProd.TextAlign = ContentAlignment.MiddleCenter;
                     valorProd.Text = $"R${item["valor"].Replace('.', ',')}";
                     valorProd.Enabled = false;
+                    qtd_disponivel.BackColor = Color.FromArgb(255, 255, 255);
+                    qtd_disponivel.Font = new Font("Arial", 10);
+                    qtd_disponivel.ForeColor = Color.Black;
+                    qtd_disponivel.AutoSize = false;
+                    qtd_disponivel.Size = new Size(186, 30);
+                    qtd_disponivel.BorderStyle = BorderStyle.FixedSingle;
+                    qtd_disponivel.TextAlign = ContentAlignment.MiddleCenter;
+                    qtd_disponivel.Text = $"QTD Disp. {item["disponivel"]}";
+                    qtd_disponivel.Enabled = false;
                     fotoProd.BackColor = Color.FromArgb(255, 255, 255);
                     fotoProd.Size = new Size(186, 105);
                     fotoProd.BorderStyle = BorderStyle.FixedSingle;
@@ -136,6 +146,7 @@ namespace acompanhar_pedido.botoes
                     remProd.Image = apaga_ico;
                     btn.Controls.Add(nomeProd);
                     btn.Controls.Add(valorProd);
+                    btn.Controls.Add(qtd_disponivel);
                     btn.Controls.Add(fotoProd);
                     btn.Controls.Add(remProd);
                     pnlGeral.Controls.Add(btn);
@@ -183,6 +194,8 @@ namespace acompanhar_pedido.botoes
                     //é preciso converter em string e tirar a virgula para enviar o comando ao sql
                     string valor = valorNumerico.Value.ToString().Replace(',', '.');
                     string categoria = categoria_box.Text;
+                    string qtd_inicial = qtd_inicial_numerico.Value.ToString().Replace(',', '.');
+                    string qtd_vendida = qtd_vendido_numerico.Value.ToString().Replace(',', '.');
                     try
                     {
                         if (!Directory.Exists(Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "fotos_produtos")))
@@ -196,9 +209,11 @@ namespace acompanhar_pedido.botoes
                     }
                     catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
                     nome_foto_produto = $"{nome}.{exten}";
-                    MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal, categoria));
+                    MessageBox.Show(sql.InsertProduto(nome, valor, nome_foto_produto, nomeOriginal, qtd_inicial, qtd_vendida, categoria));
                     pcholdNomeProd.Text = string.Empty;
                     valorNumerico.Value = 0;
+                    qtd_inicial_numerico.Value = 0;
+                    qtd_disponivel_numerico.Value = 0;
                     try { Image imagemPadrao = new Bitmap(fotopadrao); fotoProd.Image = imagemPadrao; } catch { }
                     nomeOriginal = null;
                     foto_caminho = null;
@@ -314,7 +329,7 @@ namespace acompanhar_pedido.botoes
 
         private void qtd_inicial_numerico_ValueChanged(object sender, EventArgs e)
         {
-            decimal qtd_disponivel = qtd_inicial_numerico.Value - qtd_vendido_numerico.Value)
+            decimal qtd_disponivel = qtd_inicial_numerico.Value - qtd_vendido_numerico.Value;
             qtd_disponivel_numerico.Value = qtd_disponivel;
         }
     }

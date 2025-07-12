@@ -75,8 +75,14 @@ namespace acompanhar_pedido
             lbProntosText.BackColor = Color.FromArgb(27, 133, 254);
             lbPrepText.BackColor = Color.FromArgb(27, 133, 254);
             lbTotal.BackColor = Color.FromArgb(27, 133, 254);
-            lbTotal.Text = "R$00,00";
+            lbTotal.Text = "R$0,00";
             lbTotalText.BackColor = Color.FromArgb(27, 133, 254);
+            label1.Location = new Point(btnPedido.Location.X - 15, 86);
+            label2.Location = new Point(btnPagamento.Location.X - 15, 86);
+            label3.Location = new Point(btnProdutos.Location.X - 15, 86);
+            label4.Location = new Point(btnCozinha.Location.X - 15, 86);
+            label5.Location = new Point(btnFila.Location.X - 15, 86);
+            label6.Location = new Point(btnRelatorio.Location.X - 15, 86);
             var horario = DateTime.Now;
             hora.Text = horario.ToString("hh:mm:ss");
             data.Text = horario.ToString("dd-MM-yyyy");
@@ -254,5 +260,6 @@ namespace acompanhar_pedido
         {
             try { MessageBox.Show(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString())); } catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }   
         }
+
     }
 }
