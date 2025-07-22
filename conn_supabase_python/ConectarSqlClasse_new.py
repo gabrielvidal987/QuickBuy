@@ -49,17 +49,12 @@ class ConectarSqlClasse:
         ConectarSqlClasse.usuario_logado = user
 
 
-    # realiza um teste de conexão ao banco de dados com as config da tela de login, realiza o teste na tela de login
-    def ConectDataBase(self) -> str:
-        try:
-            conn = self.connect_db()
-            
-            if not conn:
-                return f"Erro ao se conectar com o banco de dados \n Verifique os dados informados... ERRO: {erro}"
-                
-            return "Conexão com o banco de dados realizada com sucesso!!!"
-        except Exception as erro:
-            return f"Erro ao se conectar com o banco de dados \n Verifique os dados informados... ERRO: {erro}"
+    @staticmethod
+    def AddLineBreaksEveryNChars(input_str: str, interval: int) -> str:
+        if not input_str or interval <= 0:
+            return input_str
+
+        return '\n'.join(input_str[i:i+interval] for i in range(0, len(input_str), interval))
 
 
     @staticmethod
@@ -81,6 +76,19 @@ class ConectarSqlClasse:
 
         del conn
         return True
+
+
+    # realiza um teste de conexão ao banco de dados com as config da tela de login, realiza o teste na tela de login
+    def ConectDataBase(self) -> str:
+        try:
+            conn = self.connect_db()
+            
+            if not conn:
+                return f"Erro ao se conectar com o banco de dados \n Verifique os dados informados... ERRO: {erro}"
+                
+            return "Conexão com o banco de dados realizada com sucesso!!!"
+        except Exception as erro:
+            return f"Erro ao se conectar com o banco de dados \n Verifique os dados informados... ERRO: {erro}"
 
 
     def InsertProduto(self, nome, valor, caminho, nomeOriginal, qtd_inicial, qtd_vendida, categoria) -> str:
@@ -338,47 +346,56 @@ class ConectarSqlClasse:
         
         return resultado
 
-    """###OLHAR DEPOIS"""
+
     def Relatorio(self, ordem: str, nome: str):
         conn = ConectarSqlClasse.connect_db()
         
-        pesquisa = f"SELECT * FROM pedidos WHERE usuario = '{ConectarSqlClasse.usuario_logado}'"
-
-        if ordem == "az":
-            pesquisa += " ORDER BY nome_cliente ASC"
-        elif ordem == "za":
-            pesquisa += " ORDER BY nome_cliente DESC"
-        elif ordem == "nome":
-            pesquisa += f" AND nome_cliente LIKE '%{nome}%'"
-        elif ordem == "venda":
-            pesquisa += " ORDER BY valor_total ASC"
-
-        # Verifica campos nulos
-        cursor.execute(pesquisa)
-
-        # Apaga os registros inválidos
-        for numero_apagar in lista_para_apagar:
-            try:
-                apaga_comando = (
-                    f"DELETE FROM prontos WHERE usuario = '{ConectarSqlClasse.usuario_logado}' "
-                    f"AND numero_pedido = {numero_apagar};"
-                )
-                conexao.cursor().execute(apaga_comando)
-                conexao.commit()
-            except Exception as er:
-                conexao.rollback()
-                ConectarSqlClasse.EnviaLog(type(er).__name__, er.__traceback__, str(er))
-
-        # Gera DataFrame (equivalente ao DataTable)
         try:
-            df = pd.read_sql(pesquisa, conexao)
+            
+            if ordem == "az":
+                response = (
+                    conn.table("pedidos")
+                    .select("numero_pedido, nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
+                    .eq("usuario", ConectarSqlClasse.usuario_logado)
+                    .order("nome_cliente", desc=False)
+                    .execute()
+                )
+            
+            elif ordem == "za":
+                response = (
+                    conn.table("pedidos")
+                    .select("numero_pedido, nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
+                    .eq("usuario", ConectarSqlClasse.usuario_logado)
+                    .order("nome_cliente", desc=True)
+                    .execute()
+                )
+            
+            elif ordem == "nome":
+                response = (
+                    conn.table("pedidos")
+                    .select("numero_pedido, nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
+                    .eq("usuario", ConectarSqlClasse.usuario_logado)
+                    .ilike("nome_cliente", f"%{nome}%")
+                    .execute()
+                )
+            
+            elif ordem == "venda":
+                response = (
+                    conn.table("pedidos")
+                    .select("numero_pedido, nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
+                    .eq("usuario", ConectarSqlClasse.usuario_logado)
+                    .order("valor_total", desc=False)
+                    .execute()
+                )
+
+            # Gera DataFrame (equivalente ao DataTable)
+            df = pd.DataFrame(response.data)
+                
         except Exception as er:
             ###FAZER COMUNICACAO MESSAGEBOX
             ConectarSqlClasse.EnviaLog(type(er).__name__, er.__traceback__, str(er))
             df = pd.DataFrame()
 
-        cursor.close()
-        conexao.close()
         return df
 
 
@@ -829,14 +846,6 @@ class ConectarSqlClasse:
         except Exception as er:
             self.EnviaLog(type(er).__name__, er.__traceback__, str(er))
         return lista_pedidos
-
-
-    @staticmethod
-    def AddLineBreaksEveryNChars(input_str: str, interval: int) -> str:
-        if not input_str or interval <= 0:
-            return input_str
-
-        return '\n'.join(input_str[i:i+interval] for i in range(0, len(input_str), interval))
 
 
     def pegaListaDelivery(self) -> list[bool]:
