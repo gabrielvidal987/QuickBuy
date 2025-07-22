@@ -143,9 +143,10 @@ class ConectarSqlClasse:
 
             response = (
                 conn.table("pedidos")
-                .select("*") # count (Optional) The property to use to get the count of rows returned.
+                .select("numero_pedido, nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
                 .eq("usuario", ConectarSqlClasse.usuario_logado)
                 .eq("pedido_pronto", False)
+                .order("numero_pedido", desc=True)
                 .execute()
             )
             
@@ -164,61 +165,119 @@ class ConectarSqlClasse:
             conn = ConectarSqlClasse.connect_db()
 
             desc = ordem.lower() == "desc"
+
             response = (
                 conn.table("pedidos")
-                .select("*") # count (Optional) The property to use to get the count of rows returned.
+                .select("numero_pedido, nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
                 .eq("usuario", ConectarSqlClasse.usuario_logado)
-                .eq("pedido_pronto", True)
-                .order("name", desc=desc)
+                .order("numero_pedido", desc=desc)
                 .execute()
             )
+            
             filaPedidos = response.data
         except Exception as er:
             ConectarSqlClasse.EnviaLog(type(er).__name__, er.__traceback__, str(er))
             
         return filaPedidos
 
-    """###OLHAR DEPOIS"""
-    def CadPedido(
-        self, nome_cliente, endereco, produtos, obs, valor, formaPag,
-        delivery, pagamento_efetuado, produto_entregue, produtos_consumo
-    ):
+
+    def _RemoveItem_prod(self, id_item):
+        conn = ConectarSqlClasse.connect_db()
+
+        try:
+            response = (
+                conn.table("pedido_itens")
+                .delete()
+                .eq("id_item", id_item)
+                .eq("usuario", ConectarSqlClasse.usuario_logado)
+                .execute()
+            )
+        except Exception as er:
+            self.EnviaLog(type(er).__name__, er.__traceback__, str(er))
+
+        ###FAZER COMUNICACAO MESSAGEBOX
+
+    
+    def _CadPedido_prod(self, numero_pedido, id_produto, qtd_utilizada, preco_unitario):
+        conn = ConectarSqlClasse.connect_db()
+
+        dict_data = {
+            "numero_pedido": numero_pedido,
+            "id_produto": id_produto,
+            "quantidade": qtd_utilizada,
+            "preco_unitario": preco_unitario,
+            "usuario": ConectarSqlClasse.usuario_logado
+        }
+        try:
+            response = (
+                conn.table("pedido_itens")
+                .insert(dict_data,)
+                .execute()
+            )
+            return True
+            
+        except Exception as er:
+            ConectarSqlClasse.EnviaLog(type(er).__name__, er.__traceback__, str(er))
+            return False
+            
+    
+    def CadPedido(self, nome_cliente: str, endereco: str, produtos, obs, valor, formaPag, delivery, pagamento_efetuado, produto_entregue, produtos_consumo):
         resultado = "Erro, nada foi realizado"
         conn = ConectarSqlClasse.connect_db()
 
-        conexao.start_transaction(isolation_level='SERIALIZABLE')
-        cursor = conexao.cursor()
-        novonumero_gerado = 0
-
-        str_cadPedido_sql = (
-            f"INSERT INTO pedidos(nome_cliente, endereco, produtos_nome, observacoes, valor_total, forma_pag, "
-            f"pagamento_aprovado, usuario, delivery, pedido_pronto) "
-            f"VALUES('{nome_cliente}', '{endereco}', '{produtos}', '{obs}', {valor},'{formaPag}',"
-            f"{int(pagamento_efetuado)}, '{ConectarSqlClasse.usuario_logado}', {int(delivery)}, {int(produto_entregue)});"
-        )
+        novo_numero_gerado = 0
 
         try:
-            cursor.execute(str_cadPedido_sql)
-            novonumero_gerado = cursor.lastrowid
-            conexao.commit()
+            
+            dict_data = {
+                "nome_cliente": nome_cliente,
+                "endereco": endereco,
+                "observacoes": obs,
+                "valor_total": valor,
+                "forma_pag": formaPag,
+                "pagamento_aprovado": bool(pagamento_efetuado),
+                "usuario": ConectarSqlClasse.usuario_logado,
+                "delivery": bool(delivery),
+                "pedido_pronto": bool(produto_entregue)
+            }
+            response = (
+                conn.table("pedidos")
+                .insert(dict_data,)
+                .select("numero_pedido") # ← Retorna apenas o campo "id"
+                .execute()
+            )
+            
+            novo_numero_gerado = response.data[0]["numero_pedido"]
+            
             resultado = "Pedido cadastrado com sucesso!"
+            
+            list_item_id = []
+            
+            for prod in produtos:
+                sucesso, id_item = self._CadPedido_prod(numero_pedido=novo_numero_gerado, id_produto=prod["id"], qtd_utilizada=prod["qtd"], preco_unitario=prod["preco"])
+                if not sucesso:
+                    ConectarSqlClasse.EnviaLog("Erro no insert", "ConectarSqlClasse.CadPedido", "Erro ao inserir um dos produtos, cancelando pedido")
+                    self.RemovePedido(novo_numero_gerado)
+                    for id_item in list_item_id:
+                        self._RemoveItem_prod(id_item=id_item)
+                        
+                    resultado = "Erro ao cadastrar pedido"
+                    break
+                    
+                    
         except Exception as er:
-            conexao.rollback()
             ConectarSqlClasse.EnviaLog(type(er).__name__, er.__traceback__, str(er))
             resultado = "Erro ao cadastrar pedido"
-        finally:
-            cursor.close()
-            conexao.close()
 
         if resultado == "Pedido cadastrado com sucesso!":
             resultado = (
                 f"*********************************\n"
-                f"Numero do pedido/Senha: {novonumero_gerado}\n"
+                f"Numero do pedido/Senha: {novo_numero_gerado}\n"
                 f"*********************************"
             )
-            if produtos_consumo:
-                for k, v in produtos_consumo.items():
-                    self.AumentaQtdUtilizadaProduto(k, v)
+            for prod in produtos:
+                self.AumentaQtdUtilizadaProduto(prod["nome"], prod["qtd"])
+
 
         return resultado
 
@@ -323,17 +382,20 @@ class ConectarSqlClasse:
         return df
 
 
-    """###OLHAR DEPOIS"""
     def ListaProdVendidos(self):
         listaProdutos = []
         conn = ConectarSqlClasse.connect_db()
 
-        comando_sql = (
-            f"SELECT * FROM produtos WHERE ativo = true AND usuario = '{ConectarSqlClasse.usuario_logado}';"
-        )
         try:
-            cursor.execute(comando_sql)
-            for row in cursor:
+            response = (
+                conn.table("produtos")
+                .select("*") # count (Optional) The property to use to get the count of rows returned.
+                .eq("ativo", True)
+                .eq("usuario", ConectarSqlClasse.usuario_logado)
+                .execute()
+            )
+            
+            for row in response.data:
                 try:
                     pedido = {
                         "nome": str(row["nome"]),
@@ -343,11 +405,10 @@ class ConectarSqlClasse:
                 except Exception as er:
                     ConectarSqlClasse.EnviaLog(type(er).__name__, er.__traceback__, str(er))
                     break
+                
         except Exception as er:
             ConectarSqlClasse.EnviaLog(type(er).__name__, er.__traceback__, str(er))
-        finally:
-            cursor.close()
-            conexao.close()
+
         return listaProdutos
 
 
@@ -558,25 +619,25 @@ class ConectarSqlClasse:
         return horarios
 
 
-    """###OLHAR DEPOIS"""
     def FilaCadPed(self, somente_pagamento_pendente: bool) -> list[dict[str, str]]:
         filaCadPed = []
         conn = ConectarSqlClasse.connect_db()
 
         try:
             if somente_pagamento_pendente:
+                    
                 response = (
                     conn.table("pedidos")
-                    .select("*")
+                    .select("numero_pedido, nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
                     .eq("usuario", ConectarSqlClasse.usuario_logado)
-                    .eq("pagamento_aprovado", False)
+                    .eq("pagamento_aprovado", True)
                     .order("numero_pedido", desc=True)
                     .execute()
                 )
             else:
                 response = (
                     conn.table("pedidos")
-                    .select("*")
+                    .select("numero_pedido, nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
                     .eq("usuario", ConectarSqlClasse.usuario_logado)
                     .order("numero_pedido", desc=True)
                     .execute()
@@ -587,7 +648,7 @@ class ConectarSqlClasse:
                     "numero_pedido": str(row["numero_pedido"]),
                     "nome_cliente": row["nome_cliente"],
                     "endereco": row["endereco"],
-                    "produtos_nome": row["produtos_nome"],
+                    "produtos": row["pedido_itens"],
                     "observacoes": row["observacoes"],
                     "hora_pedido": row["hora_pedido"],
                     "valor_total": str(row["valor_total"]),
@@ -597,6 +658,7 @@ class ConectarSqlClasse:
                 })
         except Exception as er:
             ConectarSqlClasse.EnviaLog(type(er).__name__, er.__traceback__, str(er))
+        
         return filaCadPed
 
 
@@ -663,7 +725,6 @@ class ConectarSqlClasse:
             response = (
                 conn.table("produtos")
                 .delete()
-                .eq("ativo", True)
                 .eq("nome", nome)
                 .eq("usuario", ConectarSqlClasse.usuario_logado)
                 .execute()
@@ -713,37 +774,34 @@ class ConectarSqlClasse:
         ###FAZER COMUNICACAO MESSAGEBOX
 
 
-    """###OLHAR DEPOIS"""
     def imprimePedido(self, numero_pedido: str) -> str:
         nf = ""
         conn = ConectarSqlClasse.connect_db()
 
-        comando = (
-            f"SELECT * FROM pedidos WHERE usuario = '{self.usuario_logado}' AND numero_pedido = {numero_pedido};"
-        )
         try:
             response = (
                 conn.table("pedidos")
-                .select("*")
+                .select("nome_cliente, endereco, observacoes, hora_pedido, valor_total, forma_pag, delivery, pagamento_aprovado, pedido_itens (id_produto, quantidade, preco_unitario, subtotal, usuario, produtos (nome))")
+                .eq("usuario", ConectarSqlClasse.usuario_logado)
+                .eq("numero_pedido", numero_pedido)
                 .execute()
             )
+
             for row in response.data:
                 nf += f"CLIENTE: {row['nome_cliente']}"
                 endereco = self.AddLineBreaksEveryNChars(row["endereco"], 30)
                 nf += f"\nENDEREÇO:\n{endereco}\n"
 
-                produtos_comprados = row["produtos_nome"].split(",")
-                for prod in produtos_comprados:
-                    if not prod:
-                        break
-                    quantidade, nome_produto = prod.split("X")
-                    texto_item = f"\nITEM: {nome_produto} QTD: {quantidade}"
+                for prod in row["pedido_itens"]:
+                    quantidade = prod["qtd"]
+                    nome = prod["nome"]
+                    texto_item = f"\nITEM: {nome} QTD: {quantidade}"
                     nf += self.AddLineBreaksEveryNChars(texto_item, 30)
 
                 obs = self.AddLineBreaksEveryNChars(row["observacoes"], 30)
                 nf += f"\nOBS: {obs}"
                 nf += f"\n\n ----- {row['forma_pag']} ----- "
-                nf += "\nPEDIDO PAGO" if row["pagamento_aprovado"] else "\nPAGAMENTO PENDENTE"
+                nf += "\nPEDIDO PAGO" if bool(row["pagamento_aprovado"]) else "\nPAGAMENTO PENDENTE"
                 nf += f"\n---------------------------------\nVALOR TOTAL: R${row['valor_total']}\n---------------------------------"
                 nf += "\n\nSAÍDA: ENTREGA" if row["delivery"] else "\n\nSAÍDA: BALCÃO"
                 nf += f"\n\n*********************************\nNumero do pedido/Senha: {row['numero_pedido']}\n*********************************"
