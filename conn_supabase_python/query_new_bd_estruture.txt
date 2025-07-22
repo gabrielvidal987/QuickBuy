@@ -1,0 +1,125 @@
+-------------------------CREATE TABLES
+
+-- Tabela de usuários do sistema
+CREATE TABLE usuarios (
+    id_sys SERIAL PRIMARY KEY,
+    nome VARCHAR(200),
+    senha VARCHAR(200) NOT NULL,
+    foto VARCHAR(500) DEFAULT 'sem_foto.png'
+);
+
+-- Tabela de produtos
+CREATE TABLE produtos (
+    id_produto SERIAL PRIMARY KEY,
+    nome VARCHAR(200) NOT NULL,
+    valor NUMERIC(10, 2) NOT NULL,
+    caminho_foto VARCHAR(2000),
+    qtd_vendido INT DEFAULT 0,
+    qtd_estoque INT NOT NULL DEFAULT 999,
+    categoria VARCHAR(50),
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    usuario VARCHAR(200)
+);
+
+-- Tabela de pedidos
+CREATE TABLE pedidos (
+    numero_pedido SERIAL PRIMARY KEY,
+    nome_cliente VARCHAR(2000) NOT NULL,
+    endereco VARCHAR(2000),
+    observacoes VARCHAR(500),
+    hora_pedido TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    hora_ficou_pronto TIMESTAMP,
+    valor_total NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    forma_pag VARCHAR(30) NOT NULL DEFAULT 'dinheiro',
+    pagamento_aprovado BOOLEAN NOT NULL DEFAULT FALSE,
+    pedido_pronto BOOLEAN NOT NULL DEFAULT FALSE,
+    delivery BOOLEAN NOT NULL DEFAULT FALSE,
+    usuario VARCHAR(200)
+);
+
+-- Tabela de itens do pedido
+CREATE TABLE pedido_itens (
+    id_item SERIAL PRIMARY KEY,
+    numero_pedido INT NOT NULL REFERENCES pedidos(numero_pedido) ON DELETE CASCADE,
+    id_produto INT NOT NULL REFERENCES produtos(id_produto),
+    quantidade INT NOT NULL,
+    preco_unitario NUMERIC(10, 2) NOT NULL,
+    subtotal NUMERIC(10, 2) GENERATED ALWAYS AS (quantidade * preco_unitario) STORED,
+    usuario VARCHAR(200)
+);
+
+CREATE TABLE log_erro (
+    id_log SERIAL PRIMARY KEY,
+    usuario varchar(200),
+    hora varchar(100),
+    tipo varchar(2000),
+    origem varchar(2000),
+    erro varchar(10000)
+) 
+
+-------------------------INSERT:
+
+INSERT INTO pedido_itens (numero_pedido, id_produto, quantidade, preco_unitario, usuario)
+VALUES 
+    (1, 1, 1, 5.00, 'campestre'),      -- Exemplo: Produto ID 1
+    (1, 2, 2, 7.00, 'campestre'),      -- Produto ID 2
+
+    (2, 3, 1, 10.00, 'campestre'),     -- Produto ID 3
+    (2, 4, 1, 3.50, 'campestre'),      -- Produto ID 4
+
+    (3, 5, 3, 2.00, 'campestre'),      -- Produto ID 5
+    (3, 6, 2, 8.00, 'campestre'),      -- Produto ID 6
+
+    (4, 7, 1, 12.00, 'campestre'),     -- Produto ID 7
+
+    (5, 2, 1, 7.00, 'campestrejunior'),-- Produto ID 2
+    (5, 4, 1, 3.50, 'campestrejunior'),-- Produto ID 4
+
+    (6, 3, 2, 10.00, 'desbravadores'), -- Produto ID 3
+    (7, 1, 2, 5.00, 'campestre'),      -- Produto ID 1
+    (8, 6, 1, 8.00, 'campestre'),      -- Produto ID 6
+    (9, 7, 2, 12.00, 'campestre'),     -- Produto ID 7
+    (10, 5, 4, 2.00, 'campestre');     -- Produto ID 5
+
+
+
+INSERT INTO pedidos 
+(nome_cliente, endereco, observacoes, hora_pedido, hora_ficou_pronto, valor_total, forma_pag, pagamento_aprovado, pedido_pronto, delivery, usuario)
+VALUES
+-- Usuário campestre (7 registros)
+('João Silva', 'Rua das Flores, 123', 'Sem troco', '2025-07-21 18:01:00', '2025-07-21 18:15:00', 25.00, 'DINHEIRO', true, true, false, 'campestre'),
+('Ana Maria', 'Av. Central, 45', '', '2025-07-21 18:10:00', '2025-07-21 18:28:00', 32.50, 'PIX', true, true, false, 'campestre'),
+('Carlos Souza', 'Travessa 9', 'Cliente pediu sem cebola', '2025-07-21 18:20:00', '2025-07-21 18:37:00', 40.00, 'CRÉDITO', true, true, true, 'campestre'),
+('Bruna Costa', 'Rua B, 789', '', '2025-07-21 18:30:00', '2025-07-21 18:45:00', 17.00, 'DÉBITO', true, true, false, 'campestre'),
+('Marcos Lima', 'Rua XPTO, 33', 'Entrega rápida', '2025-07-21 18:45:00', '2025-07-21 19:00:00', 12.00, 'PIX', true, true, true, 'campestre'),
+('Juliana Paz', 'Rua do Sol, 200', 'Troco para 50', '2025-07-21 18:50:00', '2025-07-21 19:05:00', 38.00, 'DINHEIRO', true, false, false, 'campestre'),
+('Paulo Gomes', 'Rua C, 123', 'Adicionar ketchup extra', '2025-07-21 18:55:00', '2025-07-21 19:15:00', 28.00, 'PIX', false, false, false, 'campestre'),
+
+-- Outros usuários (3 registros)
+('Luciana Mendes', 'Rua do Parque, 88', '', '2025-07-21 19:00:00', '2025-07-21 19:20:00', 19.00, 'CRÉDITO', true, true, false, 'desbravadores'),
+('Ricardo Freitas', 'Rua A, 1', '', '2025-07-21 19:05:00', '2025-07-21 19:25:00', 22.00, 'DÉBITO', true, false, false, 'campestrejunior'),
+('Fernanda Rocha', 'Rua Z, 99', 'Cliente pediu entrega em caixa separada', '2025-07-21 19:10:00', '2025-07-21 19:40:00', 35.00, 'PIX', true, true, true, 'marpaulista');
+
+
+-------------------------SELECT:
+
+#puxar nome do produto e do cliente no lugar do id do produto e usando dois join
+SELECT 
+    ped.numero_pedido,
+    ped.nome_cliente,
+    p.nome AS nome_produto,
+    pi.quantidade,
+    pi.preco_unitario,
+    pi.subtotal,
+    pi.usuario
+FROM 
+    pedido_itens pi
+JOIN 
+    produtos p ON pi.id_produto = p.id_produto
+JOIN
+    pedidos ped ON pi.numero_pedido = ped.numero_pedido
+ORDER BY 
+    pi.numero_pedido;
+
+
+
