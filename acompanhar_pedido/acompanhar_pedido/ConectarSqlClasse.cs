@@ -291,7 +291,7 @@ namespace acompanhar_pedido
                 MySqlTransaction transaction = conexao.BeginTransaction(IsolationLevel.Serializable);
                 if (tabelaProdutos != "*")
                 {
-                    string limpaProdutosComand = $"Delete FROM {tabelaProdutos} WHERE usuario = '{usuario_logado}';";
+                    string limpaProdutosComand = $"Delete FROM produtos WHERE usuario = '{usuario_logado}';";
                     MySqlCommand limpaProdutos = new MySqlCommand(limpaProdutosComand, conexao,transaction);
                     try
                     {
@@ -306,7 +306,7 @@ namespace acompanhar_pedido
                 }
                 if (tabelaVendas != "*")
                 {
-                    string limpaVendasComand = $"Delete FROM {tabelaPedidos} WHERE usuario = '{usuario_logado}' AND pedido_pronto = true; UPDATE produtos SET qtd_vendido = 0 WHERE usuario = '{usuario_logado}';";
+                    string limpaVendasComand = $"Delete FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = true; UPDATE produtos SET qtd_vendido = 0 WHERE usuario = '{usuario_logado}';";
                     MySqlCommand limpaVendas = new MySqlCommand(limpaVendasComand, conexao, transaction);
                     try
                     {
@@ -321,7 +321,7 @@ namespace acompanhar_pedido
                 }
                 if (tabelaPedidos != "*")
                 {
-                    string limpaPedidosComand = $"Delete FROM {tabelaPedidos} WHERE usuario = '{usuario_logado}' AND pedido_pronto = false;";
+                    string limpaPedidosComand = $"Delete FROM pedidos WHERE usuario = '{usuario_logado}' AND pedido_pronto = false;";
                     MySqlCommand limpaPedidos = new MySqlCommand(limpaPedidosComand, conexao, transaction);
                     try
                     {

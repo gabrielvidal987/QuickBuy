@@ -80,7 +80,7 @@ namespace acompanhar_pedido
             btnLogin.Location = new Point(txtSenha.Location.X + 57, txtSenha.Location.Y + 50);
             txtSenha.Enabled = false;
             btnLogin.Enabled = false;
-            testConexaobtn_Click(sender, e);
+            // testConexaobtn_Click(sender, e);
         }
         //realiza login caso seja pressionado o botão de enter
         private void FrmLogin_KeyDown(object sender, KeyEventArgs e)
@@ -128,16 +128,20 @@ namespace acompanhar_pedido
                 //o json de ultima conexão foi feito a partir da ultima conexão realizada com sucesso
                 try
                 {
-                    string caminho_json = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "last_conn_json.json");
-                    string json = File.ReadAllText(caminho_json);
-                    config = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-                    conn = new Dictionary<string, string>()
+                    string caminho_json = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "last_conn.json");
+                    if (File.Exists(caminho_json))
                     {
-                        { "server", string.IsNullOrEmpty(server.Text) ? config["server"] : server.Text },
-                        { "uid", string.IsNullOrEmpty(uid.Text) ? config["uid"] : uid.Text },
-                        { "pwd", string.IsNullOrEmpty(password.Text) ? config["pwd"] : password.Text },
-                        { "database", string.IsNullOrEmpty(database.Text) ? config["database"] : database.Text }
-                    };
+                        string json = File.ReadAllText(caminho_json);
+                        config = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                        conn = new Dictionary<string, string>()
+                        {
+                            { "server", string.IsNullOrEmpty(server.Text) ? config["server"] : server.Text },
+                            { "uid", string.IsNullOrEmpty(uid.Text) ? config["uid"] : uid.Text },
+                            { "pwd", string.IsNullOrEmpty(password.Text) ? config["pwd"] : password.Text },
+                            { "database", string.IsNullOrEmpty(database.Text) ? config["database"] : database.Text }
+                        };
+                    }
+
                 }
                 catch {}
                 //chama o atualizar dicionario com o dicionario de conexão criado
@@ -153,7 +157,7 @@ namespace acompanhar_pedido
                         config[key_value_pair.Key] = key_value_pair.Value;
                     }
                     string newJson = JsonConvert.SerializeObject(config, Formatting.Indented);
-                    string caminho_json = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "last_conn_json.json");
+                    string caminho_json = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString()), "last_conn.json");
                     File.WriteAllText(caminho_json, newJson);
 
                     //reativa os campos para realizar o login

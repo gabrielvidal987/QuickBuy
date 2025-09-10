@@ -2,4 +2,6 @@ localhost
 root
 Vid@l9871
 acompanha_pedidosschema
+
+user:
 desbravadores
