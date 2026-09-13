@@ -30,12 +30,108 @@ namespace acompanhar_pedido.teste
         string nf;
         Thread t1;
         string texto_filtra = "";
+        //desconto aplicado ao pedido inteiro pelo botão "DESCONTO" (em R$ e/ou em %); 0 = sem desconto
+        decimal descontoReais = 0m;
+        decimal descontoPercent = 0m;
+        //promoções de atacado em combo ativas, carregadas ao abrir a tela
+        List<ComboAtacado> combosAtivos = new List<ComboAtacado>();
+
+        //um combo: conjunto de produtos que, somando as quantidades entre eles na mesma venda,
+        //atinge um mínimo e faz cada produto sair pelo preço definido para ele no combo
+        private class ComboAtacado
+        {
+            public string Id;
+            public string Nome;
+            public int QtdMinTotal;
+            public Dictionary<string, decimal> PrecoPorProduto = new Dictionary<string, decimal>();
+        }
         //inicializador da classe, chama o inicializador de componente, função de estética e função para carregar botoes
         public FazerPedido()
         {
             InitializeComponent();
             Estetica();
+            CarregaCombos();
             CarregaBotoes();
+        }
+        //carrega os combos ativos para aplicar o preço promocional durante a venda
+        public void CarregaCombos()
+        {
+            try
+            {
+                combosAtivos.Clear();
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                foreach (Dictionary<string, string> linha in sql.ListaCombos(true))
+                {
+                    if (string.IsNullOrEmpty(linha["id_produto"])) { continue; }
+                    ComboAtacado combo = combosAtivos.Find(c => c.Id == linha["id_combo"]);
+                    if (combo == null)
+                    {
+                        combo = new ComboAtacado
+                        {
+                            Id = linha["id_combo"],
+                            Nome = linha["nome"],
+                            QtdMinTotal = (int)ConectarSqlClasse.ValorDoBanco(linha["qtd_min_total"])
+                        };
+                        combosAtivos.Add(combo);
+                    }
+                    combo.PrecoPorProduto[linha["id_produto"]] = ConectarSqlClasse.ValorDoBanco(linha["valor_unitario"]);
+                }
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
+        }
+        //Recalcula o preço de TODOS os itens do carrinho. Precisa ser no carrinho inteiro (e não item a item) porque o
+        //combo depende da soma das quantidades entre produtos diferentes. Para cada item vale o MENOR preço entre:
+        //varejo, atacado individual do produto e o preço de cada combo atingido de que ele participe.
+        private void RecalculaPrecosCarrinho()
+        {
+            //descobre quais combos foram atingidos nesta venda
+            List<string> combosAtingidos = new List<string>();
+            foreach (ComboAtacado combo in combosAtivos)
+            {
+                int somaNoCarrinho = 0;
+                foreach (Dictionary<string, string> item in extratoLista)
+                {
+                    if (combo.PrecoPorProduto.ContainsKey(item["id_produto"]))
+                    {
+                        somaNoCarrinho += int.Parse(item["quantidade"]);
+                    }
+                }
+                if (combo.QtdMinTotal > 0 && somaNoCarrinho >= combo.QtdMinTotal) { combosAtingidos.Add(combo.Id); }
+            }
+            //aplica em cada item o melhor preço disponível
+            foreach (Dictionary<string, string> item in extratoLista)
+            {
+                int quantidade = int.Parse(item["quantidade"]);
+                decimal melhorPreco = decimal.Parse(item["valor_varejo"], CultureInfo.InvariantCulture);
+                decimal valorAtacado = decimal.Parse(item["valor_atacado"], CultureInfo.InvariantCulture);
+                int qtdMinAtacado = int.Parse(item["qtd_min_atacado"]);
+                string promocao = "";
+                string idCombo = "";
+                if (qtdMinAtacado > 0 && quantidade >= qtdMinAtacado && valorAtacado > 0 && valorAtacado < melhorPreco)
+                {
+                    melhorPreco = valorAtacado;
+                    promocao = "atacado";
+                }
+                foreach (ComboAtacado combo in combosAtivos)
+                {
+                    if (!combosAtingidos.Contains(combo.Id)) { continue; }
+                    decimal precoCombo;
+                    if (!combo.PrecoPorProduto.TryGetValue(item["id_produto"], out precoCombo)) { continue; }
+                    if (precoCombo > 0 && precoCombo < melhorPreco)
+                    {
+                        melhorPreco = precoCombo;
+                        promocao = "combo";
+                        idCombo = combo.Id;
+                    }
+                }
+                item["valor"] = melhorPreco.ToString(CultureInfo.InvariantCulture);
+                item["total"] = (melhorPreco * quantidade).ToString(CultureInfo.InvariantCulture);
+                item["promocao"] = promocao;
+                item["id_combo"] = idCombo;
+            }
         }
         //função para realizar a atualização da estética da pagina
         public void Estetica()
@@ -52,11 +148,17 @@ namespace acompanhar_pedido.teste
             pcholdEndereco.PlaceHolderText = "Endereço...";
             btnCad.BackColor = Color.FromArgb(132, 246, 58);
             btnHist.BackColor = Color.FromArgb(192, 213, 239);
+            //botão de histórico de pedidos removido da tela de venda.
+            //Para reativar, troque MOSTRAR_BOTAO_HISTORICO para true (o botão e o handler btnHist_Click continuam no código).
+            btnHist.Visible = MOSTRAR_BOTAO_HISTORICO;
             pcholdObs.PlaceHolderText = "Adicionar observação...";
             pcholdObs.BackColor = Color.FromArgb(198, 213, 239);
             pnlGeral.BackColor = Color.FromArgb(192, 213, 239);
         }
-        //função de remover uma unidade do produto ao clicar no nome dele, caso tenha só uma unidade o produto é removido
+        //liga/desliga o botão "HISTÓRICO DE PEDIDOS" na tela de venda
+        private static readonly bool MOSTRAR_BOTAO_HISTORICO = true;
+        //função de remover uma unidade do produto ao clicar no nome dele, caso tenha só uma unidade o produto é removido.
+        //ao diminuir a quantidade, reavalia se o item ainda bate o mínimo de atacado e recalcula o preço unitário usado.
         private void nomeProduto_Click(object sender, EventArgs e)
         {
             try
@@ -64,35 +166,101 @@ namespace acompanhar_pedido.teste
                 //pega o texto da label
                 string nomeLongo = sender.ToString();
                 string textoLabel = nomeLongo.Replace("System.Windows.Forms.Label, Text: ", "");
-                foreach (Dictionary<string, string> res in extratoLista)
+                Dictionary<string, string> res = extratoLista.Find(r => r["nome"] == textoLabel);
+                if (res == null) { return; }
+                int total = int.Parse(res["quantidade"]);
+                if (total > 1)
                 {
-                    if (res["nome"] == textoLabel)
-                    {
-                        int total = int.Parse(res["quantidade"]);
-                        if (total > 1)
-                        {
-                            total--;
-                            res["quantidade"] = total.ToString();
-                            res["total"] = Convert.ToString(double.Parse(res["valor"]) * int.Parse(res["quantidade"]));
-                            CriarLabelExtrato();
-                            ValorTotal();
-                            break;
-                        }
-                        else
-                        {
-                            extratoLista.Remove(res);
-                            nQuantProd.Text = "0";
-                            CriarLabelExtrato();
-                            ValorTotal();
-                            break;
-                        }
-                    }
+                    res["quantidade"] = (total - 1).ToString();
+                }
+                else
+                {
+                    extratoLista.Remove(res);
+                    nQuantProd.Text = "0";
+                }
+                //tirar item pode derrubar um combo que estava valendo, então recalcula o carrinho inteiro
+                RecalculaPrecosCarrinho();
+                CriarLabelExtrato();
+                ValorTotal();
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
+        }
+        //adia a confirmação da quantidade pra depois do evento (senão o próprio campo é destruído no meio do handler)
+        private void AgendaCommitQtd(TextBox tb)
+        {
+            try
+            {
+                if (this.IsHandleCreated && !this.IsDisposed)
+                {
+                    this.BeginInvoke((Action)(() => CommitQtdExtrato(tb)));
                 }
             }
             catch (Exception er)
             {
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
-            } 
+            }
+        }
+        //Enter no campo de quantidade do extrato: confirma a nova quantidade
+        private void qtdExtrato_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                AgendaCommitQtd((TextBox)sender);
+            }
+        }
+        //saiu do campo de quantidade do extrato: confirma a nova quantidade
+        private void qtdExtrato_Leave(object sender, EventArgs e)
+        {
+            AgendaCommitQtd((TextBox)sender);
+        }
+        //aplica a quantidade digitada no extrato, abatendo do estoque disponível: se pedir mais do que tem,
+        //avisa e ajusta para a quantidade possível; 0 ou vazio remove o item.
+        private void CommitQtdExtrato(TextBox tb)
+        {
+            try
+            {
+                if (tb == null || tb.IsDisposed) { return; }
+                string idProduto = tb.Tag as string;
+                Dictionary<string, string> item = extratoLista.Find(r => r["id_produto"] == idProduto);
+                if (item == null) { return; }
+                int qtdAtual = int.Parse(item["quantidade"]);
+                int novaQtd;
+                if (!int.TryParse((tb.Text ?? "").Trim(), out novaQtd))
+                {
+                    tb.Text = qtdAtual.ToString();
+                    return;
+                }
+                if (novaQtd == qtdAtual) { return; }
+                if (novaQtd <= 0)
+                {
+                    extratoLista.Remove(item);
+                }
+                else
+                {
+                    //relê o estoque do produto no banco na hora de confirmar a quantidade digitada
+                    int disponivel = EstoqueDoProduto(idProduto, item.ContainsKey("disponivel") ? item["disponivel"] : novaQtd.ToString());
+                    item["disponivel"] = disponivel.ToString();
+                    if (novaQtd > disponivel)
+                    {
+                        MessageBox.Show($"Estoque insuficiente para '{item["nome"]}'. Disponível: {disponivel}. A quantidade foi ajustada para {disponivel}.");
+                        novaQtd = disponivel;
+                    }
+                    if (novaQtd <= 0) { extratoLista.Remove(item); }
+                    else { item["quantidade"] = novaQtd.ToString(); }
+                }
+                //mudar a quantidade pode ligar/desligar um combo ou o preço de atacado, então recalcula o carrinho inteiro
+                RecalculaPrecosCarrinho();
+                CriarLabelExtrato();
+                ValorTotal();
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
         }
         //cria as labels do extrato, no primeiro bloco cria a label "nome, valor qtd" e no segundo cria as labels de cada produto
         public void CriarLabelExtrato()
@@ -137,7 +305,7 @@ namespace acompanhar_pedido.teste
                 {
                     Label produto = new Label();
                     Label valorProduto = new Label();
-                    Label qtd = new Label();
+                    TextBox qtd = new TextBox();
                     produto.Anchor = AnchorStyles.None;
                     produto.BorderStyle = BorderStyle.FixedSingle;
                     produto.Font = new System.Drawing.Font(DefaultFont.FontFamily, 12);
@@ -153,14 +321,32 @@ namespace acompanhar_pedido.teste
                     valorProduto.AutoSize = false;
                     valorProduto.Width = 85;
                     valorProduto.Height = 23;
-                    valorProduto.Text = $"R${res["valor"]}";
+                    decimal precoAtualExibido = decimal.Parse(res["valor"], CultureInfo.InvariantCulture);
+                    valorProduto.Text = $"R${precoAtualExibido.ToString("F2").Replace('.', ',')}";
+                    string promocaoAplicada = res.ContainsKey("promocao") ? res["promocao"] : "";
+                    if (promocaoAplicada == "combo")
+                    {
+                        valorProduto.Text += " (combo)";
+                        valorProduto.ForeColor = Color.FromArgb(180, 95, 0);
+                    }
+                    else if (promocaoAplicada == "atacado")
+                    {
+                        valorProduto.Text += " (atacado)";
+                        valorProduto.ForeColor = Color.FromArgb(0, 100, 0);
+                    }
+                    //campo de quantidade editável: dá pra digitar direto quantas unidades desse produto (limitado ao estoque)
                     qtd.Anchor = AnchorStyles.None;
                     qtd.BorderStyle = BorderStyle.FixedSingle;
                     qtd.Font = new System.Drawing.Font(DefaultFont.FontFamily, 12);
-                    qtd.AutoSize = false;
                     qtd.Width = 46;
                     qtd.Height = 23;
+                    qtd.TextAlign = HorizontalAlignment.Center;
+                    //mesmo fundo do nome do produto (cor do extrato), mas continua sendo um campo editável
+                    qtd.BackColor = tbExtrato.BackColor;
                     qtd.Text = res["quantidade"];
+                    qtd.Tag = res["id_produto"];
+                    qtd.KeyDown += new System.Windows.Forms.KeyEventHandler(this.qtdExtrato_KeyDown);
+                    qtd.Leave += new System.EventHandler(this.qtdExtrato_Leave);
                     produto.Click += new System.EventHandler(this.nomeProduto_Click);
                     tbExtrato.Controls.Add(produto);
                     tbExtrato.Controls.Add(valorProduto);
@@ -174,17 +360,81 @@ namespace acompanhar_pedido.teste
                 ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
-        //atualiza o campo do valor total no extrato
+        //soma dos itens do extrato antes de qualquer desconto (já com preço de varejo/atacado/combo aplicado por item)
+        private decimal SubtotalExtrato()
+        {
+            decimal soma = 0m;
+            foreach (Dictionary<string, string> res in extratoLista)
+            {
+                soma += decimal.Parse(res["total"], CultureInfo.InvariantCulture);
+            }
+            return soma;
+        }
+        //desconto total (R$ informado + % sobre o subtotal), limitado ao próprio subtotal
+        private decimal DescontoCalculado(decimal subtotal)
+        {
+            decimal d = descontoReais + subtotal * descontoPercent / 100m;
+            if (d < 0m) { d = 0m; }
+            if (d > subtotal) { d = subtotal; }
+            return d;
+        }
+        //subtotal menos o desconto (o que o cliente paga)
+        private decimal TotalComDesconto()
+        {
+            decimal subtotal = SubtotalExtrato();
+            return subtotal - DescontoCalculado(subtotal);
+        }
+        //atualiza o campo do valor total no extrato (já com o desconto) e o texto/cor do botão de desconto
         public void ValorTotal()
         {
             try
             {
-                double valorTotal = 0;
-                foreach (Dictionary<string, string> res in extratoLista)
+                //extrato vazio zera qualquer desconto pendente
+                if (extratoLista.Count == 0) { descontoReais = 0m; descontoPercent = 0m; }
+                decimal subtotal = SubtotalExtrato();
+                decimal desconto = DescontoCalculado(subtotal);
+                totalValorExtrato.Text = (subtotal - desconto).ToString("R$0.00");
+                AtualizaBotaoDesconto(desconto);
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
+        }
+        //botão de desconto: "APLICAR DESCONTO" quando não há desconto; "APLICADO R$ X DE DESCONTO" (verde) quando há
+        private void AtualizaBotaoDesconto(decimal desconto)
+        {
+            if (desconto > 0m)
+            {
+                btnDesconto.Text = "APLICADO R$ " + desconto.ToString("N2", CultureInfo.GetCultureInfo("pt-BR")) + " DE DESCONTO";
+                btnDesconto.BackColor = Color.FromArgb(132, 246, 58);
+            }
+            else
+            {
+                btnDesconto.Text = "APLICAR DESCONTO";
+                btnDesconto.BackColor = Color.FromArgb(198, 213, 239);
+            }
+        }
+        //abre o modal de desconto com o valor nominal (subtotal) e aplica o que o operador salvar
+        private void btnDesconto_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal subtotal = SubtotalExtrato();
+                if (subtotal <= 0m)
                 {
-                    valorTotal += double.Parse(res["total"]);
+                    MessageBox.Show("Adicione produtos ao extrato antes de aplicar um desconto.");
+                    return;
                 }
-                totalValorExtrato.Text = valorTotal.ToString("R$0.00");
+                using (DescontoDialog dlg = new DescontoDialog(subtotal, descontoReais, descontoPercent))
+                {
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        descontoReais = dlg.DescontoReais;
+                        descontoPercent = dlg.DescontoPercent;
+                        ValorTotal();
+                    }
+                }
             }
             catch (Exception er)
             {
@@ -196,6 +446,9 @@ namespace acompanhar_pedido.teste
         {
             tbExtrato.Controls.Clear();
             extratoLista.Clear();
+            descontoReais = 0m;
+            descontoPercent = 0m;
+            AtualizaBotaoDesconto(0m);
             nQuantProd.Text = "0";
             totalValorExtrato.Text = "R$0,00";
             pcholdCliente.Text = "";
@@ -232,7 +485,7 @@ namespace acompanhar_pedido.teste
         {
             string nome_cliente = clienteExtrato.Text.Replace("Cliente: ", "");
             string produto_quantidade = "";
-            Dictionary<string, string> produtos_consumo = new Dictionary<string, string>();
+            List<Dictionary<string, string>> itensVenda = new List<Dictionary<string, string>>();
             string obs_bruto = pcholdObs.Text;
             string obs = AddLineBreaksEveryNChars(obs_bruto, 30);
             string endereco_bruto = pcholdEndereco.Text;
@@ -249,6 +502,13 @@ namespace acompanhar_pedido.teste
             {
                 if (nome_cliente != "" && extratoLista.Count > 0)
                 {
+                    //desconto do pedido rateado proporcionalmente entre os itens, pra que o preço unitário
+                    //gravado em pedido_itens (e usado no relatório de lucro) já saia com o desconto embutido
+                    decimal subtotalPedido = SubtotalExtrato();
+                    decimal descontoPedido = DescontoCalculado(subtotalPedido);
+                    decimal totalLiquido = subtotalPedido - descontoPedido;
+                    decimal fatorDesconto = subtotalPedido > 0m ? totalLiquido / subtotalPedido : 1m;
+
                     nf = $"CLIENTE: {nome_cliente}";
                     nf += $"\nENDEREÇO:\n{endereco}\n";
                     foreach (var item in extratoLista)
@@ -256,7 +516,16 @@ namespace acompanhar_pedido.teste
                         string nome_produto = item["nome"];
                         string quantidade = $"{item["quantidade"]}X";
                         produto_quantidade += $"{quantidade} {nome_produto},";
-                        produtos_consumo.Add(item["nome"], item["quantidade"]);
+                        string promocaoItem = item.ContainsKey("promocao") ? item["promocao"] : "";
+                        decimal precoUnitLiquido = Math.Round(decimal.Parse(item["valor"], CultureInfo.InvariantCulture) * fatorDesconto, 2);
+                        itensVenda.Add(new Dictionary<string, string>
+                        {
+                            { "id_produto", item["id_produto"] },
+                            { "quantidade", item["quantidade"] },
+                            { "valor_unitario", precoUnitLiquido.ToString(CultureInfo.InvariantCulture) },
+                            { "atacado", string.IsNullOrEmpty(promocaoItem) ? "0" : "1" },
+                            { "id_combo", item.ContainsKey("id_combo") ? item["id_combo"] : "" }
+                        });
                         string texto_item = $"\nITEM: {item["nome"]} QTD: {item["quantidade"]}";
                         string texto_item_formatado = AddLineBreaksEveryNChars(texto_item, 30);
                         nf += texto_item_formatado;
@@ -266,16 +535,30 @@ namespace acompanhar_pedido.teste
                         obs = "sem observações";
                     }
                     var horario = DateTime.Now;
-                    string valorTotal = totalValorExtrato.Text.Replace("R$", "").Replace(',', '.');
+                    string valorTotal = totalLiquido.ToString("F2", CultureInfo.InvariantCulture);
                     ConectarSqlClasse sql = new ConectarSqlClasse();
                     string hora_pedido = horario.ToString("HH:mm:ss");
                     string formaPag = boxPgto.Text.Replace('é', 'e');
                     nf += $"\nOBS: {obs}";
                     nf += $"\n\n ----- {formaPag} ----- ";
                     if (Convert.ToBoolean(pagamento_ja_efetuado)) { nf += "\nPEDIDO PAGO"; } else { nf += "\nPAGAMENTO PENDENTE"; }
-                    nf += $"\n---------------------------------\nVALOR TOTAL: {totalValorExtrato.Text}\n---------------------------------";
+                    nf += "\n---------------------------------";
+                    if (descontoPedido > 0m)
+                    {
+                        CultureInfo br = CultureInfo.GetCultureInfo("pt-BR");
+                        nf += $"\nSUBTOTAL: R${subtotalPedido.ToString("N2", br)}";
+                        nf += $"\nDESCONTO: -R${descontoPedido.ToString("N2", br)}";
+                    }
+                    nf += $"\nVALOR TOTAL: {totalValorExtrato.Text}\n---------------------------------";
                     nf += $"\n\nSAÍDA: {retirada}";
-                    nf += "\n\n" + sql.CadPedido(nome_cliente,endereco, produto_quantidade, obs, valorTotal, formaPag,entrega, pagamento_ja_efetuado, produto_entregue, produtos_consumo);
+                    string resultado_cadastro = sql.CadPedido(nome_cliente, endereco, obs, valorTotal, formaPag, entrega, pagamento_ja_efetuado, produto_entregue, itensVenda, descontoPedido.ToString("F2", CultureInfo.InvariantCulture));
+                    if (!resultado_cadastro.StartsWith("*"))
+                    {
+                        //estoque insuficiente ou erro: nada foi gravado, mantem o carrinho como estava para o operador corrigir
+                        MessageBox.Show(resultado_cadastro, "Venda não realizada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    nf += "\n\n" + resultado_cadastro;
                     nf += $"\nHorario do pedido\n{hora_pedido}";
 
                     if (imprimir.Checked == true)
@@ -287,7 +570,7 @@ namespace acompanhar_pedido.teste
                         }
                         catch
                         {
-                            MessageBox.Show("Erro ao imprimir senha");
+                            MessageBox.Show("Erro ao imprimir pedido");
                         }
                     }
                     MessageBox.Show($"{nf}","PEDIDO CADASTRADO COM SUCESSO!!");
@@ -314,7 +597,7 @@ namespace acompanhar_pedido.teste
             {
                 ConectarSqlClasse sql = new ConectarSqlClasse();
                 pnlGeral.SuspendLayout();
-                while (pnlGeral.Controls.Count > 1) { pnlGeral.Controls.Remove(pnlGeral.Controls[1]); }
+                pnlGeral.Controls.Clear();
                 string filtro = "";
                 if (pcholdBuscaProd.Text != "") { filtro = pcholdBuscaProd.Text; }
                 List<Dictionary<string, string>> listaProd = new List<Dictionary<string, string>>(sql.DadosProd(filtro));
@@ -402,6 +685,7 @@ namespace acompanhar_pedido.teste
                     fotoProd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
                     fotoProd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
                     fotoProd.Click += new System.EventHandler(this.produto_lb_pb_Click);
+                    btn.Tag = item;
                     pnlGeral.Controls.Add(btn);
                     btn.Controls.Add(nomeProd);
                     btn.Controls.Add(valorProd);
@@ -417,50 +701,109 @@ namespace acompanhar_pedido.teste
             finally
             {
                 pnlGeral.ResumeLayout();
+                ultimaCargaEstoque = DateTime.Now;
             }
         }
-        //função de quando clica em um produto (sem ser no campo do nome, valor ou foto) , adiciona ele ao extrato
+        //lê o estoque atual do produto no banco; se der erro de conexão usa o valor de fallback informado
+        private int EstoqueDoProduto(string idProduto, string fallback)
+        {
+            try
+            {
+                return new ConectarSqlClasse().EstoqueAtualProduto(idProduto);
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+                int f;
+                return int.TryParse(fallback, out f) ? f : 0;
+            }
+        }
+        //relê o estoque de todos os itens que já estão no carrinho (chamado ao voltar para a tela de venda)
+        private void AtualizaEstoqueCarrinho()
+        {
+            try
+            {
+                foreach (Dictionary<string, string> item in extratoLista)
+                {
+                    item["disponivel"] = EstoqueDoProduto(item["id_produto"], item.ContainsKey("disponivel") ? item["disponivel"] : "0").ToString();
+                }
+            }
+            catch (Exception er)
+            {
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
+            }
+        }
+        //ao voltar o foco para a tela de venda, relê o estoque de tudo pra sempre trabalhar com número atualizado.
+        //debounce de 2s pra não recarregar a cada messagebox/diálogo que fecha.
+        private DateTime ultimaCargaEstoque = DateTime.MinValue;
+        private bool recarregandoEstoque = false;
+        private void FazerPedido_Activated(object sender, EventArgs e)
+        {
+            if (recarregandoEstoque) { return; }
+            if ((DateTime.Now - ultimaCargaEstoque).TotalSeconds < 2) { return; }
+            recarregandoEstoque = true;
+            try
+            {
+                CarregaBotoes();
+                AtualizaEstoqueCarrinho();
+                ultimaCargaEstoque = DateTime.Now;
+            }
+            finally { recarregandoEstoque = false; }
+        }
+        //função de quando clica em um produto (sem ser no campo do nome, valor ou foto), adiciona ele ao extrato.
+        //bloqueia se já estiver no limite do estoque disponível e aplica o preço de atacado automaticamente ao bater a qtd mínima do item.
         private void produtobtn_Click(object sender, EventArgs e)
         {
             try
             {
                 Control control = (Control)sender;
                 control.BackColor = Color.FromArgb(240, 240, 240);
-                string valor = control.Controls[1].Text.Replace("R$", "");
-                string nome = control.Controls[0].Text;
+                Dictionary<string, string> item = control.Tag as Dictionary<string, string>;
+                if (item == null) { return; }
                 try
                 {
-                    //verifica se existe o nome
-                    if (nome != "" || valor != "")
+                    string idProduto = item["id_produto"];
+                    string nome = item["nome"];
+                    decimal valorVarejo = ConectarSqlClasse.ValorDoBanco(item["valor"]);
+                    decimal valorAtacado = ConectarSqlClasse.ValorDoBanco(item["valor_atacado"]);
+                    int qtdMinAtacado = (int)ConectarSqlClasse.ValorDoBanco(item["qtd_min_atacado"]);
+                    //relê o estoque desse produto no banco na hora de adicionar, pra nunca usar número velho
+                    int disponivel = EstoqueDoProduto(idProduto, item.ContainsKey("disponivel") ? item["disponivel"] : "0");
+                    item["disponivel"] = disponivel.ToString();
+                    Dictionary<string, string> itemCarrinho = extratoLista.Find(r => r["id_produto"] == idProduto);
+                    int quantidadeAtual = itemCarrinho != null ? int.Parse(itemCarrinho["quantidade"]) : 0;
+                    if (quantidadeAtual + 1 > disponivel)
                     {
-                        //limpa o extrato
-                        //Verifica se o produto ja existe e então só incrementa na quantidade
-                        bool add = false;
-                        foreach (Dictionary<string, string> res in extratoLista)
-                        {
-                            if (res["nome"] == nome)
-                            {
-                                int quant = int.Parse(res["quantidade"]);
-                                quant++;
-                                res["quantidade"] = quant.ToString();
-                                res["total"] = Convert.ToString(double.Parse(res["valor"]) * int.Parse(res["quantidade"]));
-                                add = true;
-                            }
-                        }
-                        if (add == false)
-                        {
-                            Dictionary<string, string> dicionarioProduto = new Dictionary<string, string>
-                            {
-                        { "nome", nome },
-                        { "valor", valor },
-                        { "quantidade", "1" },
-                        { "total", valor }
-                        };
-                            extratoLista.Add(dicionarioProduto);
-                        }
-                        CriarLabelExtrato();
-                        ValorTotal();
+                        MessageBox.Show($"Estoque insuficiente para '{nome}'. Disponível: {disponivel}.");
+                        return;
                     }
+                    int novaQtd = quantidadeAtual + 1;
+                    if (itemCarrinho != null)
+                    {
+                        itemCarrinho["quantidade"] = novaQtd.ToString();
+                        itemCarrinho["disponivel"] = disponivel.ToString();
+                    }
+                    else
+                    {
+                        extratoLista.Add(new Dictionary<string, string>
+                        {
+                            { "id_produto", idProduto },
+                            { "nome", nome },
+                            { "valor", valorVarejo.ToString(CultureInfo.InvariantCulture) },
+                            { "valor_varejo", valorVarejo.ToString(CultureInfo.InvariantCulture) },
+                            { "valor_atacado", valorAtacado.ToString(CultureInfo.InvariantCulture) },
+                            { "qtd_min_atacado", qtdMinAtacado.ToString() },
+                            { "quantidade", "1" },
+                            { "total", valorVarejo.ToString(CultureInfo.InvariantCulture) },
+                            { "promocao", "" },
+                            { "id_combo", "" },
+                            { "disponivel", disponivel.ToString() }
+                        });
+                    }
+                    //o preço sai do recálculo do carrinho inteiro (o combo depende da soma entre produtos)
+                    RecalculaPrecosCarrinho();
+                    CriarLabelExtrato();
+                    ValorTotal();
                 }
                 catch (Exception er)
                 {

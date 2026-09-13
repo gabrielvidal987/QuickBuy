@@ -68,5 +68,21 @@ namespace acompanhar_pedido
         {
             removePlaceHolder();
         }
+        //define um valor "de verdade" no campo (não o placeholder), sem precisar que o usuário clique nele antes.
+        //usado para pré-carregar um valor salvo (ex.: taxa de cartão fixada anteriormente).
+        public void SetTextoReal(string valor)
+        {
+            if (string.IsNullOrEmpty(valor))
+            {
+                base.Text = "";
+                isPlaceHolder = false;
+                setPlaceholder();
+                return;
+            }
+            base.Text = valor;
+            this.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.Font = new Font(this.Font, FontStyle.Regular);
+            isPlaceHolder = false;
+        }
     }
 }

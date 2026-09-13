@@ -44,6 +44,18 @@
             this.btnUmNome = new System.Windows.Forms.RadioButton();
             this.pcholdPesquisa = new acompanhar_pedido.PlaceHolderTextBox();
             this.exportExc = new System.Windows.Forms.Button();
+            this.btnRelatorioLucro = new System.Windows.Forms.Button();
+            this.btnColunas = new System.Windows.Forms.Button();
+            this.menuColunas = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pnlPeriodo = new System.Windows.Forms.FlowLayoutPanel();
+            this.chkPeriodo = new System.Windows.Forms.CheckBox();
+            this.dtInicio = new System.Windows.Forms.DateTimePicker();
+            this.lbAte = new System.Windows.Forms.Label();
+            this.dtFim = new System.Windows.Forms.DateTimePicker();
+            this.btnHoje = new System.Windows.Forms.Button();
+            this.btn7dias = new System.Windows.Forms.Button();
+            this.btnMes = new System.Windows.Forms.Button();
+            this.lbResumoPeriodo = new System.Windows.Forms.Label();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.txDeb = new acompanhar_pedido.PlaceHolderTextBox();
             this.txCred = new acompanhar_pedido.PlaceHolderTextBox();
@@ -139,8 +151,12 @@
             this.flowLayoutPanel2.Controls.Add(this.btnUmNome);
             this.flowLayoutPanel2.Controls.Add(this.pcholdPesquisa);
             this.flowLayoutPanel2.Controls.Add(this.exportExc);
+            this.flowLayoutPanel2.Controls.Add(this.btnRelatorioLucro);
+            this.flowLayoutPanel2.Controls.Add(this.btnColunas);
+            this.flowLayoutPanel2.Controls.Add(this.pnlPeriodo);
             this.flowLayoutPanel2.Controls.Add(this.flowLayoutPanel3);
             this.flowLayoutPanel2.Controls.Add(this.tabelaVendas);
+            this.flowLayoutPanel2.Controls.Add(this.lbResumoPeriodo);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(224, 12);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(1114, 657);
@@ -262,9 +278,141 @@
             this.exportExc.Text = "EXPORTAR PARA EXCEL";
             this.exportExc.UseVisualStyleBackColor = false;
             this.exportExc.Click += new System.EventHandler(this.exportExc_Click);
-            // 
+            //
+            // btnRelatorioLucro
+            //
+            this.btnRelatorioLucro.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(230)))), ((int)(((byte)(180)))));
+            this.btnRelatorioLucro.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRelatorioLucro.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnRelatorioLucro.Location = new System.Drawing.Point(990, 72);
+            this.btnRelatorioLucro.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.btnRelatorioLucro.Name = "btnRelatorioLucro";
+            this.btnRelatorioLucro.Size = new System.Drawing.Size(146, 31);
+            this.btnRelatorioLucro.TabIndex = 16;
+            this.btnRelatorioLucro.Text = "RELATÓRIO DE LUCRO";
+            this.btnRelatorioLucro.UseVisualStyleBackColor = false;
+            this.btnRelatorioLucro.Click += new System.EventHandler(this.btnRelatorioLucro_Click);
+            //
+            // btnColunas
+            //
+            this.btnColunas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(245)))));
+            this.btnColunas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnColunas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnColunas.Location = new System.Drawing.Point(1146, 72);
+            this.btnColunas.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.btnColunas.Name = "btnColunas";
+            this.btnColunas.Size = new System.Drawing.Size(150, 31);
+            this.btnColunas.TabIndex = 19;
+            this.btnColunas.Text = "COLUNAS DO RELATÓRIO";
+            this.btnColunas.UseVisualStyleBackColor = false;
+            this.btnColunas.Click += new System.EventHandler(this.btnColunas_Click);
+            //
+            // menuColunas
+            //
+            this.menuColunas.Name = "menuColunas";
+            this.menuColunas.Size = new System.Drawing.Size(220, 26);
+            //
+            // pnlPeriodo
+            //
+            this.pnlPeriodo.Controls.Add(this.chkPeriodo);
+            this.pnlPeriodo.Controls.Add(this.dtInicio);
+            this.pnlPeriodo.Controls.Add(this.lbAte);
+            this.pnlPeriodo.Controls.Add(this.dtFim);
+            this.pnlPeriodo.Controls.Add(this.btnHoje);
+            this.pnlPeriodo.Controls.Add(this.btn7dias);
+            this.pnlPeriodo.Controls.Add(this.btnMes);
+            this.pnlPeriodo.Location = new System.Drawing.Point(3, 109);
+            this.pnlPeriodo.Name = "pnlPeriodo";
+            this.pnlPeriodo.Size = new System.Drawing.Size(948, 34);
+            this.pnlPeriodo.TabIndex = 17;
+            //
+            // chkPeriodo
+            //
+            this.chkPeriodo.AutoSize = true;
+            this.chkPeriodo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.chkPeriodo.Location = new System.Drawing.Point(3, 6);
+            this.chkPeriodo.Margin = new System.Windows.Forms.Padding(3, 6, 8, 3);
+            this.chkPeriodo.Name = "chkPeriodo";
+            this.chkPeriodo.Size = new System.Drawing.Size(130, 17);
+            this.chkPeriodo.TabIndex = 0;
+            this.chkPeriodo.Text = "FILTRAR POR PERÍODO:";
+            this.chkPeriodo.UseVisualStyleBackColor = true;
+            //
+            // dtInicio
+            //
+            this.dtInicio.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtInicio.Location = new System.Drawing.Point(160, 5);
+            this.dtInicio.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+            this.dtInicio.Name = "dtInicio";
+            this.dtInicio.Size = new System.Drawing.Size(110, 20);
+            this.dtInicio.TabIndex = 1;
+            //
+            // lbAte
+            //
+            this.lbAte.AutoSize = true;
+            this.lbAte.Location = new System.Drawing.Point(276, 9);
+            this.lbAte.Margin = new System.Windows.Forms.Padding(3, 9, 3, 0);
+            this.lbAte.Name = "lbAte";
+            this.lbAte.Size = new System.Drawing.Size(22, 13);
+            this.lbAte.TabIndex = 2;
+            this.lbAte.Text = "até";
+            //
+            // dtFim
+            //
+            this.dtFim.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtFim.Location = new System.Drawing.Point(304, 5);
+            this.dtFim.Margin = new System.Windows.Forms.Padding(3, 5, 12, 3);
+            this.dtFim.Name = "dtFim";
+            this.dtFim.Size = new System.Drawing.Size(110, 20);
+            this.dtFim.TabIndex = 3;
+            //
+            // btnHoje
+            //
+            this.btnHoje.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnHoje.Location = new System.Drawing.Point(429, 4);
+            this.btnHoje.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.btnHoje.Name = "btnHoje";
+            this.btnHoje.Size = new System.Drawing.Size(70, 24);
+            this.btnHoje.TabIndex = 4;
+            this.btnHoje.Text = "HOJE";
+            this.btnHoje.UseVisualStyleBackColor = true;
+            this.btnHoje.Click += new System.EventHandler(this.btnHoje_Click);
+            //
+            // btn7dias
+            //
+            this.btn7dias.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btn7dias.Location = new System.Drawing.Point(505, 4);
+            this.btn7dias.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.btn7dias.Name = "btn7dias";
+            this.btn7dias.Size = new System.Drawing.Size(90, 24);
+            this.btn7dias.TabIndex = 5;
+            this.btn7dias.Text = "ÚLTIMOS 7 DIAS";
+            this.btn7dias.UseVisualStyleBackColor = true;
+            this.btn7dias.Click += new System.EventHandler(this.btn7dias_Click);
+            //
+            // btnMes
+            //
+            this.btnMes.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnMes.Location = new System.Drawing.Point(601, 4);
+            this.btnMes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.btnMes.Name = "btnMes";
+            this.btnMes.Size = new System.Drawing.Size(90, 24);
+            this.btnMes.TabIndex = 6;
+            this.btnMes.Text = "MÊS ATUAL";
+            this.btnMes.UseVisualStyleBackColor = true;
+            this.btnMes.Click += new System.EventHandler(this.btnMes_Click);
+            //
+            // lbResumoPeriodo
+            //
+            this.lbResumoPeriodo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.lbResumoPeriodo.Location = new System.Drawing.Point(3, 362);
+            this.lbResumoPeriodo.Name = "lbResumoPeriodo";
+            this.lbResumoPeriodo.Size = new System.Drawing.Size(1070, 24);
+            this.lbResumoPeriodo.TabIndex = 18;
+            this.lbResumoPeriodo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            //
             // flowLayoutPanel3
-            // 
+            //
             this.flowLayoutPanel3.Controls.Add(this.txDeb);
             this.flowLayoutPanel3.Controls.Add(this.txCred);
             this.flowLayoutPanel3.Controls.Add(this.label1);
@@ -554,5 +702,17 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DataGridView tabelaVendas;
         private System.Windows.Forms.CheckBox delPendentes;
+        private System.Windows.Forms.Button btnRelatorioLucro;
+        private System.Windows.Forms.Button btnColunas;
+        private System.Windows.Forms.ContextMenuStrip menuColunas;
+        private System.Windows.Forms.FlowLayoutPanel pnlPeriodo;
+        private System.Windows.Forms.CheckBox chkPeriodo;
+        private System.Windows.Forms.DateTimePicker dtInicio;
+        private System.Windows.Forms.Label lbAte;
+        private System.Windows.Forms.DateTimePicker dtFim;
+        private System.Windows.Forms.Button btnHoje;
+        private System.Windows.Forms.Button btn7dias;
+        private System.Windows.Forms.Button btnMes;
+        private System.Windows.Forms.Label lbResumoPeriodo;
     }
 }

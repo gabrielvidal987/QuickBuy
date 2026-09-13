@@ -1,0 +1,3 @@
+https://dev.mysql.com/downloads/installer/
+
+instalar o pacote de maior tamanho e durante as opções selecionar apenas workbench, server e shell

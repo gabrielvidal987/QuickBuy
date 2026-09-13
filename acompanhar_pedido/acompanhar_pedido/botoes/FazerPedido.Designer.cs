@@ -33,6 +33,7 @@ namespace acompanhar_pedido.teste
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FazerPedido));
             this.imprimir = new System.Windows.Forms.CheckBox();
             this.btnReset = new System.Windows.Forms.Button();
+            this.btnDesconto = new System.Windows.Forms.Button();
             this.pnlTotal = new System.Windows.Forms.Panel();
             this.boxPgto = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -66,9 +67,9 @@ namespace acompanhar_pedido.teste
             this.imprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.imprimir.Location = new System.Drawing.Point(162, 120);
             this.imprimir.Name = "imprimir";
-            this.imprimir.Size = new System.Drawing.Size(132, 30);
+            this.imprimir.Size = new System.Drawing.Size(160, 30);
             this.imprimir.TabIndex = 2;
-            this.imprimir.Text = "Imprimir senha";
+            this.imprimir.Text = "Imprimir pedido";
             this.imprimir.UseVisualStyleBackColor = true;
             // 
             // btnReset
@@ -84,9 +85,10 @@ namespace acompanhar_pedido.teste
             // 
             // pnlTotal
             // 
-            this.pnlTotal.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlTotal.Controls.Add(this.boxPgto);
+            this.pnlTotal.Controls.Add(this.btnDesconto);
             this.pnlTotal.Controls.Add(this.label1);
             this.pnlTotal.Controls.Add(this.pcholdObs);
             this.pnlTotal.Controls.Add(this.resumo);
@@ -118,7 +120,21 @@ namespace acompanhar_pedido.teste
             this.boxPgto.Size = new System.Drawing.Size(380, 24);
             this.boxPgto.TabIndex = 5;
             this.boxPgto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.boxPgto_KeyDown);
-            // 
+            //
+            // btnDesconto
+            //
+            this.btnDesconto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(198)))), ((int)(((byte)(213)))), ((int)(((byte)(239)))));
+            this.btnDesconto.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDesconto.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnDesconto.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.btnDesconto.Location = new System.Drawing.Point(28, 510);
+            this.btnDesconto.Name = "btnDesconto";
+            this.btnDesconto.Size = new System.Drawing.Size(380, 24);
+            this.btnDesconto.TabIndex = 7;
+            this.btnDesconto.Text = "APLICAR DESCONTO";
+            this.btnDesconto.UseVisualStyleBackColor = false;
+            this.btnDesconto.Click += new System.EventHandler(this.btnDesconto_Click);
+            //
             // label1
             // 
             this.label1.Enabled = false;
@@ -126,7 +142,7 @@ namespace acompanhar_pedido.teste
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(332, 15);
             this.label1.TabIndex = 28;
-            this.label1.Text = "*para remover/subtrair um item basta clicar em seu nome no extrato*";
+            this.label1.Text = "*clique no nome p/ remover o item  |  edite o campo QTD p/ a quantidade*";
             // 
             // resumo
             // 
@@ -149,9 +165,9 @@ namespace acompanhar_pedido.teste
             this.btnCad.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnCad.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold);
             this.btnCad.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnCad.Location = new System.Drawing.Point(28, 512);
+            this.btnCad.Location = new System.Drawing.Point(28, 538);
             this.btnCad.Name = "btnCad";
-            this.btnCad.Size = new System.Drawing.Size(380, 67);
+            this.btnCad.Size = new System.Drawing.Size(380, 52);
             this.btnCad.TabIndex = 6;
             this.btnCad.Text = "CADASTRAR PEDIDO";
             this.btnCad.UseVisualStyleBackColor = false;
@@ -274,6 +290,7 @@ namespace acompanhar_pedido.teste
             // 
             // btnHist
             // 
+            this.btnHist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnHist.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.btnHist.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHist.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -319,28 +336,31 @@ namespace acompanhar_pedido.teste
             // 
             // pnlGeral
             // 
+            this.pnlGeral.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlGeral.AutoScroll = true;
             this.pnlGeral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlGeral.Controls.Add(this.pcholdBuscaProd);
-            this.pnlGeral.Location = new System.Drawing.Point(126, 160);
+            this.pnlGeral.Location = new System.Drawing.Point(126, 192);
             this.pnlGeral.Name = "pnlGeral";
-            this.pnlGeral.Padding = new System.Windows.Forms.Padding(20, 10, 10, 10);
-            this.pnlGeral.Size = new System.Drawing.Size(520, 507);
+            this.pnlGeral.Padding = new System.Windows.Forms.Padding(12, 12, 10, 10);
+            this.pnlGeral.Size = new System.Drawing.Size(520, 475);
             this.pnlGeral.TabIndex = 33;
-            // 
+            //
             // pcholdBuscaProd
-            // 
-            this.pcholdBuscaProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
+            // campo de busca FORA do FlowLayoutPanel: assim ele fica fixo no topo e não desalinha a grade de produtos
+            //
+            this.pcholdBuscaProd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            this.pcholdBuscaProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Italic);
             this.pcholdBuscaProd.ForeColor = System.Drawing.Color.Gray;
-            this.pcholdBuscaProd.Location = new System.Drawing.Point(150, 13);
-            this.pcholdBuscaProd.Margin = new System.Windows.Forms.Padding(130, 3, 3, 3);
+            this.pcholdBuscaProd.Location = new System.Drawing.Point(126, 162);
             this.pcholdBuscaProd.Multiline = true;
             this.pcholdBuscaProd.Name = "pcholdBuscaProd";
             this.pcholdBuscaProd.PlaceHolderText = "Buscar produto...";
-            this.pcholdBuscaProd.Size = new System.Drawing.Size(221, 30);
+            this.pcholdBuscaProd.Size = new System.Drawing.Size(320, 26);
             this.pcholdBuscaProd.TabIndex = 35;
             this.pcholdBuscaProd.Text = "Buscar produto...";
-            this.pcholdBuscaProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pcholdBuscaProd.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.pcholdBuscaProd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pcholdBuscaProd_KeyPress);
             // 
             // pcholdEndereco
@@ -391,6 +411,7 @@ namespace acompanhar_pedido.teste
             this.Controls.Add(this.btnHist);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.imprimir);
+            this.Controls.Add(this.pcholdBuscaProd);
             this.Controls.Add(this.pnlGeral);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.pcholdEndereco);
@@ -402,6 +423,7 @@ namespace acompanhar_pedido.teste
             this.Text = "FazerPedido";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FazerPedido_Load_1);
+            this.Activated += new System.EventHandler(this.FazerPedido_Activated);
             this.pnlTotal.ResumeLayout(false);
             this.pnlTotal.PerformLayout();
             this.pnlFimExtrato.ResumeLayout(false);
@@ -419,6 +441,7 @@ namespace acompanhar_pedido.teste
         //private System.Windows.Forms.FlowLayoutPanel pnlGeral;
         private DoubleBufferedFlowLayoutPanel pnlGeral;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnDesconto;
         private PlaceHolderTextBox pcholdEndereco;
         private PlaceHolderTextBox pcholdCliente;
         private System.Windows.Forms.Panel pnlTotal;

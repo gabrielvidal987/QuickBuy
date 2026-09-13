@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="acompanhar_pedido.exe" size="441752">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="acompanhar_pedido.exe" size="1324032">
       <assemblyIdentity name="acompanhar_pedido" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>zSOitcMvQHXwIHx2a4UuAAmIRIv7zxK7Aw636xzX6jY=</dsig:DigestValue>
+        <dsig:DigestValue>dK0fCLFapXeiXbjdIYJqne/NCDR6ngDmRIkoFccry2A=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -399,13 +399,13 @@
       <dsig:DigestValue>FyTPvLEarHPqdtdvsujjeT2A7astNpbMXO05MyY94gc=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="iconeApp.ico" size="5132">
+  <file name="iconeApp.ico" size="27743">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>5iXT4HgpXdK43qaXlWscvcBzMdWVND6o0A9GwruNzeo=</dsig:DigestValue>
+      <dsig:DigestValue>2e3yqzrBo9LJKxjWAL8RjL3FhJL0wNoEXud+MVqpVzo=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

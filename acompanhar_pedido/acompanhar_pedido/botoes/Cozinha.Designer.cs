@@ -66,9 +66,9 @@
             this.lbprontos.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lbprontos.Location = new System.Drawing.Point(926, 389);
             this.lbprontos.Name = "lbprontos";
-            this.lbprontos.Size = new System.Drawing.Size(166, 36);
+            this.lbprontos.Size = new System.Drawing.Size(220, 36);
             this.lbprontos.TabIndex = 2;
-            this.lbprontos.Text = "PRONTOS:";
+            this.lbprontos.Text = "ENTREGUES:";
             this.lbprontos.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // setaEntrada

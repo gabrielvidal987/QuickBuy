@@ -194,6 +194,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="botoes\Caixa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="botoes\Caixa.Designer.cs">
+      <DependentUpon>Caixa.cs</DependentUpon>
+    </Compile>
     <Compile Include="botoes\Cozinha.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -220,6 +226,30 @@
     </Compile>
     <Compile Include="botoes\historico_pedidos.Designer.cs">
       <DependentUpon>historico_pedidos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="botoes\MovimentoCaixaDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="botoes\MovimentoCaixaDialog.Designer.cs">
+      <DependentUpon>MovimentoCaixaDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="botoes\MovimentoEstoqueDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="botoes\MovimentoEstoqueDialog.Designer.cs">
+      <DependentUpon>MovimentoEstoqueDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="botoes\PromocaoCombo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="botoes\PromocaoCombo.Designer.cs">
+      <DependentUpon>PromocaoCombo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="botoes\DescontoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="botoes\DescontoDialog.Designer.cs">
+      <DependentUpon>DescontoDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="botoes\Produtos.cs">
       <SubType>Form</SubType>
@@ -263,6 +293,9 @@
     <Compile Include="botoes\FazerPedido.Designer.cs">
       <DependentUpon>FazerPedido.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="botoes\Caixa.resx">
+      <DependentUpon>Caixa.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="botoes\Cozinha.resx">
       <DependentUpon>Cozinha.cs</DependentUpon>
     </EmbeddedResource>

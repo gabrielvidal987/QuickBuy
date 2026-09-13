@@ -28,7 +28,7 @@ CREATE TABLE `usuarios` (
   `senha` varchar(200) NOT NULL,
   `foto` varchar(500) DEFAULT 'sem_foto.png',
   PRIMARY KEY (`id_sys`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'campestre','campestre','campestre.png'),(2,'campestrejunior','campestrejunior','campestrejunior.jpg'),(3,'desbravadores','desbravadores','desbravadores.jpg'),(4,'marpaulista','marpaulista','marpaulista.png');
+INSERT INTO `usuarios` VALUES (1,'campestre','campestre','campestre.png'),(2,'campestrejunior','campestrejunior','campestrejunior.jpg'),(3,'desbravadores','desbravadores','desbravadores.jpg'),(4,'marpaulista','marpaulista','marpaulista.png'),(5,'padilha','padilha','padilha.jpg');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-09 22:20:13
+-- Dump completed on 2026-09-07 10:16:41

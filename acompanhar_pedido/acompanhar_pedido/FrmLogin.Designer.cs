@@ -47,7 +47,8 @@
             this.SuspendLayout();
             // 
             // panel2
-            // 
+            //
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.label3);
@@ -196,17 +197,19 @@
             this.resultConexao.TabIndex = 11;
             // 
             // label5
-            // 
+            //
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Location = new System.Drawing.Point(12, 707);
+            this.label5.Location = new System.Drawing.Point(12, 682);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(307, 13);
             this.label5.TabIndex = 12;
             this.label5.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
             // 
             // btnLogin
-            // 
+            //
+            this.btnLogin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLogin.BackColor = System.Drawing.SystemColors.Control;
             this.btnLogin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -222,7 +225,8 @@
             this.btnLogin.Click += new System.EventHandler(this.button1_Click);
             // 
             // txtSenha
-            // 
+            //
+            this.txtSenha.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSenha.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSenha.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtSenha.Location = new System.Drawing.Point(1132, 207);

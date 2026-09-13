@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.pnlTopo = new System.Windows.Forms.Panel();
+            this.btnCaixa = new System.Windows.Forms.Button();
+            this.label7Caixa = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -61,13 +63,38 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.lbl_copy = new System.Windows.Forms.Label();
+            this.pnlDash = new System.Windows.Forms.Panel();
+            this.lbDashTitulo = new System.Windows.Forms.Label();
+            this.btnAlertaEstoque = new System.Windows.Forms.Button();
+            this.lbAlertaEstoque = new System.Windows.Forms.Label();
+            this.rbHoje = new System.Windows.Forms.RadioButton();
+            this.rbMes = new System.Windows.Forms.RadioButton();
+            this.rb30dias = new System.Windows.Forms.RadioButton();
+            this.rbTudo = new System.Windows.Forms.RadioButton();
+            this.lbPeriodoInfo = new System.Windows.Forms.Label();
+            this.lbTilePedidos = new System.Windows.Forms.Label();
+            this.lbTileSacos = new System.Windows.Forms.Label();
+            this.lbTileBruto = new System.Windows.Forms.Label();
+            this.lbTileLiquido = new System.Windows.Forms.Label();
+            this.lbLiderInfo = new System.Windows.Forms.Label();
+            this.lbGrid1 = new System.Windows.Forms.Label();
+            this.lbGrid2 = new System.Windows.Forms.Label();
+            this.gridMaisVendidos = new System.Windows.Forms.DataGridView();
+            this.gridSaidaEstoque = new System.Windows.Forms.DataGridView();
+            this.timerDash = new System.Windows.Forms.Timer(this.components);
             this.pnlTopo.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.pnlDash.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridMaisVendidos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridSaidaEstoque)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoClube)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlTopo
-            // 
+            //
+            this.pnlTopo.Controls.Add(this.fotoClube);
+            this.pnlTopo.Controls.Add(this.btnCaixa);
+            this.pnlTopo.Controls.Add(this.label7Caixa);
             this.pnlTopo.Controls.Add(this.label6);
             this.pnlTopo.Controls.Add(this.label5);
             this.pnlTopo.Controls.Add(this.label4);
@@ -86,11 +113,41 @@
             this.pnlTopo.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTopo.Location = new System.Drawing.Point(50, 10);
             this.pnlTopo.Name = "pnlTopo";
-            this.pnlTopo.Size = new System.Drawing.Size(1234, 162);
+            this.pnlTopo.Size = new System.Drawing.Size(1300, 162);
             this.pnlTopo.TabIndex = 0;
-            // 
+            //
+            // btnCaixa
+            //
+            this.btnCaixa.AccessibleDescription = "Controle de Caixa";
+            this.btnCaixa.AccessibleName = "Caixa";
+            this.btnCaixa.BackColor = System.Drawing.Color.Transparent;
+            this.btnCaixa.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCaixa.Image = ((System.Drawing.Image)(resources.GetObject("btnCaixa.Image")));
+            this.btnCaixa.Location = new System.Drawing.Point(1072, 7);
+            this.btnCaixa.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCaixa.Name = "btnCaixa";
+            this.btnCaixa.Size = new System.Drawing.Size(85, 79);
+            this.btnCaixa.TabIndex = 25;
+            this.btnCaixa.UseVisualStyleBackColor = false;
+            this.btnCaixa.Click += new System.EventHandler(this.btnCaixa_Click);
+            //
+            // label7Caixa
+            //
+            this.label7Caixa.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label7Caixa.BackColor = System.Drawing.Color.Transparent;
+            this.label7Caixa.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label7Caixa.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7Caixa.ForeColor = System.Drawing.Color.Black;
+            this.label7Caixa.Location = new System.Drawing.Point(1058, 86);
+            this.label7Caixa.Margin = new System.Windows.Forms.Padding(0);
+            this.label7Caixa.Name = "label7Caixa";
+            this.label7Caixa.Size = new System.Drawing.Size(111, 70);
+            this.label7Caixa.TabIndex = 26;
+            this.label7Caixa.Text = "Gerenciar caixa";
+            this.label7Caixa.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
             // label6
-            // 
+            //
             this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Cursor = System.Windows.Forms.Cursors.Default;
@@ -131,7 +188,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(111, 70);
             this.label4.TabIndex = 22;
-            this.label4.Text = "Cozinha";
+            this.label4.Text = "Pedidos pendentes";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
@@ -146,7 +203,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(111, 70);
             this.label3.TabIndex = 21;
-            this.label3.Text = "Cadastrar produtos";
+            this.label3.Text = "Gerenciar produtos";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label1
@@ -197,7 +254,7 @@
             // tbnMusic
             // 
             this.tbnMusic.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.tbnMusic.Location = new System.Drawing.Point(1072, 50);
+            this.tbnMusic.Location = new System.Drawing.Point(1200, 50);
             this.tbnMusic.Name = "tbnMusic";
             this.tbnMusic.Size = new System.Drawing.Size(96, 36);
             this.tbnMusic.TabIndex = 6;
@@ -255,7 +312,7 @@
             this.data.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.data.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.data.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.data.Location = new System.Drawing.Point(27, 65);
+            this.data.Location = new System.Drawing.Point(116, 65);
             this.data.Multiline = true;
             this.data.Name = "data";
             this.data.ReadOnly = true;
@@ -268,7 +325,7 @@
             this.hora.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.hora.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.hora.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.hora.Location = new System.Drawing.Point(27, 41);
+            this.hora.Location = new System.Drawing.Point(116, 41);
             this.hora.Multiline = true;
             this.hora.Name = "hora";
             this.hora.ReadOnly = true;
@@ -337,7 +394,7 @@
             this.lbPrepText.Padding = new System.Windows.Forms.Padding(5, 5, 4, 5);
             this.lbPrepText.Size = new System.Drawing.Size(211, 80);
             this.lbPrepText.TabIndex = 2;
-            this.lbPrepText.Text = "PREPARANDO";
+            this.lbPrepText.Text = "PENDENTE";
             this.lbPrepText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbProntosText
@@ -346,15 +403,15 @@
             this.lbProntosText.BackColor = System.Drawing.SystemColors.HotTrack;
             this.lbProntosText.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbProntosText.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lbProntosText.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbProntosText.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbProntosText.ForeColor = System.Drawing.Color.White;
             this.lbProntosText.Location = new System.Drawing.Point(24, 352);
             this.lbProntosText.Margin = new System.Windows.Forms.Padding(0);
             this.lbProntosText.Name = "lbProntosText";
-            this.lbProntosText.Padding = new System.Windows.Forms.Padding(5, 5, 43, 5);
+            this.lbProntosText.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.lbProntosText.Size = new System.Drawing.Size(211, 80);
             this.lbProntosText.TabIndex = 3;
-            this.lbProntosText.Text = "PRONTOS";
+            this.lbProntosText.Text = "ENTREGUES";
             this.lbProntosText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbTotal
@@ -476,10 +533,10 @@
             this.fotoClube.ErrorImage = ((System.Drawing.Image)(resources.GetObject("fotoClube.ErrorImage")));
             this.fotoClube.Image = ((System.Drawing.Image)(resources.GetObject("fotoClube.Image")));
             this.fotoClube.InitialImage = ((System.Drawing.Image)(resources.GetObject("fotoClube.InitialImage")));
-            this.fotoClube.Location = new System.Drawing.Point(611, 190);
+            this.fotoClube.Location = new System.Drawing.Point(12, 6);
             this.fotoClube.Name = "fotoClube";
-            this.fotoClube.Size = new System.Drawing.Size(413, 356);
-            this.fotoClube.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.fotoClube.Size = new System.Drawing.Size(96, 86);
+            this.fotoClube.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.fotoClube.TabIndex = 8;
             this.fotoClube.TabStop = false;
             // 
@@ -509,16 +566,266 @@
             this.lbl_copy.Size = new System.Drawing.Size(307, 13);
             this.lbl_copy.TabIndex = 13;
             this.lbl_copy.Text = "© CopyRight - programa desenvolvido por Gabriel Vidal Teixeira";
-            // 
+            //
+            // pnlDash
+            //
+            this.pnlDash.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlDash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(250)))));
+            this.pnlDash.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlDash.Controls.Add(this.lbDashTitulo);
+            this.pnlDash.Controls.Add(this.btnAlertaEstoque);
+            this.pnlDash.Controls.Add(this.lbAlertaEstoque);
+            this.pnlDash.Controls.Add(this.rbHoje);
+            this.pnlDash.Controls.Add(this.rbMes);
+            this.pnlDash.Controls.Add(this.rb30dias);
+            this.pnlDash.Controls.Add(this.rbTudo);
+            this.pnlDash.Controls.Add(this.lbPeriodoInfo);
+            this.pnlDash.Controls.Add(this.lbTilePedidos);
+            this.pnlDash.Controls.Add(this.lbTileSacos);
+            this.pnlDash.Controls.Add(this.lbTileBruto);
+            this.pnlDash.Controls.Add(this.lbTileLiquido);
+            this.pnlDash.Controls.Add(this.lbLiderInfo);
+            this.pnlDash.Controls.Add(this.lbGrid1);
+            this.pnlDash.Controls.Add(this.lbGrid2);
+            this.pnlDash.Controls.Add(this.gridMaisVendidos);
+            this.pnlDash.Controls.Add(this.gridSaidaEstoque);
+            this.pnlDash.Location = new System.Drawing.Point(590, 190);
+            this.pnlDash.Name = "pnlDash";
+            this.pnlDash.Size = new System.Drawing.Size(760, 470);
+            this.pnlDash.TabIndex = 30;
+            //
+            // lbDashTitulo
+            //
+            this.lbDashTitulo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbDashTitulo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(172)))), ((int)(((byte)(222)))));
+            this.lbDashTitulo.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold);
+            this.lbDashTitulo.Location = new System.Drawing.Point(4, 4);
+            this.lbDashTitulo.Name = "lbDashTitulo";
+            this.lbDashTitulo.Size = new System.Drawing.Size(750, 28);
+            this.lbDashTitulo.TabIndex = 0;
+            this.lbDashTitulo.Text = "PAINEL — VENDAS DE CARVÃO";
+            this.lbDashTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
+            // btnAlertaEstoque
+            //
+            this.btnAlertaEstoque.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(235)))), ((int)(((byte)(180)))));
+            this.btnAlertaEstoque.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAlertaEstoque.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnAlertaEstoque.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.btnAlertaEstoque.Location = new System.Drawing.Point(8, 38);
+            this.btnAlertaEstoque.Name = "btnAlertaEstoque";
+            this.btnAlertaEstoque.Size = new System.Drawing.Size(250, 44);
+            this.btnAlertaEstoque.TabIndex = 1;
+            this.btnAlertaEstoque.Text = "ESTOQUE OK";
+            this.btnAlertaEstoque.UseVisualStyleBackColor = false;
+            this.btnAlertaEstoque.Click += new System.EventHandler(this.btnAlertaEstoque_Click);
+            //
+            // lbAlertaEstoque
+            //
+            this.lbAlertaEstoque.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbAlertaEstoque.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lbAlertaEstoque.ForeColor = System.Drawing.Color.Green;
+            this.lbAlertaEstoque.Location = new System.Drawing.Point(266, 38);
+            this.lbAlertaEstoque.Name = "lbAlertaEstoque";
+            this.lbAlertaEstoque.Size = new System.Drawing.Size(488, 44);
+            this.lbAlertaEstoque.TabIndex = 2;
+            this.lbAlertaEstoque.Text = "Nenhum produto abaixo do estoque mínimo.";
+            this.lbAlertaEstoque.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            //
+            // rbHoje
+            //
+            this.rbHoje.AutoSize = true;
+            this.rbHoje.Location = new System.Drawing.Point(8, 90);
+            this.rbHoje.Name = "rbHoje";
+            this.rbHoje.Size = new System.Drawing.Size(50, 17);
+            this.rbHoje.TabIndex = 3;
+            this.rbHoje.Text = "Hoje";
+            this.rbHoje.UseVisualStyleBackColor = true;
+            //
+            // rbMes
+            //
+            this.rbMes.AutoSize = true;
+            this.rbMes.Checked = true;
+            this.rbMes.Location = new System.Drawing.Point(64, 90);
+            this.rbMes.Name = "rbMes";
+            this.rbMes.Size = new System.Drawing.Size(78, 17);
+            this.rbMes.TabIndex = 4;
+            this.rbMes.TabStop = true;
+            this.rbMes.Text = "Mês atual";
+            this.rbMes.UseVisualStyleBackColor = true;
+            //
+            // rb30dias
+            //
+            this.rb30dias.AutoSize = true;
+            this.rb30dias.Location = new System.Drawing.Point(146, 90);
+            this.rb30dias.Name = "rb30dias";
+            this.rb30dias.Size = new System.Drawing.Size(110, 17);
+            this.rb30dias.TabIndex = 5;
+            this.rb30dias.Text = "Últimos 30 dias";
+            this.rb30dias.UseVisualStyleBackColor = true;
+            //
+            // rbTudo
+            //
+            this.rbTudo.AutoSize = true;
+            this.rbTudo.Location = new System.Drawing.Point(258, 90);
+            this.rbTudo.Name = "rbTudo";
+            this.rbTudo.Size = new System.Drawing.Size(105, 17);
+            this.rbTudo.TabIndex = 6;
+            this.rbTudo.Text = "Todo o histórico";
+            this.rbTudo.UseVisualStyleBackColor = true;
+            //
+            // lbPeriodoInfo
+            //
+            this.lbPeriodoInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbPeriodoInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Italic);
+            this.lbPeriodoInfo.ForeColor = System.Drawing.Color.DimGray;
+            this.lbPeriodoInfo.Location = new System.Drawing.Point(400, 90);
+            this.lbPeriodoInfo.Name = "lbPeriodoInfo";
+            this.lbPeriodoInfo.Size = new System.Drawing.Size(354, 18);
+            this.lbPeriodoInfo.TabIndex = 7;
+            this.lbPeriodoInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            //
+            // lbTilePedidos
+            //
+            this.lbTilePedidos.BackColor = System.Drawing.Color.White;
+            this.lbTilePedidos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbTilePedidos.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.lbTilePedidos.Location = new System.Drawing.Point(8, 116);
+            this.lbTilePedidos.Name = "lbTilePedidos";
+            this.lbTilePedidos.Size = new System.Drawing.Size(184, 66);
+            this.lbTilePedidos.TabIndex = 7;
+            this.lbTilePedidos.Text = "PEDIDOS\n0";
+            this.lbTilePedidos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
+            // lbTileSacos
+            //
+            this.lbTileSacos.BackColor = System.Drawing.Color.White;
+            this.lbTileSacos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbTileSacos.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.lbTileSacos.Location = new System.Drawing.Point(198, 116);
+            this.lbTileSacos.Name = "lbTileSacos";
+            this.lbTileSacos.Size = new System.Drawing.Size(184, 66);
+            this.lbTileSacos.TabIndex = 8;
+            this.lbTileSacos.Text = "SACOS VENDIDOS\n0";
+            this.lbTileSacos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
+            // lbTileBruto
+            //
+            this.lbTileBruto.BackColor = System.Drawing.Color.White;
+            this.lbTileBruto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbTileBruto.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.lbTileBruto.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(90)))), ((int)(((byte)(30)))));
+            this.lbTileBruto.Location = new System.Drawing.Point(388, 116);
+            this.lbTileBruto.Name = "lbTileBruto";
+            this.lbTileBruto.Size = new System.Drawing.Size(184, 66);
+            this.lbTileBruto.TabIndex = 9;
+            this.lbTileBruto.Text = "FATURAMENTO BRUTO\nR$ 0,00";
+            this.lbTileBruto.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
+            // lbTileLiquido
+            //
+            this.lbTileLiquido.BackColor = System.Drawing.Color.White;
+            this.lbTileLiquido.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbTileLiquido.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.lbTileLiquido.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(90)))), ((int)(((byte)(30)))));
+            this.lbTileLiquido.Location = new System.Drawing.Point(578, 116);
+            this.lbTileLiquido.Name = "lbTileLiquido";
+            this.lbTileLiquido.Size = new System.Drawing.Size(176, 66);
+            this.lbTileLiquido.TabIndex = 10;
+            this.lbTileLiquido.Text = "FATURAMENTO LÍQUIDO\nR$ 0,00";
+            this.lbTileLiquido.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
+            // lbLiderInfo
+            //
+            this.lbLiderInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbLiderInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.lbLiderInfo.Location = new System.Drawing.Point(8, 188);
+            this.lbLiderInfo.Name = "lbLiderInfo";
+            this.lbLiderInfo.Size = new System.Drawing.Size(746, 20);
+            this.lbLiderInfo.TabIndex = 11;
+            this.lbLiderInfo.Text = "Produto líder no período: -";
+            //
+            // lbGrid1
+            //
+            this.lbGrid1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(198)))), ((int)(((byte)(213)))), ((int)(((byte)(239)))));
+            this.lbGrid1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lbGrid1.Location = new System.Drawing.Point(8, 212);
+            this.lbGrid1.Name = "lbGrid1";
+            this.lbGrid1.Size = new System.Drawing.Size(364, 20);
+            this.lbGrid1.TabIndex = 12;
+            this.lbGrid1.Text = "PRODUTOS QUE MAIS VENDEM";
+            this.lbGrid1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
+            // lbGrid2
+            //
+            this.lbGrid2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbGrid2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(198)))), ((int)(((byte)(213)))), ((int)(((byte)(239)))));
+            this.lbGrid2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lbGrid2.Location = new System.Drawing.Point(388, 212);
+            this.lbGrid2.Name = "lbGrid2";
+            this.lbGrid2.Size = new System.Drawing.Size(366, 20);
+            this.lbGrid2.TabIndex = 13;
+            this.lbGrid2.Text = "SAÍDA DO ESTOQUE";
+            this.lbGrid2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //
+            // gridMaisVendidos
+            //
+            this.gridMaisVendidos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.gridMaisVendidos.AllowUserToAddRows = false;
+            this.gridMaisVendidos.AllowUserToDeleteRows = false;
+            this.gridMaisVendidos.AllowUserToResizeRows = false;
+            this.gridMaisVendidos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridMaisVendidos.BackgroundColor = System.Drawing.Color.White;
+            this.gridMaisVendidos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridMaisVendidos.Location = new System.Drawing.Point(8, 234);
+            this.gridMaisVendidos.Name = "gridMaisVendidos";
+            this.gridMaisVendidos.ReadOnly = true;
+            this.gridMaisVendidos.RowHeadersVisible = false;
+            this.gridMaisVendidos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gridMaisVendidos.Size = new System.Drawing.Size(364, 228);
+            this.gridMaisVendidos.TabIndex = 14;
+            //
+            // gridSaidaEstoque
+            //
+            this.gridSaidaEstoque.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridSaidaEstoque.AllowUserToAddRows = false;
+            this.gridSaidaEstoque.AllowUserToDeleteRows = false;
+            this.gridSaidaEstoque.AllowUserToResizeRows = false;
+            this.gridSaidaEstoque.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridSaidaEstoque.BackgroundColor = System.Drawing.Color.White;
+            this.gridSaidaEstoque.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridSaidaEstoque.Location = new System.Drawing.Point(388, 234);
+            this.gridSaidaEstoque.Name = "gridSaidaEstoque";
+            this.gridSaidaEstoque.ReadOnly = true;
+            this.gridSaidaEstoque.RowHeadersVisible = false;
+            this.gridSaidaEstoque.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gridSaidaEstoque.Size = new System.Drawing.Size(366, 228);
+            this.gridSaidaEstoque.TabIndex = 15;
+            //
+            // timerDash
+            //
+            this.timerDash.Enabled = true;
+            this.timerDash.Interval = 60000;
+            this.timerDash.Tick += new System.EventHandler(this.timerDash_Tick);
+            //
             // Menu
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1334, 696);
+            this.ClientSize = new System.Drawing.Size(1400, 696);
             this.Controls.Add(this.lbl_copy);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.fotoClube);
+            this.Controls.Add(this.pnlDash);
             this.Controls.Add(this.pnlTopo);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -531,6 +838,10 @@
             this.pnlTopo.ResumeLayout(false);
             this.pnlTopo.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.pnlDash.ResumeLayout(false);
+            this.pnlDash.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridMaisVendidos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridSaidaEstoque)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoClube)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -570,5 +881,26 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnCaixa;
+        private System.Windows.Forms.Label label7Caixa;
+        private System.Windows.Forms.Panel pnlDash;
+        private System.Windows.Forms.Label lbDashTitulo;
+        private System.Windows.Forms.Button btnAlertaEstoque;
+        private System.Windows.Forms.Label lbAlertaEstoque;
+        private System.Windows.Forms.RadioButton rbHoje;
+        private System.Windows.Forms.RadioButton rbMes;
+        private System.Windows.Forms.RadioButton rb30dias;
+        private System.Windows.Forms.RadioButton rbTudo;
+        private System.Windows.Forms.Label lbPeriodoInfo;
+        private System.Windows.Forms.Label lbTilePedidos;
+        private System.Windows.Forms.Label lbTileSacos;
+        private System.Windows.Forms.Label lbTileBruto;
+        private System.Windows.Forms.Label lbTileLiquido;
+        private System.Windows.Forms.Label lbLiderInfo;
+        private System.Windows.Forms.Label lbGrid1;
+        private System.Windows.Forms.Label lbGrid2;
+        private System.Windows.Forms.DataGridView gridMaisVendidos;
+        private System.Windows.Forms.DataGridView gridSaidaEstoque;
+        private System.Windows.Forms.Timer timerDash;
     }
 }

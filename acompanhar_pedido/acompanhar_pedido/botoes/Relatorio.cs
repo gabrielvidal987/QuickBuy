@@ -24,14 +24,79 @@ namespace acompanhar_pedido.botoes
         //do bd retorna os dados e nela é adicionado mais alguns sendo manipulados
         DataTable dt = new DataTable();
         List<Dictionary<string, string>> listaBruta = new List<Dictionary<string, string>>();
+        //true quando o que está na tabela é o relatório de vendas (e não o de lucro); usado para regerar ao mudar as colunas
+        bool relatorioVendasAtivo = false;
+        //nomes das colunas do relatório de vendas, na ordem em que aparecem
+        private static readonly string[] COLUNAS_RELATORIO = {
+            "Senha", "Nome", "Endereço", "Itens", "Observações", "Hora do pedido",
+            "Hora de entrega", "Valor Líquido", "Forma de pagamento", "Pagamento Realizado",
+            "Pedido Pronto", "Delivery", "Tempo de espera", "Produto", "QTD" };
+        //colunas que começam DESMARCADAS (fora do relatório geral); o usuário pode remarcar no botão "COLUNAS DO RELATÓRIO"
+        private static readonly string[] COLUNAS_OCULTAS_PADRAO = { "Tempo de espera", "Produto", "QTD" };
         //inicializador da classe, ele chama a função de estetica() após iniciar o componente e habilita o botão de nova pasta nos dialogs que apresentam as pastas
         public Relatorio()
         {
             InitializeComponent();
             Estetica();
+            MontaMenuColunas();
+            CarregaTaxasSalvas();
             this.escolherLocal.ShowNewFolderButton = true;
         }
+        //pré-carrega nos campos de taxa a última taxa fixada pelo usuário (fica valendo até ele digitar outra);
+        //se nunca foi configurada, os campos continuam mostrando o placeholder (padrão de 1,5%)
+        private void CarregaTaxasSalvas()
+        {
+            try
+            {
+                Dictionary<string, string> taxas = new ConectarSqlClasse().PegaTaxasCartao();
+                if (!string.IsNullOrEmpty(taxas["taxa_debito"]))
+                {
+                    decimal d = decimal.Parse(taxas["taxa_debito"], System.Globalization.CultureInfo.InvariantCulture);
+                    txDeb.SetTextoReal(d.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture).Replace('.', ','));
+                }
+                if (!string.IsNullOrEmpty(taxas["taxa_credito"]))
+                {
+                    decimal c = decimal.Parse(taxas["taxa_credito"], System.Globalization.CultureInfo.InvariantCulture);
+                    txCred.SetTextoReal(c.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture).Replace('.', ','));
+                }
+            }
+            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+        }
         //função com os detalhes de estética de cor, localização e formas
+        //data inicial do filtro no formato do banco; string vazia quando o filtro está desligado (relatório do histórico inteiro)
+        private string PeriodoInicio()
+        {
+            return chkPeriodo.Checked ? dtInicio.Value.Date.ToString("yyyy-MM-dd HH:mm:ss") : "";
+        }
+        //data final: soma um dia para incluir o último dia inteiro (a comparação no banco é "menor que")
+        private string PeriodoFim()
+        {
+            return chkPeriodo.Checked ? dtFim.Value.Date.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss") : "";
+        }
+        //texto do período para mostrar no resumo
+        private string PeriodoDescrito()
+        {
+            if (!chkPeriodo.Checked) { return "todo o histórico"; }
+            return $"{dtInicio.Value:dd/MM/yyyy} a {dtFim.Value:dd/MM/yyyy}";
+        }
+        private void btnHoje_Click(object sender, EventArgs e)
+        {
+            chkPeriodo.Checked = true;
+            dtInicio.Value = DateTime.Today;
+            dtFim.Value = DateTime.Today;
+        }
+        private void btn7dias_Click(object sender, EventArgs e)
+        {
+            chkPeriodo.Checked = true;
+            dtInicio.Value = DateTime.Today.AddDays(-6);
+            dtFim.Value = DateTime.Today;
+        }
+        private void btnMes_Click(object sender, EventArgs e)
+        {
+            chkPeriodo.Checked = true;
+            dtInicio.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            dtFim.Value = DateTime.Today;
+        }
         public void Estetica()
         {
             pcholdPesquisa.PlaceHolderText = "Digite o nome";
@@ -40,7 +105,18 @@ namespace acompanhar_pedido.botoes
             button1.Width = flowLayoutPanel2.Width - 10;
             tabelaVendas.Width = flowLayoutPanel2.Width - 10;
             tabelaVendas.Height = flowLayoutPanel2.Height - 150;
+            //cadastro de usuário/clube removido: sistema passou a ser de usuário único.
+            //Para reativar, troque para true (o painel e os handlers continuam no código).
+            panel2.Visible = MOSTRAR_CADASTRO_USUARIO;
+            //limpeza de dados (apagar tabelas de produtos/vendas/pendentes) removida da tela.
+            //Para reativar, troque MOSTRAR_LIMPAR_DADOS para true (checkboxes, botão e handler apagaBD_Click continuam no código).
+            flowLayoutPanel1.Visible = MOSTRAR_LIMPAR_DADOS;
+            apagaBD.Visible = MOSTRAR_LIMPAR_DADOS;
         }
+        //liga/desliga o painel de "criar usuário/clube" na tela de relatórios
+        private static readonly bool MOSTRAR_CADASTRO_USUARIO = true;
+        //liga/desliga o bloco de "apagar tabelas / limpar dados selecionados" na tela de relatórios
+        private static readonly bool MOSTRAR_LIMPAR_DADOS = true;
         //apaga as tabelas selecionadas nas checkbox
         private void apagaBD_Click(object sender, EventArgs e)
         {
@@ -80,165 +156,192 @@ namespace acompanhar_pedido.botoes
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
         }
-        //função chamada a partir do botão de gerar relatório
+        //função chamada a partir do botão de gerar relatório.
+        //Monta o relatório em duas partes na mesma tabela:
+        //  1) uma linha por pedido do período (colunas 0..12);
+        //  2) linhas de resumo ANEXADAS AO FINAL: contagem entrega/balcão e a quantidade vendida de cada produto (colunas 13/14).
+        //As linhas de resumo nunca sobrescrevem pedidos, então funciona com qualquer quantidade de pedidos ou produtos.
         private void GeraRelatorio_Click(object sender, EventArgs e)
         {
-            //ele cria tudo em um datatable chamado 'dt'. após alterar todo esse dt ele atribui os dados dele ao TabelaVendas
             entradaTotal = 0;
             entradas.Text = string.Empty;
             saidas.Text = string.Empty;
-            dt.Clear();
-            ConectarSqlClasse sql = new ConectarSqlClasse();
             try
             {
+                tabelaVendas.DataSource = null;
                 tabelaVendas.Columns.Clear();
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+
                 string ordem = "";
                 string nome = "";
-                if (btnNomeAZ.Checked)
-                {
-                    ordem = "az";
-                    dt = sql.Relatorio(ordem, nome);
-                }
-                else if (btnNomeZA.Checked)
-                {
-                    ordem = "za";
-                    dt = sql.Relatorio(ordem, nome);
-                }
+                if (btnNomeAZ.Checked) { ordem = "az"; }
+                else if (btnNomeZA.Checked) { ordem = "za"; }
+                else if (btnValor.Checked) { ordem = "venda"; }
                 else if (btnUmNome.Checked)
                 {
-                    if (pcholdPesquisa.Text != "")
+                    if (string.IsNullOrWhiteSpace(pcholdPesquisa.Text))
                     {
-                        ordem = "nome";
-                        nome = pcholdPesquisa.Text;
-                        dt = sql.Relatorio(ordem, nome);
+                        MessageBox.Show("Preencha o nome a ser pesquisado.");
+                        return;
                     }
-                    else
-                    {
-                        MessageBox.Show("Preencha como o nome a ser pesquisado");
-                    }
+                    ordem = "nome";
+                    nome = pcholdPesquisa.Text;
                 }
-                else if (btnValor.Checked)
-                {
-                    ordem = "venda";
-                    dt = sql.Relatorio(ordem, nome);
-                }
-                else
-                {
-                    dt = sql.Relatorio(ordem, nome);
-                }
-                //remove a coluna 11 (usuario)
-                dt.Columns.RemoveAt(11);
-                //tabela que pega a lista dos produtos vendidos
-                listaBruta = sql.ListaProdVendidos();
-                //adiciona colunas de tempo, produto e qtd de produto
+
+                dt = sql.Relatorio(ordem, nome, PeriodoInicio(), PeriodoFim());
+                if (dt == null) { dt = new DataTable(); }
+
+                //remove a coluna 'usuario' e adiciona as 3 colunas extras do relatório
+                if (dt.Columns.Contains("usuario")) { dt.Columns.Remove("usuario"); }
                 dt.Columns.Add("Tempo de espera");
                 dt.Columns.Add("Produto");
                 dt.Columns.Add("QTD");
-                FiltraDeliveryBalcao();
-                ValorLiq_TEspera();
-                FiltraRelatorio();
-                //atribui os dados do dt ao tabelaVendas
+
+                int qtdPedidos = dt.Rows.Count; //linhas reais de pedido, antes de anexar o resumo
+
+                AplicaTaxasETempoEspera(qtdPedidos);
+                CalculaEntradaTotal(qtdPedidos);
+                //o bloco de resumo (contagem entrega/balcão e qtd por produto) mora nas colunas "Produto"/"QTD";
+                //só é anexado quando alguma dessas colunas está marcada no botão "COLUNAS DO RELATÓRIO"
+                if (ColunaMarcada("Produto") || ColunaMarcada("QTD")) { AnexaResumo(sql, qtdPedidos); }
+                RenomeiaColunas();
+
                 tabelaVendas.DataSource = dt;
                 tabelaVendas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                exportExc.Enabled = true;
-                exportExc.BackColor = Color.FromArgb(192, 255, 192);
+                AplicaVisibilidadeColunas();
+                relatorioVendasAtivo = true;
+                exportExc.Enabled = qtdPedidos > 0;
+                exportExc.BackColor = qtdPedidos > 0 ? Color.FromArgb(192, 255, 192) : Color.FromArgb(255, 192, 192);
+                lbResumoPeriodo.Text = $"VENDAS ({PeriodoDescrito()})  |  {qtdPedidos} pedido(s)  |  entrada total (pagos, com taxas): R${entradaTotal:N2}";
+                if (qtdPedidos == 0) { MessageBox.Show("Nenhum pedido encontrado para os filtros selecionados."); }
             }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-        }
-        //função que aplica as taxas de débito e crédito nas celulas e também adiciona tempo médio de espera
-        public void ValorLiq_TEspera()
-        {
-            //add media de tempo de espera e valor liquido
-            double deb = 0.015; // 1,5 / 100 = 0.015
-            double cred = 0.015; // 1,5 / 100 = 0.015
-            if (txDeb.Text != "") { deb = double.Parse(txDeb.Text.Replace("%", "")) / 100; }
-            if (txCred.Text != "") { cred = double.Parse(txCred.Text.Replace("%", "")) / 100; }
-            //calcula os valores liquidos com desconto de crédito e débito, e também adiciona tempo médio de espera
-            for (int c = 0; c < dt.Rows.Count; c++)
+            catch (Exception er)
             {
-                if (dt.Rows[c][0].ToString() != "")
-                {
-                    //coluna 12 é a coluna do tempo de espera, coluna 6 é o horario de entrega, coluna 5 é o horario de compra
-                    //aqui é criado o valor da celula de tempo de espera
-                    if (dt.Rows[c][6].ToString() != "") 
-                    {
-                        dt.Rows[c][12] = $"{Convert.ToDateTime(dt.Rows[c][6]) - Convert.ToDateTime(dt.Rows[c][5])}";
-                    }
-                    if (dt.Rows[c][8].ToString() == "debito")
-                    {
-                        dt.Rows[c][7] = (Convert.ToDouble(dt.Rows[c][7]) - (Convert.ToDouble(dt.Rows[c][7]) * deb)).ToString("F");
-                    }
-                    if (dt.Rows[c][8].ToString() == "credito")
-                    {
-                        dt.Rows[c][7] = (Convert.ToDouble(dt.Rows[c][7]) - (Convert.ToDouble(dt.Rows[c][7]) * cred)).ToString("F");
-                    }
-                }
-                else { break; }
+                MessageBox.Show("Erro ao gerar o relatório: " + er.Message);
+                ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message);
             }
         }
-        //filtra alguns pontos do relatório como o nome das colunas, calcula valor final (com desconto de crédito e débito) e produtos consumidos
-        public void FiltraRelatorio()
+        //lê a taxa (%) de um campo, aceitando "1,5", "1.5" ou "1,5%". Quando o usuário digitou um valor válido,
+        //FIXA ele no banco (coluna "taxa_debito"/"taxa_credito" do usuário logado) — passa a valer em qualquer
+        //estação/sessão até ser digitado outro. Campo vazio/placeholder: usa o padrão (1,5%) sem mexer no que já
+        //estava salvo. Retorna a fração (ex.: 0.015).
+        private static double LeTaxaEFixa(PlaceHolderTextBox campo, string colunaBanco, double padrao)
         {
-            try
+            string limpo = (campo.Text ?? "").Replace("%", "").Replace(',', '.').Trim();
+            if (double.TryParse(limpo, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double v) && v > 0)
             {
-                //calcula a entrada total baseada na tabela/relatorio gerado
-                for (int c = 0; c <dt.Rows.Count; c++) 
+                try { new ConectarSqlClasse().SalvarTaxaCartao(colunaBanco, (decimal)v); }
+                catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
+                return v / 100.0;
+            }
+            return padrao;
+        }
+        //aplica o desconto de taxa de débito/crédito no valor líquido e calcula o tempo de espera de cada pedido
+        private void AplicaTaxasETempoEspera(int qtdPedidos)
+        {
+            double deb = LeTaxaEFixa(txDeb, "taxa_debito", 0.015);
+            double cred = LeTaxaEFixa(txCred, "taxa_credito", 0.015);
+            for (int c = 0; c < qtdPedidos && c < dt.Rows.Count; c++)
+            {
+                //tempo de espera (só quando o pedido tem hora de entrega)
+                string ficouPronto = dt.Rows[c][6].ToString();
+                if (!string.IsNullOrEmpty(ficouPronto))
                 {
-                    if (dt.Rows[c][0].ToString() != "" && Convert.ToBoolean(dt.Rows[c][9])) { entradaTotal += Convert.ToDouble(dt.Rows[c][7]); }
-                    else { continue; }
+                    try { dt.Rows[c][12] = (Convert.ToDateTime(ficouPronto) - Convert.ToDateTime(dt.Rows[c][5])).ToString(); }
+                    catch { }
                 }
-                //coloca no relatório a qtd de cada produto vendido; soma 2 na posição da linha pois as duas primeiras linhas tem a info de qtd de delivery e qtd balcão
-                for (int c = 0; c < listaBruta.Count(); c++) 
-                {
-                    if (c > dt.Rows.Count - 1)
-                    {
-                        dt.Rows.Add();
-                        dt.Rows[c][13] = listaBruta[c]["nome"]; dt.Rows[c][14] = listaBruta[c]["qtd_vendido"];
-                    }
-                    else
-                    {
-                        dt.Rows[c][13] = listaBruta[c]["nome"]; dt.Rows[c][14] = listaBruta[c]["qtd_vendido"];
-                    }
-                }
+                //desconto da taxa conforme a forma de pagamento (case-insensitive, tolera acento)
+                string forma = dt.Rows[c][8].ToString().Trim().ToLowerInvariant();
+                double valor = Convert.ToDouble(dt.Rows[c][7]);
+                if (forma.Contains("déb") || forma.Contains("deb")) { dt.Rows[c][7] = valor - valor * deb; }
+                else if (forma.Contains("créd") || forma.Contains("cred")) { dt.Rows[c][7] = valor - valor * cred; }
+            }
+        }
+        //soma o valor líquido de todos os pedidos já pagos do período
+        private void CalculaEntradaTotal(int qtdPedidos)
+        {
+            entradaTotal = 0;
+            for (int c = 0; c < qtdPedidos && c < dt.Rows.Count; c++)
+            {
+                bool pago = false;
+                try { pago = Convert.ToBoolean(dt.Rows[c][9]); } catch { }
+                if (pago) { entradaTotal += Convert.ToDouble(dt.Rows[c][7]); }
+            }
+        }
+        //anexa ao final da tabela: contagem entrega x balcão e a quantidade vendida de cada produto no período
+        private void AnexaResumo(ConectarSqlClasse sql, int qtdPedidos)
+        {
+            listaBruta = sql.ListaProdVendidos(PeriodoInicio(), PeriodoFim()) ?? new List<Dictionary<string, string>>();
 
-                //deixar a coluna de entrega em readonly (por ter removido uma coluna, a coluna 12(antes delivery) foi para a posição 11)
-                dt.Columns[9].ReadOnly = true;
-                dt.Columns[11].ReadOnly = true;
-                //altera o nome das colunas
-                dt.Columns[0].ColumnName = "Senha";
-                dt.Columns[1].ColumnName = "Nome";
-                dt.Columns[2].ColumnName = "Endereço";
-                dt.Columns[3].ColumnName = "Itens";
-                dt.Columns[4].ColumnName = "Observações";
-                dt.Columns[5].ColumnName = "hora do pedido";
-                dt.Columns[6].ColumnName = "hora de conclusão";
-                dt.Columns[7].ColumnName = "Valor Líquido";
-                dt.Columns[8].ColumnName = "Forma de pagamento";
-                dt.Columns[9].ColumnName = "Pagamento Realizado";
-                dt.Columns[10].ColumnName = "Pedido Pronto";
-                dt.Columns[11].ColumnName = "Delivery";
-                dt.Columns[12].ColumnName = "Tempo de espera";
-                dt.Columns[13].ColumnName = "Produto";
-                dt.Columns[14].ColumnName = "QTD";
-            }
-            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
-        }
-        //adiciona contagem de saídas de delivery
-        public void FiltraDeliveryBalcao()
-        {
-            ConectarSqlClasse sql = new ConectarSqlClasse();
-            List<bool> lista_delivery = new List<bool>(sql.pegaListaDelivery());
-            //adiciona quantidade de entregas e quantidade de balcão
-            int entrega = 0; int balcao = 0;
-            foreach (bool delivery in lista_delivery)
+            //conta entregas x balcão a partir das próprias linhas do relatório (respeita o período automaticamente)
+            int entrega = 0, balcao = 0;
+            for (int c = 0; c < qtdPedidos && c < dt.Rows.Count; c++)
             {
-                if (delivery) { entrega++; } else { balcao++; }
+                bool ehDelivery = false;
+                try { ehDelivery = Convert.ToBoolean(dt.Rows[c][11]); } catch { }
+                if (ehDelivery) { entrega++; } else { balcao++; }
             }
-            //vai no indice após o ultimo registro de produto e tenta colocar o saida delivery
-            if (listaBruta.Count >= dt.Rows.Count) { dt.Rows.Add(); dt.Rows.Add(); }
-            else if (listaBruta.Count + 1 == dt.Rows.Count) { dt.Rows.Add(); }
-            dt.Rows[listaBruta.Count][13] = "Saída Delivery"; dt.Rows[listaBruta.Count][14] = entrega.ToString();
-            dt.Rows[listaBruta.Count + 1][13] = "Saída Balcão"; dt.Rows[listaBruta.Count + 1][14] = balcao.ToString();
+
+            AdicionaLinhaResumo("Saída Delivery", entrega.ToString());
+            AdicionaLinhaResumo("Saída Balcão", balcao.ToString());
+            foreach (Dictionary<string, string> prod in listaBruta)
+            {
+                AdicionaLinhaResumo(prod["nome"], prod["qtd_vendido"]);
+            }
+        }
+        //cria uma linha em branco (colunas de pedido vazias) só com o rótulo/valor nas colunas 13 e 14
+        private void AdicionaLinhaResumo(string rotulo, string valor)
+        {
+            DataRow linha = dt.NewRow();
+            linha[13] = rotulo;
+            linha[14] = valor;
+            dt.Rows.Add(linha);
+        }
+        //renomeia as colunas para os títulos exibidos e marca as não editáveis
+        private void RenomeiaColunas()
+        {
+            for (int i = 0; i < COLUNAS_RELATORIO.Length && i < dt.Columns.Count; i++)
+            {
+                dt.Columns[i].ColumnName = COLUNAS_RELATORIO[i];
+            }
+            try { dt.Columns[9].ReadOnly = true; dt.Columns[11].ReadOnly = true; } catch { }
+        }
+        //monta o menu de checkboxes do botão "COLUNAS DO RELATÓRIO" (uma opção por coluna do relatório de vendas)
+        private void MontaMenuColunas()
+        {
+            menuColunas.Items.Clear();
+            foreach (string col in COLUNAS_RELATORIO)
+            {
+                ToolStripMenuItem item = new ToolStripMenuItem(col);
+                item.CheckOnClick = true;
+                item.Checked = Array.IndexOf(COLUNAS_OCULTAS_PADRAO, col) < 0;
+                menuColunas.Items.Add(item);
+            }
+            //ao fechar o menu, regera o relatório de vendas para refletir as colunas escolhidas (inclui/remove o resumo)
+            menuColunas.Closed += (s, e) => { if (relatorioVendasAtivo) { GeraRelatorio_Click(this, EventArgs.Empty); } };
+        }
+        //diz se a coluna com esse título está marcada no menu (colunas desconhecidas contam como marcadas)
+        private bool ColunaMarcada(string nome)
+        {
+            foreach (ToolStripItem it in menuColunas.Items)
+            {
+                ToolStripMenuItem mi = it as ToolStripMenuItem;
+                if (mi != null && mi.Text == nome) { return mi.Checked; }
+            }
+            return true;
+        }
+        //aplica no grid a visibilidade de cada coluna conforme o menu
+        private void AplicaVisibilidadeColunas()
+        {
+            foreach (DataGridViewColumn col in tabelaVendas.Columns)
+            {
+                col.Visible = ColunaMarcada(col.HeaderText);
+            }
+        }
+        //abre o menu de colunas abaixo do botão
+        private void btnColunas_Click(object sender, EventArgs e)
+        {
+            menuColunas.Show(btnColunas, new Point(0, btnColunas.Height));
         }
         //timer responsavel pela responsividade da area da tabela e calculo de entrada - saida
         private void timer1_Tick(object sender, EventArgs e)
@@ -316,35 +419,26 @@ namespace acompanhar_pedido.botoes
                         // a ordem para as celulas é primeiro numero vertical e segundo horizontal, ou primeiro numero e depois letra, sempre começando do 0
                         Workbook wb = new Workbook();
                         Worksheet ws = wb.Worksheets[0];
-                        ws.Cells[0, 0].PutValue("Senha");
-                        ws.Cells[0, 1].PutValue("Nome");
-                        ws.Cells[0, 2].PutValue("Endereço");
-                        ws.Cells[0, 3].PutValue("Itens");
-                        ws.Cells[0, 4].PutValue("observações");
-                        ws.Cells[0, 5].PutValue("Hora do pedido");
-                        ws.Cells[0, 6].PutValue("Hora de conclusão");
-                        ws.Cells[0, 7].PutValue("Valor Líquido");
-                        ws.Cells[0, 8].PutValue("Forma de pagamento");
-                        ws.Cells[0, 9].PutValue("Pagamento Realizado");
-                        ws.Cells[0, 10].PutValue("Pedido Pronto");
-                        ws.Cells[0, 11].PutValue("Delivery");
-                        ws.Cells[0, 12].PutValue("Tempo de espera");
-                        ws.Cells[0, 13].PutValue("Produto");
-                        ws.Cells[0, 14].PutValue("QTD");
-                        for (int c = 0; c < tabelaVendas.RowCount; c++)
+                        //exporta exatamente as colunas visíveis do grid (respeita o botão "COLUNAS DO RELATÓRIO"), usando o título mostrado
+                        int colSaida = 0;
+                        for (int i = 0; i < tabelaVendas.Columns.Count; i++)
                         {
-                            for(int i = 0; i < tabelaVendas.Columns.Count; i++)
+                            if (!tabelaVendas.Columns[i].Visible) { continue; }
+                            string titulo = tabelaVendas.Columns[i].HeaderText;
+                            ws.Cells[0, colSaida].PutValue(titulo);
+                            for (int c = 0; c < tabelaVendas.RowCount; c++)
                             {
-                                string valor_celula = tabelaVendas.Rows[c].Cells[i].Value.ToString();
-                                if (valor_celula != "")
+                                object bruto = tabelaVendas.Rows[c].Cells[i].Value;
+                                string valor_celula = bruto == null ? "" : bruto.ToString();
+                                if (valor_celula == "") { continue; }
+                                //a coluna "Delivery" só existe nas linhas de pedido; nas linhas de resumo fica vazia
+                                if (titulo == "Delivery" && bool.TryParse(valor_celula, out bool ehEntrega))
                                 {
-                                    if (i == 11)
-                                    {
-                                        if (bool.Parse(valor_celula)) { valor_celula = "Entrega"; } else { valor_celula = "Balcão"; }
-                                    }
-                                    ws.Cells[c + 1, i].PutValue(valor_celula);
+                                    valor_celula = ehEntrega ? "Entrega" : "Balcão";
                                 }
+                                ws.Cells[c + 1, colSaida].PutValue(valor_celula);
                             }
+                            colSaida++;
                         }
                         wb.Save(fl + @"\Relatório de vendas.xlsx", SaveFormat.Xlsx);
                         //altera para centralizar texto
@@ -376,6 +470,36 @@ namespace acompanhar_pedido.botoes
                 }
                 catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); };
             }
+        }
+        //mostra na mesma tabela o relatório de lucro por produto (receita das vendas registradas x custo atual de cada produto).
+        //Obs: a receita usa o preço realmente cobrado em cada venda (varejo/atacado); vendas feitas antes desta atualização não têm esse
+        //histórico e por isso não entram na receita. O custo usado é o CUSTO ATUAL do produto (não guarda custo histórico por venda).
+        private void btnRelatorioLucro_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ConectarSqlClasse sql = new ConectarSqlClasse();
+                DataTable dtLucro = sql.RelatorioLucroProdutos(PeriodoInicio(), PeriodoFim());
+                relatorioVendasAtivo = false;
+                tabelaVendas.DataSource = null;
+                tabelaVendas.Columns.Clear();
+                tabelaVendas.DataSource = dtLucro;
+                tabelaVendas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                exportExc.Enabled = false;
+                //totaliza o período para mostrar embaixo da tabela
+                decimal qtd = 0, receita = 0, custo = 0, lucro = 0;
+                foreach (DataRow linha in dtLucro.Rows)
+                {
+                    qtd += Convert.ToDecimal(linha["QtdVendida"]);
+                    receita += Convert.ToDecimal(linha["ReceitaTotal"]);
+                    custo += Convert.ToDecimal(linha["CustoTotal"]);
+                    lucro += Convert.ToDecimal(linha["Lucro"]);
+                }
+                string margem = receita > 0 ? (lucro / receita * 100).ToString("N1") + "%" : "-";
+                lbResumoPeriodo.Text = $"LUCRO ({PeriodoDescrito()})  |  {qtd:N0} itens vendidos  |  Receita: R${receita:N2}  |  " +
+                    $"Custo: R${custo:N2}  |  Lucro: R${lucro:N2}  |  Margem: {margem}";
+            }
+            catch (Exception er) { ConectarSqlClasse.EnviaLog(er.GetType().ToString(), er.StackTrace.ToString(), er.Message); }
         }
         //função chamada ao apertar enter no campo de filtro de nome
         private void pcholdPesquisa_KeyDown(object sender, KeyEventArgs e)
